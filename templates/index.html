@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patreon Credits Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background-color: #2a2a2a;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #ff424d;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #ccc;
+            font-size: 1rem;
+        }
+        
+        .container {
+            flex: 1;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .form-section {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #ff424d;
+        }
+        
+        textarea, input[type="number"], select {
+            width: 100%;
+            padding: 12px;
+            background-color: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+        }
+        
+        select {
+            cursor: pointer;
+        }
+        
+        textarea:focus, input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: #ff424d;
+        }
+        
+        .options-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .options-row .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: #ff424d;
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background-color: #e63946;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: #444;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #555;
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .status-section {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .status-section.active {
+            display: block;
+        }
+        
+        .status-message {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid #444;
+            border-top-color: #ff424d;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .video-preview {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            padding: 20px;
+            display: none;
+        }
+        
+        .video-preview.active {
+            display: block;
+        }
+        
+        .video-preview h3 {
+            margin-bottom: 15px;
+            color: #ff424d;
+        }
+        
+        video {
+            width: 100%;
+            max-width: 720px;
+            border-radius: 10px;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .download-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .download-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 40px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .error-message {
+            background-color: #dc3545;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .error-message.active {
+            display: block;
+        }
+        
+        .info-box {
+            background-color: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .info-box h4 {
+            color: #ff424d;
+            margin-bottom: 10px;
+        }
+        
+        .info-box p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+        
+        .patron-count {
+            color: #ff424d;
+            font-weight: 600;
+        }
+        
+        .style-section {
+            background-color: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .style-section h4 {
+            color: #ff424d;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .style-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .style-group {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .style-group label {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        input[type="color"] {
+            width: 100%;
+            height: 40px;
+            padding: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎬 Patreon Credits Generator</h1>
+        <p>Create professional scrolling credits for your YouTube videos</p>
+    </div>
+    
+    <div class="container">
+        <div class="error-message" id="errorMessage"></div>
+        
+        <div class="form-section">
+            <form id="creditsForm">
+                <div class="form-group">
+                    <label for="message">Custom Message</label>
+                    <textarea id="message" rows="3" placeholder="This video was made possible by our amazing Patreon supporters:">This video was made possible by our amazing Patreon supporters:</textarea>
+                </div>
+                
+                <div class="style-section">
+                    <h4>Message Styling</h4>
+                    <div class="style-controls">
+                        <div class="style-group">
+                            <label for="messageSize">Size</label>
+                            <input type="number" id="messageSize" min="10" max="100" value="36">
+                        </div>
+                        <div class="style-group">
+                            <label for="messageColor">Color</label>
+                            <input type="color" id="messageColor" value="#ffffff">
+                        </div>
+                        <div class="style-group">
+                            <label for="messageFont">Font</label>
+                            <select id="messageFont">
+                                <option value="default">Default</option>
+                                <option value="bold">Bold</option>
+                                <option value="italic">Italic</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="style-section">
+                    <h4>Patron Names Styling</h4>
+                    <div class="style-controls">
+                        <div class="style-group">
+                            <label for="patronSize">Size</label>
+                            <input type="number" id="patronSize" min="10" max="60" value="20">
+                        </div>
+                        <div class="style-group">
+                            <label for="patronColor">Color</label>
+                            <input type="color" id="patronColor" value="#ffffff">
+                        </div>
+                        <div class="style-group">
+                            <label for="patronFont">Font</label>
+                            <select id="patronFont">
+                                <option value="default">Default</option>
+                                <option value="bold">Bold</option>
+                                <option value="italic">Italic</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="options-row">
+                    <div class="form-group">
+                        <label for="duration">Video Duration (seconds)</label>
+                        <input type="number" id="duration" min="5" max="60" value="15">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="resolution">Resolution</label>
+                        <select id="resolution">
+                            <option value="1280x720" selected>720p HD (1280x720)</option>
+                            <option value="1920x1080">1080p Full HD (1920x1080)</option>
+                            <option value="3840x2160">4K UHD (3840x2160)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Options</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="useCache">
+                            <label for="useCache" style="margin: 0;">Use cached patron list</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button type="submit" class="btn-primary" id="generateBtn">
+                        Generate Credits Video
+                    </button>
+                    <button type="button" class="btn-secondary" id="refreshBtn">
+                        Refresh Patron List
+                    </button>
+                </div>
+            </form>
+            
+            <div class="info-box">
+                <h4>ℹ️ Information</h4>
+                <p>Current patron count: <span class="patron-count" id="patronCount">Loading...</span></p>
+                <p>FFmpeg status: <span id="ffmpegStatus">Checking...</span></p>
+            </div>
+        </div>
+        
+        <div class="status-section" id="statusSection">
+            <div class="status-message">
+                <div class="spinner"></div>
+                <span id="statusText">Generating credits video...</span>
+            </div>
+        </div>
+        
+        <div class="video-preview" id="videoPreview">
+            <h3>📹 Preview</h3>
+            <video id="videoPlayer" controls></video>
+            <div class="download-section">
+                <a href="#" class="download-btn" id="downloadBtn">Download Video</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const form = document.getElementById('creditsForm');
+        const generateBtn = document.getElementById('generateBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const statusSection = document.getElementById('statusSection');
+        const statusText = document.getElementById('statusText');
+        const videoPreview = document.getElementById('videoPreview');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const patronCount = document.getElementById('patronCount');
+        const ffmpegStatus = document.getElementById('ffmpegStatus');
+        
+        // Check FFmpeg status on load
+        checkFFmpeg();
+        updatePatronCount();
+        
+        async function checkFFmpeg() {
+            try {
+                const response = await fetch('/check-ffmpeg');
+                const data = await response.json();
+                ffmpegStatus.textContent = data.installed ? '✅ Installed' : '❌ Not installed';
+                ffmpegStatus.style.color = data.installed ? '#28a745' : '#dc3545';
+            } catch (error) {
+                ffmpegStatus.textContent = '❌ Error checking';
+                ffmpegStatus.style.color = '#dc3545';
+            }
+        }
+        
+        async function updatePatronCount() {
+            try {
+                const response = await fetch('/patron-count');
+                const data = await response.json();
+                patronCount.textContent = data.count || '0';
+            } catch (error) {
+                patronCount.textContent = 'Error loading';
+            }
+        }
+        
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('active');
+            setTimeout(() => {
+                errorMessage.classList.remove('active');
+            }, 5000);
+        }
+        
+        function showStatus(message) {
+            statusText.textContent = message;
+            statusSection.classList.add('active');
+        }
+        
+        function hideStatus() {
+            statusSection.classList.remove('active');
+        }
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const message = document.getElementById('message').value.trim();
+            const duration = parseInt(document.getElementById('duration').value);
+            const resolution = document.getElementById('resolution').value;
+            const useCache = document.getElementById('useCache').checked;
+            
+            // Get styling options
+            const messageStyle = {
+                size: parseInt(document.getElementById('messageSize').value),
+                color: document.getElementById('messageColor').value,
+                font: document.getElementById('messageFont').value
+            };
+            
+            const patronStyle = {
+                size: parseInt(document.getElementById('patronSize').value),
+                color: document.getElementById('patronColor').value,
+                font: document.getElementById('patronFont').value
+            };
+            
+            if (!message) {
+                showError('Please enter a message');
+                return;
+            }
+            
+            generateBtn.disabled = true;
+            showStatus('Fetching patron list...');
+            
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message,
+                        duration,
+                        resolution,
+                        use_cache: useCache,
+                        message_style: messageStyle,
+                        patron_style: patronStyle
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to generate video');
+                }
+                
+                showStatus('Video generated successfully!');
+                
+                // Show video preview
+                videoPlayer.src = data.video_url;
+                videoPreview.classList.add('active');
+                
+                // Update download link
+                downloadBtn.href = `/download/${data.filename}`;
+                
+                // Update patron count
+                patronCount.textContent = data.patron_count;
+                
+                setTimeout(hideStatus, 2000);
+                
+            } catch (error) {
+                showError(error.message);
+                hideStatus();
+            } finally {
+                generateBtn.disabled = false;
+            }
+        });
+        
+        refreshBtn.addEventListener('click', async () => {
+            refreshBtn.disabled = true;
+            showStatus('Refreshing patron list...');
+            
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Test',
+                        duration: 5,
+                        use_cache: false
+                    })
+                });
+                
+                if (response.ok) {
+                    showStatus('Patron list refreshed!');
+                    updatePatronCount();
+                    setTimeout(hideStatus, 2000);
+                }
+            } catch (error) {
+                showError('Failed to refresh patron list');
+                hideStatus();
+            } finally {
+                refreshBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
