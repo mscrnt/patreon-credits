@@ -28,6 +28,27 @@
             padding: 20px;
             text-align: center;
             border-bottom: 2px solid #ff424d;
+            position: relative;
+        }
+
+        .bmc-link {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #FFDD00;
+            color: #000;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .bmc-link:hover {
+            background-color: #e6c700;
+            transform: translateY(calc(-50% - 2px));
         }
         
         .header h1 {
@@ -320,6 +341,7 @@
     <div class="header">
         <h1>🎬 Patreon Credits Generator</h1>
         <p>Create professional scrolling credits for your YouTube videos</p>
+        <a href="https://buymeacoffee.com/mscrnt" target="_blank" rel="noopener" class="bmc-link">☕ Buy me a coffee</a>
     </div>
     
     <div class="container">
