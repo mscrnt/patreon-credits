@@ -63,14 +63,14 @@ def generate_credits():
             message, patrons, duration, resolution,
             message_style, patron_style, columns, name_align,
             truncate_length, word_wrap, name_spacing, bg_color)
-        
+
         return jsonify({
             'success': True,
             'video_url': f'/static/output/{video_filename}',
             'patron_count': len(patrons),
             'filename': video_filename
         })
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -349,7 +349,7 @@ def api_docs():
 if __name__ == '__main__':
     # Check for required environment variables
     use_dummy_data = os.getenv('USE_DUMMY_DATA', 'false').lower() == 'true'
-    
+
     if not use_dummy_data and (not os.getenv('PATREON_TOKEN') or not os.getenv('PATREON_CAMPAIGN_ID')):
         print("WARNING: No Patreon credentials found.")
         print("To use real data: Copy .env.example to .env and fill in your credentials")
@@ -357,10 +357,10 @@ if __name__ == '__main__':
         os.environ['USE_DUMMY_DATA'] = 'true'
         # Reinitialize the API with dummy data mode
         patreon_api.__init__()
-    
+
     # Check for FFmpeg
     if not video_renderer.check_ffmpeg():
         print("WARNING: FFmpeg not found. Please install FFmpeg to generate videos.")
         print("Install with: brew install ffmpeg (macOS) or apt-get install ffmpeg (Linux)")
-    
+
     app.run(debug=True, port=5000)
