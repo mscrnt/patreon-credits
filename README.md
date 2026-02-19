@@ -8,8 +8,11 @@ A web-based tool to automatically generate scrolling end-credits videos for YouT
 - 🔄 Fetch current active patrons from Patreon API
 - ⏱️ Customizable video duration (5-60 seconds)
 - 📝 Custom message header
-- 🎨 Clean, dark-themed web interface
-- 💾 Patron list caching
+- 🎨 19 bundled font families (including CJK support)
+- 🖌️ Customizable text colors, sizes, and bold options
+- 📐 Two layout modes: 4-column left (YouTube cards) or 3-column centered
+- 🖥️ 720p, 1080p, and 4K resolution support
+- 💾 Patron list caching + localStorage for UI settings
 - 🧪 Dummy data mode for testing
 
 ## Prerequisites
@@ -90,13 +93,18 @@ python app.py
 
 2. Open your browser to `http://localhost:5000`
 
-3. Enter your custom message (e.g., "This video was made possible by:")
+3. Configure your video:
+   - Enter a custom header message
+   - Choose fonts, colors, and bold for both the header and patron names
+   - Select a layout (4-column left or 3-column centered)
+   - Pick a resolution (720p, 1080p, or 4K)
+   - Set the video duration (5-60 seconds)
 
-4. Set the video duration (default: 15 seconds)
+4. Click "Generate Credits Video"
 
-5. Click "Generate Credits Video"
+5. Preview and download the generated video
 
-6. Preview and download the generated video
+All settings are saved in your browser and restored on the next visit.
 
 ## Testing with Dummy Data
 
@@ -107,22 +115,46 @@ To explicitly enable dummy data mode, set in your `.env`:
 USE_DUMMY_DATA=true
 ```
 
+## Bundled Fonts
+
+19 font families are included in the `fonts/` directory, so no system font dependencies are needed:
+
+**Sans-serif:** Noto Sans (CJK), Inter, Roboto, Open Sans, Montserrat, Lato, Nunito, Rubik, DM Sans, Josefin Sans, Ubuntu, Oswald, Bebas Neue
+
+**Serif:** Playfair Display, Lora, Libre Baskerville, Arvo, Neuton
+
+**Handwriting:** Playwrite DE Grund
+
+Noto Sans CJK is the default and supports Latin, Chinese, Japanese, and Korean characters.
+
 ## Project Structure
 
 ```
 patreon-credits/
 ├── app.py                  # Flask server
 ├── patreon.py              # Patreon API client
-├── ffmpeg_renderer.py      # Video rendering logic
+├── ffmpeg_renderer.py      # Pillow + FFmpeg video rendering
+├── fonts/                  # Bundled font files (19 families)
 ├── templates/
 │   └── index.html          # Web interface
 ├── static/
 │   └── output/             # Generated videos
-├── patrons_cache.json      # Cached patron data
 ├── .env                    # Configuration
 ├── .env.example            # Configuration template
 └── requirements.txt        # Python dependencies
 ```
+
+## Video Specifications
+
+- **Resolutions:** 720p HD, 1080p Full HD, 4K UHD
+- **Format:** MP4 (H.264)
+- **Background:** Black
+- **Header:** Static at top, customizable font/color/size
+- **Names:** Scrolling bottom-to-top, gold (#FFD700) by default
+- **Layouts:**
+  - 4 columns left-aligned — right side reserved for YouTube end cards
+  - 3 columns centered — names span the full frame
+- **CJK support:** Proper character width handling via Pillow's `font.getlength()`
 
 ## API Endpoints
 
@@ -131,19 +163,6 @@ patreon-credits/
 - `GET /download/<filename>` - Download generated video
 - `GET /patron-count` - Get current patron count
 - `GET /check-ffmpeg` - Check FFmpeg installation
-
-## Video Specifications
-
-- Resolutions: 
-  - 720p HD (1280x720) - Default
-  - 1080p Full HD (1920x1080)
-  - 4K UHD (3840x2160)
-- Format: MP4 (H.264)
-- Background: Black
-- Text: White, left-aligned with space for YouTube cards
-- Font size: Scales with resolution
-- Scroll: Bottom to top
-- Layout: 3 columns on the left, right side reserved for YouTube end cards
 
 ## Troubleshooting
 
@@ -164,10 +183,19 @@ patreon-credits/
 ## Development
 
 The app uses:
-- Flask for the web server
-- Patreon API v2 for patron data
-- FFmpeg for video generation
+- **Flask** for the web server
+- **Pillow (PIL)** for text rendering to images (pixel-accurate CJK support)
+- **FFmpeg** for video compositing and encoding
+- **Patreon API v2** for patron data
+- **Google Fonts CDN** for browser font previews
+- **localStorage** for persisting UI settings
 - Vanilla JavaScript for the frontend
+
+## Support
+
+If you find this tool useful, consider supporting development:
+
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/mscrnt)
 
 ## License
 

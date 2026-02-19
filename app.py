@@ -34,9 +34,11 @@ def generate_credits():
         duration = int(data.get('duration', 15))
         resolution = data.get('resolution', '1280x720')
         use_cache = data.get('use_cache', False)
-        message_style = data.get('message_style', {'size': 36, 'color': '#ffffff', 'font': 'noto_sans', 'bold': True})
+        message_style = data.get('message_style', {'size': 36, 'color': '#ffffff', 'font': 'noto_sans', 'bold': True, 'align': 'left'})
         patron_style = data.get('patron_style', {'size': 20, 'color': '#FFD700', 'font': 'noto_sans', 'bold': False})
-        layout = data.get('layout', '4col_left')
+        columns = int(data.get('columns', 4))
+        name_align = data.get('name_align', 'left')
+        truncate_length = int(data.get('truncate_length', 15))
 
         # Validate duration
         if duration < 5 or duration > 60:
@@ -49,12 +51,15 @@ def generate_credits():
                 patrons = patreon_api.fetch_active_patrons()
         else:
             patrons = patreon_api.fetch_active_patrons()
-        
+
         if not patrons:
             return jsonify({'error': 'No active patrons found'}), 404
-        
+
         # Generate video
-        video_filename = video_renderer.render_video(message, patrons, duration, resolution, message_style, patron_style, layout)
+        video_filename = video_renderer.render_video(
+            message, patrons, duration, resolution,
+            message_style, patron_style, columns, name_align,
+            truncate_length)
         
         return jsonify({
             'success': True,

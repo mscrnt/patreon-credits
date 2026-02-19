@@ -9,14 +9,26 @@ LINE_SPACING_MULTIPLIER = 1.4
 HEADER_PADDING_BASE = 30
 
 # Font registry: name -> (regular_file, bold_file)
-# Noto Sans CJK supports Latin + CJK; the others are Latin-only.
+# Noto Sans/Serif CJK support Latin + Chinese/Japanese/Korean.
+# LXGW WenKai supports Latin + Chinese/Japanese kanji.
+# All others are Latin-only.
 FONT_FAMILIES = {
-    # Sans-serif
+    # CJK + Latin (Chinese/Japanese/Korean)
     'noto_sans':        ('NotoSansCJKsc-Regular.otf',    'NotoSansCJKsc-Bold.otf'),
+    'noto_serif_cjk':   ('NotoSerifCJKsc-Regular.otf',   'NotoSerifCJKsc-Bold.otf'),
+    'lxgw_wenkai':      ('LXGWWenKai-Regular.ttf',       'LXGWWenKai-Medium.ttf'),
+    'zen_maru_gothic':  ('ZenMaruGothic-Regular.ttf',    'ZenMaruGothic-Bold.ttf'),
+    'mplus_rounded':    ('MPLUSRounded1c-Regular.ttf',   'MPLUSRounded1c-Bold.ttf'),
+    'shippori_mincho':  ('ShipporiMincho-Regular.ttf',   'ShipporiMincho-Bold.ttf'),
+    # Sans-serif (Latin only)
     'inter':            ('Inter-Regular.ttf',             'Inter-Bold.ttf'),
     'roboto':           ('Roboto-Regular.ttf',            'Roboto-Bold.ttf'),
     'open_sans':        ('OpenSans-Regular.ttf',          'OpenSans-Bold.ttf'),
+    'poppins':          ('Poppins-Regular.ttf',           'Poppins-Bold.ttf'),
     'montserrat':       ('Montserrat-Regular.ttf',        'Montserrat-Bold.ttf'),
+    'raleway':          ('Raleway-Regular.ttf',           'Raleway-Bold.ttf'),
+    'quicksand':        ('Quicksand-Regular.ttf',         'Quicksand-Bold.ttf'),
+    'source_sans':      ('SourceSans3-Regular.ttf',       'SourceSans3-Bold.ttf'),
     'lato':             ('Lato-Regular.ttf',              'Lato-Bold.ttf'),
     'nunito':           ('Nunito-Regular.ttf',            'Nunito-Bold.ttf'),
     'rubik':            ('Rubik-Regular.ttf',             'Rubik-Bold.ttf'),
@@ -25,13 +37,21 @@ FONT_FAMILIES = {
     'ubuntu':           ('Ubuntu-Regular.ttf',            'Ubuntu-Bold.ttf'),
     'oswald':           ('Oswald-Regular.ttf',            'Oswald-Bold.ttf'),
     'bebas_neue':       ('BebasNeue-Regular.ttf',         'BebasNeue-Regular.ttf'),
-    # Serif
+    # Serif (Latin only)
+    'cinzel':           ('Cinzel-Regular.ttf',            'Cinzel-Bold.ttf'),
     'playfair_display': ('PlayfairDisplay-Regular.ttf',   'PlayfairDisplay-Bold.ttf'),
+    'merriweather':     ('Merriweather-Regular.ttf',      'Merriweather-Bold.ttf'),
+    'crimson_text':     ('CrimsonText-Regular.ttf',       'CrimsonText-Bold.ttf'),
     'lora':             ('Lora-Regular.ttf',              'Lora-Bold.ttf'),
     'libre_baskerville':('LibreBaskerville-Regular.ttf',  'LibreBaskerville-Bold.ttf'),
     'arvo':             ('Arvo-Regular.ttf',              'Arvo-Bold.ttf'),
     'neuton':           ('Neuton-Regular.ttf',            'Neuton-Bold.ttf'),
-    # Handwriting
+    # Display (Latin only)
+    'alfa_slab_one':    ('AlfaSlabOne-Regular.ttf',       'AlfaSlabOne-Regular.ttf'),
+    'bangers':          ('Bangers-Regular.ttf',           'Bangers-Regular.ttf'),
+    # Handwriting/Script (Latin only)
+    'permanent_marker': ('PermanentMarker-Regular.ttf',   'PermanentMarker-Regular.ttf'),
+    'pacifico':         ('Pacifico-Regular.ttf',          'Pacifico-Regular.ttf'),
     'playwrite':        ('PlaywriteDEGrund-Regular.ttf',  'PlaywriteDEGrund-Regular.ttf'),
 }
 
@@ -106,6 +126,7 @@ class VideoRenderer:
         """Render the header message as a PIL Image on solid black."""
         font_size = int(message_style['size'] * scale_factor)
         color = self._hex_to_rgb(message_style['color'])
+        align = message_style.get('align', 'left')
 
         family = message_style.get('font', 'noto_sans')
         bold = message_style.get('bold', False)
@@ -117,25 +138,49 @@ class VideoRenderer:
         text_height = line_height * len(lines)
 
         padding = int(HEADER_PADDING_BASE * scale_factor)
-        x_offset = int(50 * scale_factor)
+        margin = int(50 * scale_factor)
         header_height = text_height + padding * 2
+        usable_width = width - margin * 2
 
         img = Image.new('RGB', (width, header_height), (0, 0, 0))
         draw = ImageDraw.Draw(img)
 
         y = padding
-        for line in lines:
-            draw.text((x_offset, y), line, font=font, fill=color)
+        for i, line in enumerate(lines):
+            text_w = font.getlength(line)
+
+            if align == 'center':
+                x = margin + (usable_width - text_w) / 2
+            elif align == 'right':
+                x = margin + usable_width - text_w
+            elif align == 'justify' and i < len(lines) - 1:
+                words = line.split()
+                if len(words) > 1:
+                    total_words_w = sum(font.getlength(w) for w in words)
+                    gap = (usable_width - total_words_w) / (len(words) - 1)
+                    wx = float(margin)
+                    for word in words:
+                        draw.text((wx, y), word, font=font, fill=color)
+                        wx += font.getlength(word) + gap
+                    y += line_height
+                    continue
+                x = margin
+            else:
+                x = margin
+
+            draw.text((x, y), line, font=font, fill=color)
             y += line_height
 
         return img, header_height
 
-    def _render_patrons_image(self, patrons, width, patron_style, scale_factor, layout='4col_left'):
+    def _render_patrons_image(self, patrons, width, patron_style, scale_factor,
+                              columns=4, name_align='left', truncate_length=15):
         """Render patron names as a tall PIL Image.
 
-        Layouts:
-            '4col_left'  – 4 columns using the left ~57 % of the frame
-            '3col_center' – 3 columns centred across the full frame
+        Args:
+            columns: 1-5 columns for patron names.
+            name_align: 'left' (leaves right side for YouTube cards),
+                        'center', or 'right'.
         """
         font_size = int(patron_style['size'] * scale_factor)
         color = self._hex_to_rgb(patron_style['color'])
@@ -145,22 +190,30 @@ class VideoRenderer:
         font_path = self._resolve_font(family, bold=bold)
         font = self._load_font(font_path, font_size)
 
-        # Layout parameters
-        if layout == '3col_center':
-            num_columns = 3
-            area_width = int(width * 0.90)
+        num_columns = max(1, min(5, columns))
+        line_height = int(font_size * LINE_SPACING_MULTIPLIER)
+        col_padding = int(20 * scale_factor)
+
+        # Truncate names if configured (0 = no truncation)
+        display_names = []
+        for name in patrons:
+            if truncate_length > 0 and len(name) > truncate_length:
+                name = name[:truncate_length].rstrip() + '...'
+            display_names.append(name)
+
+        max_name_width = max((font.getlength(n) for n in display_names), default=0)
+        column_width = int(max_name_width + col_padding * 2)
+        area_width = column_width * num_columns
+
+        # Position the columns block based on alignment
+        if name_align == 'right':
+            area_offset = width - area_width
+        elif name_align == 'center':
             area_offset = (width - area_width) // 2
-        else:  # 4col_left
-            num_columns = 4
-            area_width = int(width * 0.57)
+        else:  # left
             area_offset = 0
 
-        column_width = area_width // num_columns
-        line_height = int(font_size * LINE_SPACING_MULTIPLIER)
-        margin = int(5 * scale_factor)
-        max_text_width = column_width - margin * 2
-
-        rows_needed = (len(patrons) + num_columns - 1) // num_columns
+        rows_needed = (len(display_names) + num_columns - 1) // num_columns
         total_height = max(rows_needed * line_height, 1)
 
         img = Image.new('RGB', (width, total_height), (0, 0, 0))
@@ -170,16 +223,10 @@ class VideoRenderer:
             y = row * line_height
             for col in range(num_columns):
                 index = row * num_columns + col
-                if index >= len(patrons):
+                if index >= len(display_names):
                     continue
 
-                name = patrons[index]
-
-                # Pixel-accurate truncation
-                if font.getlength(name) > max_text_width:
-                    while len(name) > 0 and font.getlength(name + '...') > max_text_width:
-                        name = name[:-1]
-                    name = name.rstrip() + '...'
+                name = display_names[index]
 
                 # Centre-align within column
                 text_width = font.getlength(name)
@@ -195,10 +242,11 @@ class VideoRenderer:
     # ------------------------------------------------------------------
 
     def render_video(self, message, patrons, duration=15, resolution='1280x720',
-                     message_style=None, patron_style=None, layout='4col_left'):
+                     message_style=None, patron_style=None,
+                     columns=4, name_align='left', truncate_length=15):
         """Render the credits video using Pillow + FFmpeg."""
         if message_style is None:
-            message_style = {'size': 36, 'color': '#ffffff', 'font': 'noto_sans', 'bold': True}
+            message_style = {'size': 36, 'color': '#ffffff', 'font': 'noto_sans', 'bold': True, 'align': 'left'}
         if patron_style is None:
             patron_style = {'size': 20, 'color': '#FFD700', 'font': 'noto_sans', 'bold': False}
 
@@ -209,7 +257,8 @@ class VideoRenderer:
         header_img, header_height = self._render_header_image(
             message, width, message_style, scale_factor)
         patrons_img, patrons_height = self._render_patrons_image(
-            patrons, width, patron_style, scale_factor, layout)
+            patrons, width, patron_style, scale_factor, columns, name_align,
+            truncate_length)
 
         # Save to temp PNGs
         header_file = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
@@ -224,7 +273,9 @@ class VideoRenderer:
         output_path = os.path.join(self.output_dir, output_filename)
 
         try:
-            total_scroll = patrons_height + height
+            # Names start below the frame and scroll up until the last row
+            # clears behind the header overlay.
+            total_scroll = patrons_height + height + header_height
             scroll_speed = total_scroll / duration
 
             # Patron image starts below the frame, scrolls upward

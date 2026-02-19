@@ -6,7 +6,7 @@
     <title>Patreon Credits Generator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@400;700&family=Neuton:ital,wght@0,200;0,300;0,400;0,700;0,800;1,400&family=Noto+Sans:wght@400;700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playwrite+DE+Grund:wght@100..400&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=Bangers&family=Bebas+Neue&family=Cinzel:wght@400;700&family=Crimson+Text:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=LXGW+WenKai:wght@300;400;700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=M+PLUS+Rounded+1c:wght@400;700&family=Merriweather:wght@400;700&family=Montserrat:wght@400;700&family=Neuton:ital,wght@0,200;0,300;0,400;0,700;0,800;1,400&family=Noto+Sans:wght@400;700&family=Noto+Serif+SC:wght@400;700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@400;700&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playwrite+DE+Grund:wght@100..400&family=Poppins:wght@400;700&family=Quicksand:wght@400;700&family=Raleway:wght@400;700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Shippori+Mincho:wght@400;700&family=Source+Sans+3:wght@400;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -368,12 +368,23 @@
                         <div class="style-group">
                             <label for="messageFont">Font</label>
                             <select id="messageFont">
-                                <optgroup label="Sans-serif">
-                                    <option value="noto_sans" selected>Noto Sans (CJK)</option>
+                                <optgroup label="CJK + Latin (Chinese/Japanese/Korean)">
+                                    <option value="noto_sans" selected>Noto Sans CJK</option>
+                                    <option value="noto_serif_cjk">Noto Serif CJK</option>
+                                    <option value="lxgw_wenkai">LXGW WenKai</option>
+                                    <option value="zen_maru_gothic">Zen Maru Gothic</option>
+                                    <option value="mplus_rounded">M PLUS Rounded 1c</option>
+                                    <option value="shippori_mincho">Shippori Mincho</option>
+                                </optgroup>
+                                <optgroup label="Sans-serif (Latin only)">
                                     <option value="inter">Inter</option>
                                     <option value="roboto">Roboto</option>
                                     <option value="open_sans">Open Sans</option>
+                                    <option value="poppins">Poppins</option>
                                     <option value="montserrat">Montserrat</option>
+                                    <option value="raleway">Raleway</option>
+                                    <option value="quicksand">Quicksand</option>
+                                    <option value="source_sans">Source Sans 3</option>
                                     <option value="lato">Lato</option>
                                     <option value="nunito">Nunito</option>
                                     <option value="rubik">Rubik</option>
@@ -383,16 +394,34 @@
                                     <option value="oswald">Oswald</option>
                                     <option value="bebas_neue">Bebas Neue</option>
                                 </optgroup>
-                                <optgroup label="Serif">
+                                <optgroup label="Serif (Latin only)">
+                                    <option value="cinzel">Cinzel</option>
                                     <option value="playfair_display">Playfair Display</option>
+                                    <option value="merriweather">Merriweather</option>
+                                    <option value="crimson_text">Crimson Text</option>
                                     <option value="lora">Lora</option>
                                     <option value="libre_baskerville">Libre Baskerville</option>
                                     <option value="arvo">Arvo</option>
                                     <option value="neuton">Neuton</option>
                                 </optgroup>
-                                <optgroup label="Handwriting">
+                                <optgroup label="Display (Latin only)">
+                                    <option value="alfa_slab_one">Alfa Slab One</option>
+                                    <option value="bangers">Bangers</option>
+                                </optgroup>
+                                <optgroup label="Handwriting/Script (Latin only)">
+                                    <option value="permanent_marker">Permanent Marker</option>
+                                    <option value="pacifico">Pacifico</option>
                                     <option value="playwrite">Playwrite DE Grund</option>
                                 </optgroup>
+                            </select>
+                        </div>
+                        <div class="style-group">
+                            <label for="messageAlign">Align</label>
+                            <select id="messageAlign">
+                                <option value="left" selected>Left</option>
+                                <option value="center">Center</option>
+                                <option value="right">Right</option>
+                                <option value="justify">Justified</option>
                             </select>
                         </div>
                         <div class="style-group">
@@ -420,12 +449,23 @@
                         <div class="style-group">
                             <label for="patronFont">Font</label>
                             <select id="patronFont">
-                                <optgroup label="Sans-serif">
-                                    <option value="noto_sans" selected>Noto Sans (CJK)</option>
+                                <optgroup label="CJK + Latin (Chinese/Japanese/Korean)">
+                                    <option value="noto_sans" selected>Noto Sans CJK</option>
+                                    <option value="noto_serif_cjk">Noto Serif CJK</option>
+                                    <option value="lxgw_wenkai">LXGW WenKai</option>
+                                    <option value="zen_maru_gothic">Zen Maru Gothic</option>
+                                    <option value="mplus_rounded">M PLUS Rounded 1c</option>
+                                    <option value="shippori_mincho">Shippori Mincho</option>
+                                </optgroup>
+                                <optgroup label="Sans-serif (Latin only)">
                                     <option value="inter">Inter</option>
                                     <option value="roboto">Roboto</option>
                                     <option value="open_sans">Open Sans</option>
+                                    <option value="poppins">Poppins</option>
                                     <option value="montserrat">Montserrat</option>
+                                    <option value="raleway">Raleway</option>
+                                    <option value="quicksand">Quicksand</option>
+                                    <option value="source_sans">Source Sans 3</option>
                                     <option value="lato">Lato</option>
                                     <option value="nunito">Nunito</option>
                                     <option value="rubik">Rubik</option>
@@ -435,14 +475,23 @@
                                     <option value="oswald">Oswald</option>
                                     <option value="bebas_neue">Bebas Neue</option>
                                 </optgroup>
-                                <optgroup label="Serif">
+                                <optgroup label="Serif (Latin only)">
+                                    <option value="cinzel">Cinzel</option>
                                     <option value="playfair_display">Playfair Display</option>
+                                    <option value="merriweather">Merriweather</option>
+                                    <option value="crimson_text">Crimson Text</option>
                                     <option value="lora">Lora</option>
                                     <option value="libre_baskerville">Libre Baskerville</option>
                                     <option value="arvo">Arvo</option>
                                     <option value="neuton">Neuton</option>
                                 </optgroup>
-                                <optgroup label="Handwriting">
+                                <optgroup label="Display (Latin only)">
+                                    <option value="alfa_slab_one">Alfa Slab One</option>
+                                    <option value="bangers">Bangers</option>
+                                </optgroup>
+                                <optgroup label="Handwriting/Script (Latin only)">
+                                    <option value="permanent_marker">Permanent Marker</option>
+                                    <option value="pacifico">Pacifico</option>
                                     <option value="playwrite">Playwrite DE Grund</option>
                                 </optgroup>
                             </select>
@@ -474,11 +523,28 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="layout">Layout</label>
-                        <select id="layout">
-                            <option value="4col_left" selected>4 Columns – Left (YouTube cards)</option>
-                            <option value="3col_center">3 Columns – Centered</option>
+                        <label for="columns">Columns</label>
+                        <select id="columns">
+                            <option value="1">1 Column</option>
+                            <option value="2">2 Columns</option>
+                            <option value="3">3 Columns</option>
+                            <option value="4" selected>4 Columns</option>
+                            <option value="5">5 Columns</option>
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nameAlign">Name Alignment</label>
+                        <select id="nameAlign">
+                            <option value="left" selected>Left</option>
+                            <option value="center">Center</option>
+                            <option value="right">Right</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="truncateLength">Max Name Length</label>
+                        <input type="number" id="truncateLength" min="0" max="50" value="15" title="0 = no truncation">
                     </div>
 
                     <div class="form-group">
@@ -539,10 +605,19 @@
         // Font family mapping (backend key -> CSS font-family)
         const fontFamilyMap = {
             'noto_sans': "'Noto Sans', sans-serif",
+            'noto_serif_cjk': "'Noto Serif SC', serif",
+            'lxgw_wenkai': "'LXGW WenKai', cursive",
+            'zen_maru_gothic': "'Zen Maru Gothic', sans-serif",
+            'mplus_rounded': "'M PLUS Rounded 1c', sans-serif",
+            'shippori_mincho': "'Shippori Mincho', serif",
             'inter': "'Inter', sans-serif",
             'roboto': "'Roboto', sans-serif",
             'open_sans': "'Open Sans', sans-serif",
+            'poppins': "'Poppins', sans-serif",
             'montserrat': "'Montserrat', sans-serif",
+            'raleway': "'Raleway', sans-serif",
+            'quicksand': "'Quicksand', sans-serif",
+            'source_sans': "'Source Sans 3', sans-serif",
             'lato': "'Lato', sans-serif",
             'nunito': "'Nunito', sans-serif",
             'rubik': "'Rubik', sans-serif",
@@ -551,11 +626,18 @@
             'ubuntu': "'Ubuntu', sans-serif",
             'oswald': "'Oswald', sans-serif",
             'bebas_neue': "'Bebas Neue', sans-serif",
+            'cinzel': "'Cinzel', serif",
             'playfair_display': "'Playfair Display', serif",
+            'merriweather': "'Merriweather', serif",
+            'crimson_text': "'Crimson Text', serif",
             'lora': "'Lora', serif",
             'libre_baskerville': "'Libre Baskerville', serif",
             'arvo': "'Arvo', serif",
             'neuton': "'Neuton', serif",
+            'alfa_slab_one': "'Alfa Slab One', serif",
+            'bangers': "'Bangers', system-ui",
+            'permanent_marker': "'Permanent Marker', cursive",
+            'pacifico': "'Pacifico', cursive",
             'playwrite': "'Playwrite DE Grund', cursive"
         };
 
@@ -569,13 +651,17 @@
             { id: 'messageColor',  type: 'value' },
             { id: 'messageFont',   type: 'value' },
             { id: 'messageBold',   type: 'checked' },
+            { id: 'messageAlign',  type: 'value' },
             { id: 'patronSize',    type: 'value' },
             { id: 'patronColor',   type: 'value' },
             { id: 'patronFont',    type: 'value' },
             { id: 'patronBold',    type: 'checked' },
             { id: 'duration',      type: 'value' },
             { id: 'resolution',    type: 'value' },
-            { id: 'layout',        type: 'value' },
+            { id: 'columns',       type: 'value' },
+            { id: 'nameAlign',     type: 'value' },
+            { id: 'truncateLength', type: 'value' },
+            { id: 'useCache',      type: 'checked' },
         ];
 
         function saveSettings() {
@@ -694,7 +780,9 @@
             const message = document.getElementById('message').value.trim();
             const duration = parseInt(document.getElementById('duration').value);
             const resolution = document.getElementById('resolution').value;
-            const layout = document.getElementById('layout').value;
+            const columns = parseInt(document.getElementById('columns').value);
+            const nameAlign = document.getElementById('nameAlign').value;
+            const truncateLength = parseInt(document.getElementById('truncateLength').value) || 0;
             const useCache = document.getElementById('useCache').checked;
             
             // Get styling options
@@ -702,7 +790,8 @@
                 size: parseInt(document.getElementById('messageSize').value),
                 color: document.getElementById('messageColor').value,
                 font: document.getElementById('messageFont').value,
-                bold: document.getElementById('messageBold').checked
+                bold: document.getElementById('messageBold').checked,
+                align: document.getElementById('messageAlign').value
             };
 
             const patronStyle = {
@@ -730,7 +819,9 @@
                         message,
                         duration,
                         resolution,
-                        layout,
+                        columns,
+                        name_align: nameAlign,
+                        truncate_length: truncateLength,
                         use_cache: useCache,
                         message_style: messageStyle,
                         patron_style: patronStyle
