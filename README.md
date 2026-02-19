@@ -7,13 +7,17 @@ A web-based tool to automatically generate scrolling end-credits videos for YouT
 - 🎬 Generate professional scrolling credits videos (MP4 format)
 - 🔄 Fetch current active patrons from Patreon API
 - ⏱️ Customizable video duration (5-60 seconds)
-- 📝 Custom message header
-- 🎨 19 bundled font families (including CJK support)
-- 🖌️ Customizable text colors, sizes, and bold options
-- 📐 Two layout modes: 4-column left (YouTube cards) or 3-column centered
+- 📝 Custom header message with alignment options (left, center, right, justified)
+- 🎨 35 bundled font families (including CJK support for Chinese/Japanese/Korean)
+- 🖌️ Customizable text colors, sizes, and bold for both header and patron names
+- 🎨 Customizable background color
+- 📐 1-5 column layout with configurable alignment (left, center, right)
+- 📏 Name truncation with configurable max length, or word wrap with hyphenation
+- ➖ Optional separator lines between name rows
 - 🖥️ 720p, 1080p, and 4K resolution support
 - 💾 Patron list caching + localStorage for UI settings
 - 🧪 Dummy data mode for testing
+- 🔌 Adobe Premiere Pro plugin for direct timeline integration
 
 ## Prerequisites
 
@@ -94,9 +98,11 @@ python app.py
 2. Open your browser to `http://localhost:5000`
 
 3. Configure your video:
-   - Enter a custom header message
-   - Choose fonts, colors, and bold for both the header and patron names
-   - Select a layout (4-column left or 3-column centered)
+   - Enter a custom header message with alignment options
+   - Choose fonts, colors, sizes, and bold for both header and patron names
+   - Set background color
+   - Configure columns (1-5), name alignment, and max name length
+   - Enable word wrap and/or separator lines between names
    - Pick a resolution (720p, 1080p, or 4K)
    - Set the video duration (5-60 seconds)
 
@@ -117,13 +123,17 @@ USE_DUMMY_DATA=true
 
 ## Bundled Fonts
 
-19 font families are included in the `fonts/` directory, so no system font dependencies are needed:
+35 font families are included in the `fonts/` directory, so no system font dependencies are needed:
 
-**Sans-serif:** Noto Sans (CJK), Inter, Roboto, Open Sans, Montserrat, Lato, Nunito, Rubik, DM Sans, Josefin Sans, Ubuntu, Oswald, Bebas Neue
+**CJK + Latin:** Noto Sans CJK, Noto Serif CJK, LXGW WenKai, Zen Maru Gothic, M PLUS Rounded 1c, Shippori Mincho
 
-**Serif:** Playfair Display, Lora, Libre Baskerville, Arvo, Neuton
+**Sans-serif:** Inter, Roboto, Open Sans, Poppins, Montserrat, Raleway, Quicksand, Source Sans 3, Lato, Nunito, Rubik, DM Sans, Josefin Sans, Ubuntu, Oswald, Bebas Neue
 
-**Handwriting:** Playwrite DE Grund
+**Serif:** Cinzel, Playfair Display, Merriweather, Crimson Text, Lora, Libre Baskerville, Arvo, Neuton
+
+**Display:** Alfa Slab One, Bangers
+
+**Handwriting/Script:** Permanent Marker, Pacifico, Playwrite DE Grund
 
 Noto Sans CJK is the default and supports Latin, Chinese, Japanese, and Korean characters.
 
@@ -150,12 +160,11 @@ patreon-credits/
 
 - **Resolutions:** 720p HD, 1080p Full HD, 4K UHD
 - **Format:** MP4 (H.264)
-- **Background:** Black
-- **Header:** Static at top, customizable font/color/size
+- **Background:** Customizable color (default: black)
+- **Header:** Static at top, customizable font/color/size/alignment
 - **Names:** Scrolling bottom-to-top, gold (#FFD700) by default
-- **Layouts:**
-  - 4 columns left-aligned — right side reserved for YouTube end cards
-  - 3 columns centered — names span the full frame
+- **Layout:** 1-5 columns with left/center/right alignment
+- **Name options:** Truncation with max length, word wrap with hyphenation, separator lines between rows
 - **CJK support:** Proper character width handling via Pillow's `font.getlength()`
 
 ## API Endpoints
