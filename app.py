@@ -39,6 +39,9 @@ def generate_credits():
         columns = int(data.get('columns', 4))
         name_align = data.get('name_align', 'left')
         truncate_length = int(data.get('truncate_length', 15))
+        word_wrap = data.get('word_wrap', False)
+        name_spacing = data.get('name_spacing', False)
+        bg_color = data.get('bg_color', '#000000')
 
         # Validate duration
         if duration < 5 or duration > 60:
@@ -59,7 +62,7 @@ def generate_credits():
         video_filename = video_renderer.render_video(
             message, patrons, duration, resolution,
             message_style, patron_style, columns, name_align,
-            truncate_length)
+            truncate_length, word_wrap, name_spacing, bg_color)
         
         return jsonify({
             'success': True,
@@ -171,6 +174,21 @@ def api_spec():
                                             'maximum': 50,
                                             'default': 15,
                                             'description': 'Max characters per name (0 = no truncation).',
+                                        },
+                                        'word_wrap': {
+                                            'type': 'boolean',
+                                            'default': False,
+                                            'description': 'Hyphen-wrap long names instead of truncating with ellipsis.',
+                                        },
+                                        'name_spacing': {
+                                            'type': 'boolean',
+                                            'default': False,
+                                            'description': 'Add an extra line of spacing between each row of names.',
+                                        },
+                                        'bg_color': {
+                                            'type': 'string',
+                                            'default': '#000000',
+                                            'description': 'Background color as hex string.',
                                         },
                                         'use_cache': {
                                             'type': 'boolean',

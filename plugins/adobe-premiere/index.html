@@ -204,9 +204,25 @@
                 <input type="number" id="truncateLength" value="15" min="0" max="50" title="0 = no limit">
             </div>
         </div>
-        <div class="checkbox-row">
-            <input type="checkbox" id="useCache">
-            <label for="useCache">Use cached patron list</label>
+        <div class="row">
+            <div class="field-sm">
+                <label>Background</label>
+                <input type="color" id="bgColor" value="#000000">
+            </div>
+        </div>
+        <div class="row" style="gap: 16px;">
+            <div class="checkbox-row">
+                <input type="checkbox" id="wordWrap">
+                <label for="wordWrap">Word wrap</label>
+            </div>
+            <div class="checkbox-row">
+                <input type="checkbox" id="nameSpacing">
+                <label for="nameSpacing">Line breaks</label>
+            </div>
+            <div class="checkbox-row">
+                <input type="checkbox" id="useCache">
+                <label for="useCache">Use cache</label>
+            </div>
         </div>
     </div>
 

@@ -60,6 +60,9 @@
             columns: parseInt(document.getElementById("columns").value, 10),
             name_align: document.getElementById("nameAlign").value,
             truncate_length: parseInt(document.getElementById("truncateLength").value, 10) || 0,
+            word_wrap: document.getElementById("wordWrap").checked,
+            name_spacing: document.getElementById("nameSpacing").checked,
+            bg_color: document.getElementById("bgColor").value,
             use_cache: document.getElementById("useCache").checked,
             message_style: {
                 size: parseInt(document.getElementById("messageSize").value, 10),

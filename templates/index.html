@@ -557,17 +557,29 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" style="max-width: 100px;">
                         <label for="truncateLength">Max Name Length</label>
                         <input type="number" id="truncateLength" min="0" max="50" value="15" title="0 = no truncation">
                     </div>
 
-                    <div class="form-group">
-                        <label>Options</label>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="useCache">
-                            <label for="useCache" style="margin: 0;">Use cached patron list</label>
-                        </div>
+                    <div class="form-group" style="max-width: 120px;">
+                        <label for="bgColor">Background</label>
+                        <input type="color" id="bgColor" value="#000000">
+                    </div>
+                </div>
+
+                <div class="options-row" style="gap: 30px;">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="wordWrap">
+                        <label for="wordWrap" style="margin: 0;">Word wrap names</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="nameSpacing">
+                        <label for="nameSpacing" style="margin: 0;">Line break between names</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="useCache">
+                        <label for="useCache" style="margin: 0;">Use cached patron list</label>
                     </div>
                 </div>
                 
@@ -676,6 +688,9 @@
             { id: 'columns',       type: 'value' },
             { id: 'nameAlign',     type: 'value' },
             { id: 'truncateLength', type: 'value' },
+            { id: 'wordWrap',      type: 'checked' },
+            { id: 'nameSpacing',   type: 'checked' },
+            { id: 'bgColor',       type: 'value' },
             { id: 'useCache',      type: 'checked' },
         ];
 
@@ -798,6 +813,9 @@
             const columns = parseInt(document.getElementById('columns').value);
             const nameAlign = document.getElementById('nameAlign').value;
             const truncateLength = parseInt(document.getElementById('truncateLength').value) || 0;
+            const wordWrap = document.getElementById('wordWrap').checked;
+            const nameSpacing = document.getElementById('nameSpacing').checked;
+            const bgColor = document.getElementById('bgColor').value;
             const useCache = document.getElementById('useCache').checked;
             
             // Get styling options
@@ -837,6 +855,9 @@
                         columns,
                         name_align: nameAlign,
                         truncate_length: truncateLength,
+                        word_wrap: wordWrap,
+                        name_spacing: nameSpacing,
+                        bg_color: bgColor,
                         use_cache: useCache,
                         message_style: messageStyle,
                         patron_style: patronStyle
