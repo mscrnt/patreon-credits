@@ -54,6 +54,17 @@
             transform: translateY(calc(-50% - 2px));
         }
 
+        .settings-link {
+            left: 120px;
+            background-color: #666;
+            color: #fff;
+        }
+
+        .settings-link:hover {
+            background-color: #777;
+            transform: translateY(calc(-50% - 2px));
+        }
+
         .bmc-link {
             right: 20px;
             background-color: #FFDD00;
@@ -354,6 +365,7 @@
 <body>
     <div class="header">
         <a href="/api/docs" class="header-link api-link">API Docs</a>
+        <a href="/settings" class="header-link settings-link">Settings</a>
         <h1>🎬 Patreon Credits Generator</h1>
         <p>Create professional scrolling credits for your YouTube videos</p>
         <a href="https://buymeacoffee.com/mscrnt" target="_blank" rel="noopener" class="header-link bmc-link">☕ Buy me a coffee</a>
@@ -369,6 +381,18 @@
                     <textarea id="message" rows="3" placeholder="This video was made possible by our amazing Patreon supporters:">This video was made possible by our amazing Patreon supporters:</textarea>
                 </div>
                 
+                <div class="form-group">
+                    <label for="customNames">Custom Names (optional)</label>
+                    <textarea id="customNames" rows="4" placeholder="Enter names manually, one per line — overrides Patreon list"></textarea>
+                    <div style="display: flex; align-items: center; gap: 12px; margin-top: 4px;">
+                        <p style="color: #888; font-size: 0.8rem; margin: 0;">Leave empty to use Patreon patron list.</p>
+                        <label style="display: inline-flex; align-items: center; gap: 4px; cursor: pointer; background: #444; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; color: #ccc; margin: 0;">
+                            Upload .txt/.csv
+                            <input type="file" id="namesFileInput" accept=".txt,.csv" style="display: none;">
+                        </label>
+                    </div>
+                </div>
+
                 <div class="style-section">
                     <h4>Message Styling</h4>
                     <div class="style-controls">
@@ -674,6 +698,7 @@
         // IDs of all form fields to persist
         const persistFields = [
             { id: 'message',       type: 'value' },
+            { id: 'customNames',   type: 'value' },
             { id: 'messageSize',   type: 'value' },
             { id: 'messageColor',  type: 'value' },
             { id: 'messageFont',   type: 'value' },
@@ -808,6 +833,7 @@
             e.preventDefault();
             
             const message = document.getElementById('message').value.trim();
+            const customNames = document.getElementById('customNames').value.trim();
             const duration = parseInt(document.getElementById('duration').value);
             const resolution = document.getElementById('resolution').value;
             const columns = parseInt(document.getElementById('columns').value);
@@ -850,6 +876,7 @@
                     },
                     body: JSON.stringify({
                         message,
+                        custom_names: customNames,
                         duration,
                         resolution,
                         columns,
@@ -876,8 +903,8 @@
                 videoPlayer.src = data.video_url;
                 videoPreview.classList.add('active');
                 
-                // Update download link
-                downloadBtn.href = `/download/${data.filename}`;
+                // Store filename for download handler
+                downloadBtn.dataset.filename = data.filename;
                 
                 // Update patron count
                 patronCount.textContent = data.patron_count;
@@ -892,6 +919,49 @@
             }
         });
         
+        document.getElementById('namesFileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                let text = reader.result;
+                // CSV: if lines contain commas, split on commas and flatten
+                if (file.name.endsWith('.csv')) {
+                    const names = text.split(/[\r\n]+/)
+                        .flatMap(line => line.split(','))
+                        .map(n => n.trim().replace(/^["']|["']$/g, ''))
+                        .filter(Boolean);
+                    text = names.join('\n');
+                }
+                const ta = document.getElementById('customNames');
+                ta.value = ta.value ? ta.value.trimEnd() + '\n' + text.trim() : text.trim();
+                saveSettings();
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        });
+
+        downloadBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const filename = downloadBtn.dataset.filename;
+            if (!filename) return;
+            try {
+                const resp = await fetch(`/download/${filename}`);
+                if (!resp.ok) throw new Error('Download failed');
+                const blob = await resp.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `patreon_credits_${filename}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (err) {
+                showError(err.message);
+            }
+        });
+
         refreshBtn.addEventListener('click', async () => {
             refreshBtn.disabled = true;
             showStatus('Refreshing patron list...');

@@ -1,27 +1,81 @@
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file, redirect
 import os
+import platform
+import shutil
+import tempfile
+import zipfile
+import tarfile
+import requests as http_requests
 from patreon import PatreonAPI
 from ffmpeg_renderer import VideoRenderer
 from dotenv import load_dotenv
+from path_utils import (
+    get_env_path, get_env_example_path, get_output_dir,
+    get_templates_dir, get_static_dir, get_ffmpeg_dir,
+    get_ffmpeg_download_url, check_ffmpeg as check_ffmpeg_util,
+)
 
-load_dotenv()
+load_dotenv(get_env_path())
 
-app = Flask(__name__)
+# Copy .env.example -> .env on first run
+if not os.path.exists(get_env_path()) and os.path.exists(get_env_example_path()):
+    shutil.copy2(get_env_example_path(), get_env_path())
+    load_dotenv(get_env_path(), override=True)
+
+app = Flask(
+    __name__,
+    template_folder=get_templates_dir(),
+    static_folder=get_static_dir(),
+)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 # Initialize services
 patreon_api = PatreonAPI()
 video_renderer = VideoRenderer()
 
+
+def _is_first_run():
+    """True when no .env exists or it still has placeholder values."""
+    env = get_env_path()
+    if not os.path.exists(env):
+        return True
+    token = os.getenv('PATREON_TOKEN', '')
+    dummy = os.getenv('USE_DUMMY_DATA', 'false').lower() == 'true'
+    if dummy:
+        return False
+    return not token or token == 'your_creator_access_token_here'
+
+
+def _write_env(token='', campaign_id='', use_dummy='false'):
+    """Write values to the .env file."""
+    lines = [
+        '# Patreon API Configuration',
+        f'PATREON_TOKEN={token}',
+        f'PATREON_CAMPAIGN_ID={campaign_id}',
+        f'USE_DUMMY_DATA={use_dummy}',
+        '',
+    ]
+    with open(get_env_path(), 'w') as f:
+        f.write('\n'.join(lines))
+
 @app.route('/')
 def index():
-    """Main page"""
+    """Main page — redirects to /setup on first run."""
+    if _is_first_run():
+        return redirect('/setup')
     return render_template('index.html')
+
+
+@app.route('/setup')
+def setup_page():
+    """First-run setup wizard."""
+    return render_template('setup.html')
+
 
 @app.route('/check-ffmpeg')
 def check_ffmpeg():
     """Check if FFmpeg is installed"""
-    is_installed = video_renderer.check_ffmpeg()
+    is_installed = check_ffmpeg_util()
     return jsonify({'installed': is_installed})
 
 @app.route('/generate', methods=['POST'])
@@ -43,12 +97,16 @@ def generate_credits():
         name_spacing = data.get('name_spacing', False)
         bg_color = data.get('bg_color', '#000000')
 
+        custom_names = data.get('custom_names', '').strip()
+
         # Validate duration
         if duration < 5 or duration > 60:
             return jsonify({'error': 'Duration must be between 5 and 60 seconds'}), 400
 
-        # Get patrons
-        if use_cache:
+        # Get patrons — custom names override Patreon fetch
+        if custom_names:
+            patrons = [n.strip() for n in custom_names.split('\n') if n.strip()]
+        elif use_cache:
             patrons = patreon_api.get_cached_patrons()
             if not patrons:
                 patrons = patreon_api.fetch_active_patrons()
@@ -66,7 +124,7 @@ def generate_credits():
 
         return jsonify({
             'success': True,
-            'video_url': f'/static/output/{video_filename}',
+            'video_url': f'/output/{video_filename}',
             'patron_count': len(patrons),
             'filename': video_filename
         })
@@ -74,11 +132,20 @@ def generate_credits():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/output/<filename>')
+def serve_output(filename):
+    """Serve a generated video from the writable output directory."""
+    file_path = os.path.join(get_output_dir(), filename)
+    if os.path.exists(file_path):
+        return send_file(file_path)
+    return jsonify({'error': 'File not found'}), 404
+
+
 @app.route('/download/<filename>')
 def download_video(filename):
     """Download the generated video"""
     try:
-        file_path = os.path.join('static/output', filename)
+        file_path = os.path.join(get_output_dir(), filename)
         if os.path.exists(file_path):
             return send_file(file_path, as_attachment=True, download_name=f'patreon_credits_{filename}')
         else:
@@ -105,6 +172,105 @@ def refresh_patrons():
         return jsonify({'count': len(patrons), 'patrons': patrons})
     except Exception as e:
         return jsonify({'error': str(e), 'count': 0}), 500
+
+@app.route('/settings', methods=['GET'])
+def get_settings():
+    """Return current settings as JSON (or render settings page via Accept header)."""
+    # If the browser wants HTML, render the page
+    if 'text/html' in request.headers.get('Accept', ''):
+        return render_template('settings.html')
+    # Otherwise return JSON for the JS fetch calls
+    load_dotenv(get_env_path(), override=True)
+    return jsonify({
+        'patreon_token': os.getenv('PATREON_TOKEN', ''),
+        'campaign_id': os.getenv('PATREON_CAMPAIGN_ID', ''),
+        'use_dummy_data': os.getenv('USE_DUMMY_DATA', 'false').lower() == 'true',
+    })
+
+
+@app.route('/settings', methods=['POST'])
+def save_settings():
+    """Save Patreon credentials to .env and reinitialise."""
+    global patreon_api
+    data = request.get_json()
+    token = data.get('patreon_token', '').strip()
+    campaign_id = data.get('campaign_id', '').strip()
+    use_dummy = 'true' if data.get('use_dummy_data') else 'false'
+
+    _write_env(token, campaign_id, use_dummy)
+    load_dotenv(get_env_path(), override=True)
+    patreon_api = PatreonAPI()
+
+    return jsonify({'success': True})
+
+
+@app.route('/detect-campaign', methods=['POST'])
+def detect_campaign():
+    """Auto-detect campaign ID from a Patreon token."""
+    data = request.get_json()
+    token = data.get('token', '').strip()
+    if not token:
+        return jsonify({'error': 'No token provided'}), 400
+    campaign_id, error = PatreonAPI.detect_campaign_id(token)
+    if error:
+        return jsonify({'error': error}), 400
+    return jsonify({'campaign_id': campaign_id})
+
+
+@app.route('/install-ffmpeg', methods=['POST'])
+def install_ffmpeg():
+    """Download and install FFmpeg to the app's ffmpeg_bin/ directory."""
+    try:
+        url, archive_name = get_ffmpeg_download_url()
+        dest_dir = get_ffmpeg_dir()
+        system = platform.system()
+
+        # Download to temp file
+        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=archive_name)
+        tmp.close()
+        resp = http_requests.get(url, stream=True, timeout=300)
+        resp.raise_for_status()
+        with open(tmp.name, 'wb') as f:
+            for chunk in resp.iter_content(chunk_size=1024 * 1024):
+                f.write(chunk)
+
+        ext = '.exe' if system == 'Windows' else ''
+        ffmpeg_dest = os.path.join(dest_dir, f'ffmpeg{ext}')
+
+        if archive_name.endswith('.zip'):
+            with zipfile.ZipFile(tmp.name) as zf:
+                for info in zf.infolist():
+                    basename = os.path.basename(info.filename)
+                    if basename in (f'ffmpeg{ext}', 'ffmpeg'):
+                        with zf.open(info) as src, open(ffmpeg_dest, 'wb') as dst:
+                            shutil.copyfileobj(src, dst)
+                        break
+        elif archive_name.endswith(('.tar.xz', '.tar.gz')):
+            with tarfile.open(tmp.name) as tf:
+                for member in tf.getmembers():
+                    if os.path.basename(member.name) == 'ffmpeg':
+                        src = tf.extractfile(member)
+                        if src:
+                            with open(ffmpeg_dest, 'wb') as dst:
+                                shutil.copyfileobj(src, dst)
+                        break
+
+        os.unlink(tmp.name)
+
+        if not os.path.isfile(ffmpeg_dest):
+            return jsonify({'success': False, 'error': 'Could not find ffmpeg binary in archive'}), 500
+
+        if system != 'Windows':
+            os.chmod(ffmpeg_dest, 0o755)
+
+        # Reinitialise renderer so it picks up the new path
+        global video_renderer
+        video_renderer = VideoRenderer()
+
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 
 @app.route('/api/spec')
 def api_spec():
@@ -347,20 +513,17 @@ def api_docs():
 
 
 if __name__ == '__main__':
-    # Check for required environment variables
-    use_dummy_data = os.getenv('USE_DUMMY_DATA', 'false').lower() == 'true'
+    if _is_first_run():
+        print("First run detected — open http://localhost:5000 to complete setup.")
+    else:
+        use_dummy_data = os.getenv('USE_DUMMY_DATA', 'false').lower() == 'true'
+        if not use_dummy_data and (not os.getenv('PATREON_TOKEN') or not os.getenv('PATREON_CAMPAIGN_ID')):
+            print("WARNING: No Patreon credentials found.")
+            print("Running in DUMMY DATA mode for testing...")
+            os.environ['USE_DUMMY_DATA'] = 'true'
+            patreon_api = PatreonAPI()
 
-    if not use_dummy_data and (not os.getenv('PATREON_TOKEN') or not os.getenv('PATREON_CAMPAIGN_ID')):
-        print("WARNING: No Patreon credentials found.")
-        print("To use real data: Copy .env.example to .env and fill in your credentials")
-        print("Running in DUMMY DATA mode for testing...")
-        os.environ['USE_DUMMY_DATA'] = 'true'
-        # Reinitialize the API with dummy data mode
-        patreon_api.__init__()
-
-    # Check for FFmpeg
-    if not video_renderer.check_ffmpeg():
-        print("WARNING: FFmpeg not found. Please install FFmpeg to generate videos.")
-        print("Install with: brew install ffmpeg (macOS) or apt-get install ffmpeg (Linux)")
+    if not check_ffmpeg_util():
+        print("WARNING: FFmpeg not found. You can install it from the Settings page.")
 
     app.run(debug=True, port=5000)

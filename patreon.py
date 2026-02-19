@@ -3,11 +3,14 @@ import json
 import os
 from dotenv import load_dotenv
 from datetime import datetime
+from path_utils import get_env_path, get_cache_path
 
-load_dotenv()
+load_dotenv(get_env_path())
+
 
 class PatreonAPI:
     def __init__(self):
+        load_dotenv(get_env_path(), override=True)
         self.token = os.getenv('PATREON_TOKEN')
         self.campaign_id = os.getenv('PATREON_CAMPAIGN_ID')
         self.use_dummy_data = os.getenv('USE_DUMMY_DATA', 'false').lower() == 'true'
@@ -16,6 +19,33 @@ class PatreonAPI:
             'Authorization': f'Bearer {self.token}',
             'Content-Type': 'application/json'
         }
+
+    @staticmethod
+    def detect_campaign_id(token):
+        """Call the Patreon API to auto-detect the campaign ID from a token.
+
+        Returns (campaign_id, error_message). On success error_message is None.
+        """
+        try:
+            resp = requests.get(
+                'https://www.patreon.com/api/oauth2/v2/campaigns',
+                headers={
+                    'Authorization': f'Bearer {token}',
+                    'Content-Type': 'application/json',
+                },
+                timeout=15,
+            )
+            if resp.status_code == 401:
+                return None, 'Invalid token (401 Unauthorized)'
+            if resp.status_code != 200:
+                return None, f'API error: {resp.status_code}'
+            data = resp.json()
+            campaigns = data.get('data', [])
+            if not campaigns:
+                return None, 'No campaigns found for this token'
+            return campaigns[0]['id'], None
+        except requests.RequestException as exc:
+            return None, str(exc)
 
     def get_dummy_patrons(self):
         """Generate dummy patron data for testing"""
@@ -96,12 +126,13 @@ class PatreonAPI:
             'timestamp': datetime.now().isoformat(),
             'patrons': patrons
         }
-        with open('patrons_cache.json', 'w') as f:
+        with open(get_cache_path(), 'w') as f:
             json.dump(cache_data, f, indent=2)
 
     def get_cached_patrons(self):
         """Get patrons from cache if available"""
-        if os.path.exists('patrons_cache.json'):
-            with open('patrons_cache.json', 'r') as f:
+        path = get_cache_path()
+        if os.path.exists(path):
+            with open(path, 'r') as f:
                 return json.load(f).get('patrons', [])
         return []

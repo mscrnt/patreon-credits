@@ -55,6 +55,7 @@
     function getFormData() {
         return {
             message: document.getElementById("message").value.trim(),
+            custom_names: (document.getElementById("customNames") || {}).value || "",
             duration: parseInt(document.getElementById("duration").value, 10),
             resolution: document.getElementById("resolution").value,
             columns: parseInt(document.getElementById("columns").value, 10),
@@ -202,6 +203,30 @@
                 refreshBtn.disabled = false;
             });
     });
+
+    // ---- File upload for custom names ----
+    var namesFileInput = document.getElementById("namesFileInput");
+    if (namesFileInput) {
+        namesFileInput.addEventListener("change", function (e) {
+            var file = e.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function () {
+                var text = reader.result;
+                if (file.name.match(/\.csv$/i)) {
+                    var names = text.split(/[\r\n]+/)
+                        .reduce(function (acc, line) { return acc.concat(line.split(",")); }, [])
+                        .map(function (n) { return n.trim().replace(/^["']|["']$/g, ""); })
+                        .filter(Boolean);
+                    text = names.join("\n");
+                }
+                var ta = document.getElementById("customNames");
+                ta.value = ta.value ? ta.value.trimEnd() + "\n" + text.trim() : text.trim();
+            };
+            reader.readAsText(file);
+            e.target.value = "";
+        });
+    }
 
     // ---- Init ----
     checkServer();

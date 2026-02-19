@@ -5,3 +5,8 @@
 patrons_cache.json
 venv/
 static/output/*.mp4
+output/*.mp4
+dist/
+build/
+ffmpeg_bin/
+*.spec.bak

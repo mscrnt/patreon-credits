@@ -3,6 +3,8 @@ import os
 import tempfile
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
+from fontTools.ttLib import TTFont
+from path_utils import get_output_dir, get_fonts_dir, get_ffmpeg_path, check_ffmpeg as _check_ffmpeg, _subprocess_kwargs
 
 # Layout constants
 LINE_SPACING_MULTIPLIER = 1.4
@@ -57,10 +59,15 @@ FONT_FAMILIES = {
 
 
 class VideoRenderer:
+    # Fonts with broad Unicode coverage (Greek, Cyrillic, etc.), tried in order
+    _FALLBACK_FAMILIES = ['inter', 'roboto', 'open_sans', 'source_sans', 'noto_sans']
+
     def __init__(self):
-        self.output_dir = 'static/output'
-        os.makedirs(self.output_dir, exist_ok=True)
-        self._font_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fonts')
+        self.output_dir = get_output_dir()
+        self._font_dir = get_fonts_dir()
+        self._ffmpeg_path = get_ffmpeg_path()
+        self._cmap_cache = {}   # font_path -> set of codepoints
+        self._font_cache = {}   # (font_path, size) -> PIL ImageFont
 
     # ------------------------------------------------------------------
     # Font helpers
@@ -94,12 +101,107 @@ class VideoRenderer:
 
     def _load_font(self, font_path, size):
         """Load a PIL ImageFont, falling back to default if path is None."""
+        key = (font_path, size)
+        if key in self._font_cache:
+            return self._font_cache[key]
+        font = None
         if font_path:
             try:
-                return ImageFont.truetype(font_path, size)
+                font = ImageFont.truetype(font_path, size)
             except (IOError, OSError):
                 pass
-        return ImageFont.load_default()
+        if font is None:
+            font = ImageFont.load_default()
+        self._font_cache[key] = font
+        return font
+
+    # ------------------------------------------------------------------
+    # Font-fallback helpers
+    # ------------------------------------------------------------------
+
+    def _get_cmap(self, font_path):
+        """Return the set of Unicode codepoints covered by a font file."""
+        if font_path in self._cmap_cache:
+            return self._cmap_cache[font_path]
+        try:
+            tt = TTFont(font_path)
+            cmap = tt.getBestCmap() or {}
+            tt.close()
+            result = set(cmap.keys())
+        except Exception:
+            result = None  # None = assume all chars supported
+        self._cmap_cache[font_path] = result
+        return result
+
+    def _build_fallback_chain(self, primary_path, bold):
+        """Build an ordered list of (font_path, cmap) fallbacks."""
+        chain = []
+        seen = {primary_path}
+        for fam in self._FALLBACK_FAMILIES:
+            fp = self._resolve_font(fam, bold=bold)
+            if fp and fp not in seen:
+                seen.add(fp)
+                chain.append((fp, self._get_cmap(fp)))
+        return chain
+
+    def _build_runs(self, text, primary_path, bold):
+        """Split *text* into runs of (substring, font_path).
+
+        Each run uses the primary font when possible, otherwise the first
+        fallback whose cmap contains the character.
+        """
+        if not text:
+            return []
+        primary_cmap = self._get_cmap(primary_path)
+        fallbacks = self._build_fallback_chain(primary_path, bold)
+
+        runs = []
+        cur_text = ''
+        cur_path = None
+
+        for ch in text:
+            cp = ord(ch)
+            # Spaces always use whatever font is current (or primary)
+            if ch in (' ', '\t'):
+                chosen = cur_path or primary_path
+            elif primary_cmap is None or cp in primary_cmap:
+                chosen = primary_path
+            else:
+                chosen = primary_path
+                for fp, cmap in fallbacks:
+                    if cmap is not None and cp in cmap:
+                        chosen = fp
+                        break
+
+            if chosen == cur_path:
+                cur_text += ch
+            else:
+                if cur_text:
+                    runs.append((cur_text, cur_path))
+                cur_text = ch
+                cur_path = chosen
+
+        if cur_text:
+            runs.append((cur_text, cur_path))
+        return runs
+
+    def _draw_text(self, draw, x, y, text, primary_path, size, fill, bold=False):
+        """Draw *text* at (x, y) with automatic font fallback."""
+        runs = self._build_runs(text, primary_path, bold)
+        cx = x
+        for run_text, font_path in runs:
+            font = self._load_font(font_path, size)
+            draw.text((cx, y), run_text, font=font, fill=fill)
+            cx += font.getlength(run_text)
+
+    def _measure_text(self, text, primary_path, size, bold=False):
+        """Measure the pixel width of *text* with font fallback."""
+        runs = self._build_runs(text, primary_path, bold)
+        total = 0.0
+        for run_text, font_path in runs:
+            font = self._load_font(font_path, size)
+            total += font.getlength(run_text)
+        return total
 
     # Keep legacy helpers for anything external that calls them
     def get_system_font(self):
@@ -132,7 +234,6 @@ class VideoRenderer:
         family = message_style.get('font', 'noto_sans')
         bold = message_style.get('bold', False)
         font_path = self._resolve_font(family, bold=bold)
-        font = self._load_font(font_path, font_size)
 
         lines = message.split('\n')
         line_height = int(font_size * LINE_SPACING_MULTIPLIER)
@@ -148,7 +249,7 @@ class VideoRenderer:
 
         y = padding
         for i, line in enumerate(lines):
-            text_w = font.getlength(line)
+            text_w = self._measure_text(line, font_path, font_size, bold)
 
             if align == 'center':
                 x = margin + (usable_width - text_w) / 2
@@ -157,19 +258,19 @@ class VideoRenderer:
             elif align == 'justify' and i < len(lines) - 1:
                 words = line.split()
                 if len(words) > 1:
-                    total_words_w = sum(font.getlength(w) for w in words)
+                    total_words_w = sum(self._measure_text(w, font_path, font_size, bold) for w in words)
                     gap = (usable_width - total_words_w) / (len(words) - 1)
                     wx = float(margin)
                     for word in words:
-                        draw.text((wx, y), word, font=font, fill=color)
-                        wx += font.getlength(word) + gap
+                        self._draw_text(draw, wx, y, word, font_path, font_size, color, bold)
+                        wx += self._measure_text(word, font_path, font_size, bold) + gap
                     y += line_height
                     continue
                 x = margin
             else:
                 x = margin
 
-            draw.text((x, y), line, font=font, fill=color)
+            self._draw_text(draw, x, y, line, font_path, font_size, color, bold)
             y += line_height
 
         return img, header_height
@@ -219,7 +320,6 @@ class VideoRenderer:
         family = patron_style.get('font', 'noto_sans')
         bold = patron_style.get('bold', False)
         font_path = self._resolve_font(family, bold=bold)
-        font = self._load_font(font_path, font_size)
 
         num_columns = max(1, min(5, columns))
         line_height = int(font_size * LINE_SPACING_MULTIPLIER)
@@ -238,7 +338,7 @@ class VideoRenderer:
 
         # Measure widest rendered line across all entries
         all_lines = [ln for entry in entries for ln in entry]
-        max_name_width = max((font.getlength(ln) for ln in all_lines), default=0)
+        max_name_width = max((self._measure_text(ln, font_path, font_size, bold) for ln in all_lines), default=0)
         column_width = int(max_name_width + col_padding * 2)
         area_width = column_width * num_columns
 
@@ -302,10 +402,10 @@ class VideoRenderer:
 
                 col_start_x = area_offset + col * column_width
                 for li, line_text in enumerate(entry_lines):
-                    text_w = font.getlength(line_text)
+                    text_w = self._measure_text(line_text, font_path, font_size, bold)
                     x = col_start_x + (column_width - text_w) / 2
                     y = y_start + li * line_height
-                    draw.text((x, y), line_text, font=font, fill=color)
+                    self._draw_text(draw, x, y, line_text, font_path, font_size, color, bold)
 
             y_offset += row_h
 
@@ -361,7 +461,7 @@ class VideoRenderer:
             ffmpeg_color = f'0x{bg_hex}'
 
             cmd = [
-                'ffmpeg',
+                self._ffmpeg_path,
                 '-f', 'lavfi', '-i', f'color={ffmpeg_color}:s={resolution}:d={duration}:r=30',
                 '-loop', '1', '-t', str(duration), '-i', patrons_file.name,
                 '-loop', '1', '-t', str(duration), '-i', header_file.name,
@@ -379,7 +479,7 @@ class VideoRenderer:
                 output_path,
             ]
 
-            result = subprocess.run(cmd, capture_output=True, text=True)
+            result = subprocess.run(cmd, capture_output=True, text=True, **_subprocess_kwargs())
 
             if result.returncode != 0:
                 raise Exception(f"FFmpeg error: {result.stderr}")
@@ -397,8 +497,4 @@ class VideoRenderer:
 
     def check_ffmpeg(self):
         """Check if FFmpeg is installed"""
-        try:
-            result = subprocess.run(['ffmpeg', '-version'], capture_output=True)
-            return result.returncode == 0
-        except FileNotFoundError:
-            return False
+        return _check_ffmpeg()
