@@ -1,69 +1,86 @@
 # Patreon Credits Generator
 
-A web-based tool to automatically generate scrolling end-credits videos for YouTube content creators, featuring their Patreon supporters.
+A standalone desktop app to generate scrolling end-credits videos for YouTube content creators, featuring their Patreon supporters. Runs as a native window on Windows, macOS, and Linux — no Python or FFmpeg install required.
+
+## Download
+
+Grab the latest release for your platform from the [Releases page](../../releases):
+
+| Platform | File | Notes |
+|----------|------|-------|
+| **Windows** | `PatreonCredits.exe` | Standalone executable |
+| **Windows** | `PatreonCredits_Setup_*.exe` | Installer (adds Start Menu shortcut) |
+| **macOS** | `PatreonCredits_*.dmg` | Drag to Applications |
+| **Linux** | `PatreonCredits_*.AppImage` | `chmod +x` and run |
 
 ## Features
 
-- 🎬 Generate professional scrolling credits videos (MP4 format)
-- 🔄 Fetch current active patrons from Patreon API
-- ⏱️ Customizable video duration (5-60 seconds)
-- 📝 Custom header message with alignment options (left, center, right, justified)
-- 🎨 35 bundled font families (including CJK support for Chinese/Japanese/Korean)
-- 🖌️ Customizable text colors, sizes, and bold for both header and patron names
+- 🎬 Professional scrolling credits videos (MP4)
+- 🔄 Fetch active patrons from Patreon API
+- 📝 Custom names input — paste or upload a `.txt`/`.csv` file (no Patreon required)
+- ⏱️ Customizable duration (5-60 seconds)
+- 📝 Custom header with alignment options (left, center, right, justified)
+- 🎨 35 bundled font families (CJK + international character fallback)
+- 🖌️ Customizable text colors, sizes, and bold
 - 🎨 Customizable background color
-- 📐 1-5 column layout with configurable alignment (left, center, right)
-- 📏 Name truncation with configurable max length, or word wrap with hyphenation
+- 📐 1-5 column layout with configurable alignment
+- 📏 Name truncation or word wrap with hyphenation
 - ➖ Optional separator lines between name rows
-- 🖥️ 720p, 1080p, and 4K resolution support
-- 💾 Patron list caching + localStorage for UI settings
+- 🖥️ 720p, 1080p, and 4K resolution
+- ⚙️ In-app settings page for Patreon credentials
 - 🧪 Dummy data mode for testing
 - 🔌 Adobe Premiere Pro plugin for direct timeline integration
 
-## Prerequisites
+## Quick Start (Desktop App)
 
-- Python 3.7+
-- FFmpeg (for video generation)
-- Patreon Creator Access Token (for real data)
+1. Download and run the app for your platform (see above)
+2. On first launch, a setup wizard helps you configure Patreon credentials (or skip to use dummy data / manual names)
+3. Configure your video options and click **Generate Credits Video**
+4. Preview and download the result
 
-## Installation
+Settings and output videos are saved next to the executable.
 
-1. Clone the repository:
+## Development Setup
+
+For contributors or running from source:
+
+### Prerequisites
+
+- Python 3.10+
+- FFmpeg installed and in PATH
+
+### Install
+
 ```bash
+git clone https://github.com/mscrnt/patreon-credits.git
 cd patreon-credits
-```
-
-2. Create and activate a virtual environment:
-```bash
 python -m venv venv
 source venv/bin/activate        # Linux/macOS
 venv\Scripts\activate           # Windows
-```
-
-3. Install Python dependencies:
-```bash
 pip install -r requirements.txt
-```
-
-4. Install FFmpeg:
-   - macOS: `brew install ffmpeg`
-   - Ubuntu/Debian: `sudo apt-get install ffmpeg`
-   - Windows: Download from [ffmpeg.org](https://ffmpeg.org/download.html)
-
-5. Configure environment:
-```bash
 cp .env.example .env
 ```
 
-Edit `.env` and add your Patreon credentials:
+Edit `.env` with your Patreon credentials (or set `USE_DUMMY_DATA=true`):
 ```
 PATREON_TOKEN=your_creator_access_token
 PATREON_CAMPAIGN_ID=your_campaign_id
 USE_DUMMY_DATA=false
 ```
 
+### Run
+
+```bash
+# Desktop mode (native window via pywebview)
+python launcher.py
+
+# Web mode (browser at http://localhost:5000)
+python app.py
+```
+
 ## Getting Patreon Credentials
 
-You need two values for the `.env` file:
+You need two values (configurable in the app's **Settings** page or `.env` file):
 
 ### 1. Creator Access Token (`PATREON_TOKEN`)
 
@@ -73,53 +90,14 @@ You need two values for the `.env` file:
 
 ### 2. Campaign ID (`PATREON_CAMPAIGN_ID`)
 
-**Option A: Via the API (easiest)**
-
-Run this in your terminal using the token from step 1:
+Run this with your token from step 1:
 
 ```bash
 curl -s -H "Authorization: Bearer YOUR_TOKEN_HERE" \
   "https://www.patreon.com/api/oauth2/v2/campaigns"
 ```
 
-The response will include your campaign ID in the `data[0].id` field.
-
-**Option B: From the URL**
-
-Go to your Patreon creator page and look at the URL — it sometimes contains the campaign ID.
-
-## Usage
-
-1. Start the Flask server:
-```bash
-python app.py
-```
-
-2. Open your browser to `http://localhost:5000`
-
-3. Configure your video:
-   - Enter a custom header message with alignment options
-   - Choose fonts, colors, sizes, and bold for both header and patron names
-   - Set background color
-   - Configure columns (1-5), name alignment, and max name length
-   - Enable word wrap and/or separator lines between names
-   - Pick a resolution (720p, 1080p, or 4K)
-   - Set the video duration (5-60 seconds)
-
-4. Click "Generate Credits Video"
-
-5. Preview and download the generated video
-
-All settings are saved in your browser and restored on the next visit.
-
-## Testing with Dummy Data
-
-If you don't have Patreon credentials yet, the app will automatically run in dummy data mode with 50 sample patron names.
-
-To explicitly enable dummy data mode, set in your `.env`:
-```
-USE_DUMMY_DATA=true
-```
+The campaign ID is in the `data[0].id` field.
 
 ## Bundled Fonts
 
@@ -137,21 +115,54 @@ USE_DUMMY_DATA=true
 
 Noto Sans CJK is the default and supports Latin, Chinese, Japanese, and Korean characters.
 
+## Building from Source
+
+### Platform build scripts
+
+```bash
+# Windows (run from cmd)
+scripts\build_windows.bat
+
+# macOS
+./scripts/build_macos.sh
+
+# Linux
+./scripts/build_linux.sh
+```
+
+Each script runs PyInstaller and creates the platform-specific package (Inno Setup installer, DMG, or AppImage). Builds must run on the target platform — PyInstaller cannot cross-compile.
+
+### CI/CD
+
+Pushing a `v*` tag triggers GitHub Actions to build all three platforms and create a GitHub Release with artifacts attached. See [.github/workflows/build.yml](.github/workflows/build.yml).
+
 ## Project Structure
 
 ```
 patreon-credits/
-├── app.py                  # Flask server
+├── app.py                  # Flask server + routes
+├── launcher.py             # Desktop app entry point (pywebview)
+├── path_utils.py           # Path resolution (dev vs frozen)
 ├── patreon.py              # Patreon API client
 ├── ffmpeg_renderer.py      # Pillow + FFmpeg video rendering
+├── patreon_credits.spec    # PyInstaller build spec
 ├── fonts/                  # Bundled font files (35 families)
 ├── templates/
-│   └── index.html          # Web interface
-├── static/
-│   └── output/             # Generated videos
+│   ├── index.html          # Main UI
+│   ├── settings.html       # Settings page
+│   ├── setup.html          # First-run setup wizard
+│   └── swagger.html        # API docs
+├── static/                 # Flask static files
+├── installer/
+│   └── patreon_credits.iss # Inno Setup script (Windows)
+├── scripts/
+│   ├── build_windows.bat   # Windows build script
+│   ├── build_macos.sh      # macOS build script
+│   └── build_linux.sh      # Linux build script
 ├── plugins/
-│   └── adobe-premiere/     # Adobe Premiere Pro CEP panel plugin
-├── .env                    # Configuration
+│   └── adobe-premiere/     # Premiere Pro CEP panel plugin
+├── .github/workflows/
+│   └── build.yml           # CI/CD (cross-platform builds)
 ├── .env.example            # Configuration template
 └── requirements.txt        # Python dependencies
 ```
@@ -169,14 +180,16 @@ patreon-credits/
 
 ## API Endpoints
 
-- `GET /` - Main web interface
-- `POST /generate` - Generate credits video
-- `GET /download/<filename>` - Download generated video
-- `GET /patron-count` - Get current patron count
-- `POST /refresh-patrons` - Force-refresh patron list from Patreon API
-- `GET /check-ffmpeg` - Check FFmpeg installation
-- `GET /api/docs` - Swagger UI documentation
-- `GET /api/spec` - OpenAPI 3.0 JSON specification
+- `GET /` — Main web interface
+- `POST /generate` — Generate credits video (accepts `custom_names` for manual input)
+- `GET /download/<filename>` — Download generated video
+- `GET /patron-count` — Get current patron count
+- `POST /refresh-patrons` — Force-refresh patron list from Patreon API
+- `GET /check-ffmpeg` — Check FFmpeg installation
+- `GET /settings` — Settings page (Patreon credentials, dummy data toggle)
+- `POST /settings` — Save settings to `.env`
+- `GET /api/docs` — Swagger UI documentation
+- `GET /api/spec` — OpenAPI 3.0 JSON specification
 
 ## Adobe Premiere Pro Plugin
 
@@ -186,30 +199,31 @@ See the [plugin README](plugins/adobe-premiere/README.md) for installation and u
 
 ## Troubleshooting
 
-### FFmpeg not found
-- Ensure FFmpeg is installed and in your system PATH
-- Try running `ffmpeg -version` in terminal
+### FFmpeg not found (desktop app)
+The desktop app bundles its own FFmpeg — this should not happen. If it does, check the status indicator in the bottom-right of the UI.
+
+### FFmpeg not found (dev mode)
+Ensure FFmpeg is installed and in your system PATH (`ffmpeg -version`).
 
 ### No patrons showing
-- Check your Patreon API credentials
-- Ensure you have active patrons in your campaign
-- Try using the "Refresh Patron List" button
+- Check credentials in **Settings** or `.env`
+- Try the **Refresh Patron List** button
+- Or paste names directly in the **Custom Names** textarea
 
 ### Video generation fails
-- Check FFmpeg installation
+- Check FFmpeg status indicator
 - Ensure sufficient disk space
-- Check console for error messages
+- Check the console/terminal for error messages
 
-## Development
+## Tech Stack
 
-The app uses:
-- **Flask** for the web server
-- **Pillow (PIL)** for text rendering to images (pixel-accurate CJK support)
-- **FFmpeg** for video compositing and encoding
-- **Patreon API v2** for patron data
-- **Google Fonts CDN** for browser font previews
-- **localStorage** for persisting UI settings
-- Vanilla JavaScript for the frontend
+- **Flask** — web server
+- **pywebview** — native desktop window (WebView2 on Windows, WebKit on macOS/Linux)
+- **PyInstaller** — standalone packaging
+- **Pillow** — text rendering with font fallback (fontTools cmap)
+- **FFmpeg** — video compositing (H.264 MP4)
+- **Patreon API v2** — patron data
+- Vanilla JavaScript frontend with localStorage persistence
 
 ## Support
 

@@ -5,7 +5,8 @@ A CEP (Common Extensibility Platform) panel that integrates the Patreon Credits 
 ## Features
 
 - Generate credits videos directly from the Premiere Pro panel
-- All styling options: fonts, colors, sizes, alignment, columns
+- All styling options: fonts, colors, sizes, alignment, columns, background color
+- Custom names input — paste or upload a `.txt`/`.csv` file
 - 35 bundled font families including CJK support
 - One-click import and add to timeline
 - Automatic server connection status
@@ -14,8 +15,10 @@ A CEP (Common Extensibility Platform) panel that integrates the Patreon Credits 
 ## Prerequisites
 
 - Adobe Premiere Pro CC 2019 or later
-- The Patreon Credits Generator server running locally (`python app.py`)
-- FFmpeg installed on the system
+- The Patreon Credits Generator server running locally — either:
+  - Desktop app (`PatreonCredits.exe` / `launcher.py`), or
+  - Dev server (`python app.py`)
+- FFmpeg installed on the system (or bundled in the desktop app)
 
 ## Installation
 
@@ -61,10 +64,7 @@ ZXPSignCmd -sign plugins/adobe-premiere PatreonCredits.zxp certificate.p12 passw
 
 ## Usage
 
-1. Start the Patreon Credits Generator server:
-   ```bash
-   python app.py
-   ```
+1. Start the Patreon Credits Generator server (run the desktop app or `python app.py`)
 
 2. Open Premiere Pro and go to **Window > Extensions > Patreon Credits**
 
