@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patreon Credits Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@400;700&family=Neuton:ital,wght@0,200;0,300;0,400;0,700;0,800;1,400&family=Noto+Sans:wght@400;700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playwrite+DE+Grund:wght@100..400&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -298,6 +301,19 @@
             padding: 5px;
             cursor: pointer;
         }
+
+        .font-preview {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+            font-size: 18px;
+            color: #ccc;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 </head>
 <body>
@@ -330,14 +346,44 @@
                         <div class="style-group">
                             <label for="messageFont">Font</label>
                             <select id="messageFont">
-                                <option value="default">Default</option>
-                                <option value="bold">Bold</option>
-                                <option value="italic">Italic</option>
+                                <optgroup label="Sans-serif">
+                                    <option value="noto_sans" selected>Noto Sans (CJK)</option>
+                                    <option value="inter">Inter</option>
+                                    <option value="roboto">Roboto</option>
+                                    <option value="open_sans">Open Sans</option>
+                                    <option value="montserrat">Montserrat</option>
+                                    <option value="lato">Lato</option>
+                                    <option value="nunito">Nunito</option>
+                                    <option value="rubik">Rubik</option>
+                                    <option value="dm_sans">DM Sans</option>
+                                    <option value="josefin_sans">Josefin Sans</option>
+                                    <option value="ubuntu">Ubuntu</option>
+                                    <option value="oswald">Oswald</option>
+                                    <option value="bebas_neue">Bebas Neue</option>
+                                </optgroup>
+                                <optgroup label="Serif">
+                                    <option value="playfair_display">Playfair Display</option>
+                                    <option value="lora">Lora</option>
+                                    <option value="libre_baskerville">Libre Baskerville</option>
+                                    <option value="arvo">Arvo</option>
+                                    <option value="neuton">Neuton</option>
+                                </optgroup>
+                                <optgroup label="Handwriting">
+                                    <option value="playwrite">Playwrite DE Grund</option>
+                                </optgroup>
                             </select>
                         </div>
+                        <div class="style-group">
+                            <label>&nbsp;</label>
+                            <div class="checkbox-group" style="margin-top: 0;">
+                                <input type="checkbox" id="messageBold" checked>
+                                <label for="messageBold" style="margin: 0;">Bold</label>
+                            </div>
+                        </div>
                     </div>
+                    <div class="font-preview" id="messageFontPreview" style="font-family: 'Noto Sans', sans-serif; font-weight: bold;">The quick brown fox jumps over the lazy dog</div>
                 </div>
-                
+
                 <div class="style-section">
                     <h4>Patron Names Styling</h4>
                     <div class="style-controls">
@@ -347,19 +393,49 @@
                         </div>
                         <div class="style-group">
                             <label for="patronColor">Color</label>
-                            <input type="color" id="patronColor" value="#ffffff">
+                            <input type="color" id="patronColor" value="#FFD700">
                         </div>
                         <div class="style-group">
                             <label for="patronFont">Font</label>
                             <select id="patronFont">
-                                <option value="default">Default</option>
-                                <option value="bold">Bold</option>
-                                <option value="italic">Italic</option>
+                                <optgroup label="Sans-serif">
+                                    <option value="noto_sans" selected>Noto Sans (CJK)</option>
+                                    <option value="inter">Inter</option>
+                                    <option value="roboto">Roboto</option>
+                                    <option value="open_sans">Open Sans</option>
+                                    <option value="montserrat">Montserrat</option>
+                                    <option value="lato">Lato</option>
+                                    <option value="nunito">Nunito</option>
+                                    <option value="rubik">Rubik</option>
+                                    <option value="dm_sans">DM Sans</option>
+                                    <option value="josefin_sans">Josefin Sans</option>
+                                    <option value="ubuntu">Ubuntu</option>
+                                    <option value="oswald">Oswald</option>
+                                    <option value="bebas_neue">Bebas Neue</option>
+                                </optgroup>
+                                <optgroup label="Serif">
+                                    <option value="playfair_display">Playfair Display</option>
+                                    <option value="lora">Lora</option>
+                                    <option value="libre_baskerville">Libre Baskerville</option>
+                                    <option value="arvo">Arvo</option>
+                                    <option value="neuton">Neuton</option>
+                                </optgroup>
+                                <optgroup label="Handwriting">
+                                    <option value="playwrite">Playwrite DE Grund</option>
+                                </optgroup>
                             </select>
                         </div>
+                        <div class="style-group">
+                            <label>&nbsp;</label>
+                            <div class="checkbox-group" style="margin-top: 0;">
+                                <input type="checkbox" id="patronBold">
+                                <label for="patronBold" style="margin: 0;">Bold</label>
+                            </div>
+                        </div>
                     </div>
+                    <div class="font-preview" id="patronFontPreview" style="font-family: 'Noto Sans', sans-serif; font-weight: normal; color: #FFD700;">The quick brown fox jumps over the lazy dog</div>
                 </div>
-                
+
                 <div class="options-row">
                     <div class="form-group">
                         <label for="duration">Video Duration (seconds)</label>
@@ -374,7 +450,15 @@
                             <option value="3840x2160">4K UHD (3840x2160)</option>
                         </select>
                     </div>
-                    
+
+                    <div class="form-group">
+                        <label for="layout">Layout</label>
+                        <select id="layout">
+                            <option value="4col_left" selected>4 Columns – Left (YouTube cards)</option>
+                            <option value="3col_center">3 Columns – Centered</option>
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label>Options</label>
                         <div class="checkbox-group">
@@ -430,6 +514,115 @@
         const patronCount = document.getElementById('patronCount');
         const ffmpegStatus = document.getElementById('ffmpegStatus');
         
+        // Font family mapping (backend key -> CSS font-family)
+        const fontFamilyMap = {
+            'noto_sans': "'Noto Sans', sans-serif",
+            'inter': "'Inter', sans-serif",
+            'roboto': "'Roboto', sans-serif",
+            'open_sans': "'Open Sans', sans-serif",
+            'montserrat': "'Montserrat', sans-serif",
+            'lato': "'Lato', sans-serif",
+            'nunito': "'Nunito', sans-serif",
+            'rubik': "'Rubik', sans-serif",
+            'dm_sans': "'DM Sans', sans-serif",
+            'josefin_sans': "'Josefin Sans', sans-serif",
+            'ubuntu': "'Ubuntu', sans-serif",
+            'oswald': "'Oswald', sans-serif",
+            'bebas_neue': "'Bebas Neue', sans-serif",
+            'playfair_display': "'Playfair Display', serif",
+            'lora': "'Lora', serif",
+            'libre_baskerville': "'Libre Baskerville', serif",
+            'arvo': "'Arvo', serif",
+            'neuton': "'Neuton', serif",
+            'playwrite': "'Playwrite DE Grund', cursive"
+        };
+
+        // ---- localStorage persistence ----
+        const STORAGE_KEY = 'patreon_credits_settings';
+
+        // IDs of all form fields to persist
+        const persistFields = [
+            { id: 'message',       type: 'value' },
+            { id: 'messageSize',   type: 'value' },
+            { id: 'messageColor',  type: 'value' },
+            { id: 'messageFont',   type: 'value' },
+            { id: 'messageBold',   type: 'checked' },
+            { id: 'patronSize',    type: 'value' },
+            { id: 'patronColor',   type: 'value' },
+            { id: 'patronFont',    type: 'value' },
+            { id: 'patronBold',    type: 'checked' },
+            { id: 'duration',      type: 'value' },
+            { id: 'resolution',    type: 'value' },
+            { id: 'layout',        type: 'value' },
+        ];
+
+        function saveSettings() {
+            const settings = {};
+            persistFields.forEach(f => {
+                const el = document.getElementById(f.id);
+                settings[f.id] = f.type === 'checked' ? el.checked : el.value;
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+        }
+
+        function loadSettings() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return;
+            try {
+                const settings = JSON.parse(raw);
+                persistFields.forEach(f => {
+                    if (settings[f.id] === undefined) return;
+                    const el = document.getElementById(f.id);
+                    if (f.type === 'checked') el.checked = settings[f.id];
+                    else el.value = settings[f.id];
+                });
+            } catch (_) { /* ignore corrupt data */ }
+        }
+
+        // Restore on page load
+        loadSettings();
+
+        // Save whenever any tracked field changes
+        persistFields.forEach(f => {
+            const el = document.getElementById(f.id);
+            el.addEventListener('change', saveSettings);
+            if (el.type === 'color' || el.tagName === 'TEXTAREA') {
+                el.addEventListener('input', saveSettings);
+            }
+        });
+
+        // ---- Live font preview updaters ----
+        function updateFontPreview(previewId, fontSelectId, boldCheckboxId, colorInputId) {
+            const preview = document.getElementById(previewId);
+            const fontVal = document.getElementById(fontSelectId).value;
+            const bold = document.getElementById(boldCheckboxId).checked;
+            preview.style.fontFamily = fontFamilyMap[fontVal] || 'sans-serif';
+            preview.style.fontWeight = bold ? 'bold' : 'normal';
+            if (colorInputId) {
+                preview.style.color = document.getElementById(colorInputId).value;
+            }
+        }
+
+        // Bind change events for message styling
+        document.getElementById('messageFont').addEventListener('change', () =>
+            updateFontPreview('messageFontPreview', 'messageFont', 'messageBold', 'messageColor'));
+        document.getElementById('messageBold').addEventListener('change', () =>
+            updateFontPreview('messageFontPreview', 'messageFont', 'messageBold', 'messageColor'));
+        document.getElementById('messageColor').addEventListener('input', () =>
+            updateFontPreview('messageFontPreview', 'messageFont', 'messageBold', 'messageColor'));
+
+        // Bind change events for patron styling
+        document.getElementById('patronFont').addEventListener('change', () =>
+            updateFontPreview('patronFontPreview', 'patronFont', 'patronBold', 'patronColor'));
+        document.getElementById('patronBold').addEventListener('change', () =>
+            updateFontPreview('patronFontPreview', 'patronFont', 'patronBold', 'patronColor'));
+        document.getElementById('patronColor').addEventListener('input', () =>
+            updateFontPreview('patronFontPreview', 'patronFont', 'patronBold', 'patronColor'));
+
+        // Sync previews with (possibly restored) values
+        updateFontPreview('messageFontPreview', 'messageFont', 'messageBold', 'messageColor');
+        updateFontPreview('patronFontPreview', 'patronFont', 'patronBold', 'patronColor');
+
         // Check FFmpeg status on load
         checkFFmpeg();
         updatePatronCount();
@@ -479,19 +672,22 @@
             const message = document.getElementById('message').value.trim();
             const duration = parseInt(document.getElementById('duration').value);
             const resolution = document.getElementById('resolution').value;
+            const layout = document.getElementById('layout').value;
             const useCache = document.getElementById('useCache').checked;
             
             // Get styling options
             const messageStyle = {
                 size: parseInt(document.getElementById('messageSize').value),
                 color: document.getElementById('messageColor').value,
-                font: document.getElementById('messageFont').value
+                font: document.getElementById('messageFont').value,
+                bold: document.getElementById('messageBold').checked
             };
-            
+
             const patronStyle = {
                 size: parseInt(document.getElementById('patronSize').value),
                 color: document.getElementById('patronColor').value,
-                font: document.getElementById('patronFont').value
+                font: document.getElementById('patronFont').value,
+                bold: document.getElementById('patronBold').checked
             };
             
             if (!message) {
@@ -512,6 +708,7 @@
                         message,
                         duration,
                         resolution,
+                        layout,
                         use_cache: useCache,
                         message_style: messageStyle,
                         patron_style: patronStyle

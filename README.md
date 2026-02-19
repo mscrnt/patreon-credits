@@ -25,17 +25,24 @@ A web-based tool to automatically generate scrolling end-credits videos for YouT
 cd patreon-credits
 ```
 
-2. Install Python dependencies:
+2. Create and activate a virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate        # Linux/macOS
+venv\Scripts\activate           # Windows
+```
+
+3. Install Python dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Install FFmpeg:
+4. Install FFmpeg:
    - macOS: `brew install ffmpeg`
    - Ubuntu/Debian: `sudo apt-get install ffmpeg`
    - Windows: Download from [ffmpeg.org](https://ffmpeg.org/download.html)
 
-4. Configure environment:
+5. Configure environment:
 ```bash
 cp .env.example .env
 ```
@@ -49,10 +56,30 @@ USE_DUMMY_DATA=false
 
 ## Getting Patreon Credentials
 
+You need two values for the `.env` file:
+
+### 1. Creator Access Token (`PATREON_TOKEN`)
+
 1. Go to [Patreon Platform](https://www.patreon.com/portal/registration/register-clients)
-2. Create a new client/app
-3. Get your Creator Access Token
-4. Find your Campaign ID in the API response or URL
+2. Create a new client/app (or use an existing one)
+3. Copy your **Creator Access Token**
+
+### 2. Campaign ID (`PATREON_CAMPAIGN_ID`)
+
+**Option A: Via the API (easiest)**
+
+Run this in your terminal using the token from step 1:
+
+```bash
+curl -s -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  "https://www.patreon.com/api/oauth2/v2/campaigns"
+```
+
+The response will include your campaign ID in the `data[0].id` field.
+
+**Option B: From the URL**
+
+Go to your Patreon creator page and look at the URL — it sometimes contains the campaign ID.
 
 ## Usage
 
