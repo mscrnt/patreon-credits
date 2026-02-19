@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patreon Credits</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Server status -->
+    <div class="server-status">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Checking server...</span>
+    </div>
+    <div class="project-info" id="projectInfo"></div>
+
+    <!-- Header Message -->
+    <div class="section">
+        <h2>Header Message</h2>
+        <textarea id="message" rows="2">This video was made possible by our Patreon supporters:</textarea>
+        <div class="row" style="margin-top: 6px;">
+            <div class="field-sm">
+                <label>Size</label>
+                <input type="number" id="messageSize" value="36" min="8" max="120">
+            </div>
+            <div class="field-sm">
+                <label>Color</label>
+                <input type="color" id="messageColor" value="#ffffff">
+            </div>
+            <div class="field">
+                <label>Font</label>
+                <select id="messageFont">
+                    <optgroup label="CJK + Latin">
+                        <option value="noto_sans" selected>Noto Sans CJK</option>
+                        <option value="noto_serif_cjk">Noto Serif CJK</option>
+                        <option value="lxgw_wenkai">LXGW WenKai</option>
+                        <option value="zen_maru_gothic">Zen Maru Gothic</option>
+                        <option value="mplus_rounded">M PLUS Rounded 1c</option>
+                        <option value="shippori_mincho">Shippori Mincho</option>
+                    </optgroup>
+                    <optgroup label="Sans-serif">
+                        <option value="inter">Inter</option>
+                        <option value="roboto">Roboto</option>
+                        <option value="open_sans">Open Sans</option>
+                        <option value="poppins">Poppins</option>
+                        <option value="montserrat">Montserrat</option>
+                        <option value="raleway">Raleway</option>
+                        <option value="quicksand">Quicksand</option>
+                        <option value="source_sans">Source Sans 3</option>
+                        <option value="lato">Lato</option>
+                        <option value="nunito">Nunito</option>
+                        <option value="rubik">Rubik</option>
+                        <option value="dm_sans">DM Sans</option>
+                        <option value="josefin_sans">Josefin Sans</option>
+                        <option value="ubuntu">Ubuntu</option>
+                        <option value="oswald">Oswald</option>
+                        <option value="bebas_neue">Bebas Neue</option>
+                    </optgroup>
+                    <optgroup label="Serif">
+                        <option value="cinzel">Cinzel</option>
+                        <option value="playfair_display">Playfair Display</option>
+                        <option value="merriweather">Merriweather</option>
+                        <option value="crimson_text">Crimson Text</option>
+                        <option value="lora">Lora</option>
+                        <option value="libre_baskerville">Libre Baskerville</option>
+                        <option value="arvo">Arvo</option>
+                        <option value="neuton">Neuton</option>
+                    </optgroup>
+                    <optgroup label="Display">
+                        <option value="alfa_slab_one">Alfa Slab One</option>
+                        <option value="bangers">Bangers</option>
+                    </optgroup>
+                    <optgroup label="Handwriting/Script">
+                        <option value="permanent_marker">Permanent Marker</option>
+                        <option value="pacifico">Pacifico</option>
+                        <option value="playwrite">Playwrite DE Grund</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="field">
+                <label>Align</label>
+                <select id="messageAlign">
+                    <option value="left" selected>Left</option>
+                    <option value="center">Center</option>
+                    <option value="right">Right</option>
+                    <option value="justify">Justified</option>
+                </select>
+            </div>
+            <div class="checkbox-row" style="margin-top: 12px;">
+                <input type="checkbox" id="messageBold" checked>
+                <label for="messageBold">Bold</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patron Name Styling -->
+    <div class="section">
+        <h2>Patron Names</h2>
+        <div class="row">
+            <div class="field-sm">
+                <label>Size</label>
+                <input type="number" id="patronSize" value="20" min="8" max="120">
+            </div>
+            <div class="field-sm">
+                <label>Color</label>
+                <input type="color" id="patronColor" value="#FFD700">
+            </div>
+            <div class="field">
+                <label>Font</label>
+                <select id="patronFont">
+                    <optgroup label="CJK + Latin">
+                        <option value="noto_sans" selected>Noto Sans CJK</option>
+                        <option value="noto_serif_cjk">Noto Serif CJK</option>
+                        <option value="lxgw_wenkai">LXGW WenKai</option>
+                        <option value="zen_maru_gothic">Zen Maru Gothic</option>
+                        <option value="mplus_rounded">M PLUS Rounded 1c</option>
+                        <option value="shippori_mincho">Shippori Mincho</option>
+                    </optgroup>
+                    <optgroup label="Sans-serif">
+                        <option value="inter">Inter</option>
+                        <option value="roboto">Roboto</option>
+                        <option value="open_sans">Open Sans</option>
+                        <option value="poppins">Poppins</option>
+                        <option value="montserrat">Montserrat</option>
+                        <option value="raleway">Raleway</option>
+                        <option value="quicksand">Quicksand</option>
+                        <option value="source_sans">Source Sans 3</option>
+                        <option value="lato">Lato</option>
+                        <option value="nunito">Nunito</option>
+                        <option value="rubik">Rubik</option>
+                        <option value="dm_sans">DM Sans</option>
+                        <option value="josefin_sans">Josefin Sans</option>
+                        <option value="ubuntu">Ubuntu</option>
+                        <option value="oswald">Oswald</option>
+                        <option value="bebas_neue">Bebas Neue</option>
+                    </optgroup>
+                    <optgroup label="Serif">
+                        <option value="cinzel">Cinzel</option>
+                        <option value="playfair_display">Playfair Display</option>
+                        <option value="merriweather">Merriweather</option>
+                        <option value="crimson_text">Crimson Text</option>
+                        <option value="lora">Lora</option>
+                        <option value="libre_baskerville">Libre Baskerville</option>
+                        <option value="arvo">Arvo</option>
+                        <option value="neuton">Neuton</option>
+                    </optgroup>
+                    <optgroup label="Display">
+                        <option value="alfa_slab_one">Alfa Slab One</option>
+                        <option value="bangers">Bangers</option>
+                    </optgroup>
+                    <optgroup label="Handwriting/Script">
+                        <option value="permanent_marker">Permanent Marker</option>
+                        <option value="pacifico">Pacifico</option>
+                        <option value="playwrite">Playwrite DE Grund</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+        <div class="checkbox-row">
+            <input type="checkbox" id="patronBold">
+            <label for="patronBold">Bold</label>
+        </div>
+    </div>
+
+    <!-- Video Settings -->
+    <div class="section">
+        <h2>Video Settings</h2>
+        <div class="row">
+            <div class="field">
+                <label>Duration (sec)</label>
+                <input type="number" id="duration" value="15" min="5" max="60">
+            </div>
+            <div class="field">
+                <label>Resolution</label>
+                <select id="resolution">
+                    <option value="1280x720" selected>720p</option>
+                    <option value="1920x1080">1080p</option>
+                    <option value="3840x2160">4K</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="field">
+                <label>Columns</label>
+                <select id="columns">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4" selected>4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Name Align</label>
+                <select id="nameAlign">
+                    <option value="left" selected>Left</option>
+                    <option value="center">Center</option>
+                    <option value="right">Right</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Max Name Len</label>
+                <input type="number" id="truncateLength" value="15" min="0" max="50" title="0 = no limit">
+            </div>
+        </div>
+        <div class="checkbox-row">
+            <input type="checkbox" id="useCache">
+            <label for="useCache">Use cached patron list</label>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <button class="btn-primary" id="generateBtn">Generate Credits Video</button>
+    <button class="btn-secondary" id="refreshBtn">Refresh Patron List</button>
+    <button class="btn-success" id="addTimelineBtn" style="display: none;">Import & Add to Timeline</button>
+
+    <div class="status-bar" id="statusBar"></div>
+
+    <script src="js/CSInterface.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

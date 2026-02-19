@@ -31,19 +31,33 @@
             position: relative;
         }
 
-        .bmc-link {
+        .header-link {
             position: absolute;
-            right: 20px;
             top: 50%;
             transform: translateY(-50%);
-            background-color: #FFDD00;
-            color: #000;
             font-weight: 700;
             font-size: 14px;
             padding: 8px 16px;
             border-radius: 5px;
             text-decoration: none;
             transition: all 0.3s ease;
+        }
+
+        .api-link {
+            left: 20px;
+            background-color: #4a9eff;
+            color: #fff;
+        }
+
+        .api-link:hover {
+            background-color: #3a8eef;
+            transform: translateY(calc(-50% - 2px));
+        }
+
+        .bmc-link {
+            right: 20px;
+            background-color: #FFDD00;
+            color: #000;
         }
 
         .bmc-link:hover {
@@ -339,9 +353,10 @@
 </head>
 <body>
     <div class="header">
+        <a href="/api/docs" class="header-link api-link">API Docs</a>
         <h1>🎬 Patreon Credits Generator</h1>
         <p>Create professional scrolling credits for your YouTube videos</p>
-        <a href="https://buymeacoffee.com/mscrnt" target="_blank" rel="noopener" class="bmc-link">☕ Buy me a coffee</a>
+        <a href="https://buymeacoffee.com/mscrnt" target="_blank" rel="noopener" class="header-link bmc-link">☕ Buy me a coffee</a>
     </div>
     
     <div class="container">

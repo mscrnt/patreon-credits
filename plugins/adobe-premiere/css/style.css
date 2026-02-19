@@ -1,0 +1,214 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 12px;
+    background-color: #232323;
+    color: #e0e0e0;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+h2 {
+    font-size: 14px;
+    color: #ffffff;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #444;
+}
+
+.section {
+    margin-bottom: 14px;
+}
+
+.row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+    align-items: center;
+}
+
+.row.wrap {
+    flex-wrap: wrap;
+}
+
+label {
+    display: block;
+    font-size: 11px;
+    color: #aaa;
+    margin-bottom: 2px;
+}
+
+.field {
+    flex: 1;
+    min-width: 0;
+}
+
+.field-sm {
+    flex: 0 0 70px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 4px 6px;
+    background: #1a1a1a;
+    border: 1px solid #555;
+    border-radius: 3px;
+    color: #e0e0e0;
+    font-size: 12px;
+}
+
+input[type="color"] {
+    width: 32px;
+    height: 26px;
+    border: 1px solid #555;
+    border-radius: 3px;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+textarea {
+    width: 100%;
+    padding: 4px 6px;
+    background: #1a1a1a;
+    border: 1px solid #555;
+    border-radius: 3px;
+    color: #e0e0e0;
+    font-size: 12px;
+    resize: vertical;
+    min-height: 40px;
+}
+
+input[type="checkbox"] {
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+.checkbox-row label {
+    margin-bottom: 0;
+    color: #e0e0e0;
+}
+
+select:focus,
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: #4a9eff;
+}
+
+button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 100%;
+}
+
+.btn-primary {
+    background: #4a9eff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #3a8eef;
+}
+
+.btn-primary:disabled {
+    background: #555;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: #444;
+    color: #e0e0e0;
+    margin-top: 6px;
+}
+
+.btn-secondary:hover {
+    background: #555;
+}
+
+.btn-success {
+    background: #2ea043;
+    color: #fff;
+    margin-top: 6px;
+}
+
+.btn-success:hover {
+    background: #3cb352;
+}
+
+.status-bar {
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    display: none;
+}
+
+.status-bar.info {
+    background: #1a3a5c;
+    border: 1px solid #4a9eff;
+    color: #8cc4ff;
+    display: block;
+}
+
+.status-bar.success {
+    background: #1a3c1a;
+    border: 1px solid #2ea043;
+    color: #6ee67e;
+    display: block;
+}
+
+.status-bar.error {
+    background: #3c1a1a;
+    border: 1px solid #da3633;
+    color: #ff8888;
+    display: block;
+}
+
+.server-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    font-size: 11px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #555;
+}
+
+.status-dot.connected {
+    background: #2ea043;
+}
+
+.status-dot.disconnected {
+    background: #da3633;
+}
+
+.project-info {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 10px;
+}

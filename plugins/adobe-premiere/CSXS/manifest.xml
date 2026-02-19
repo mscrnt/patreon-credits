@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionManifest Version="6.0" ExtensionBundleId="com.patreon.credits.generator"
+    ExtensionBundleVersion="1.0.0" ExtensionBundleName="Patreon Credits Generator"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <ExtensionList>
+        <Extension Id="com.patreon.credits.generator.panel" Version="1.0.0" />
+    </ExtensionList>
+
+    <ExecutionEnvironment>
+        <HostList>
+            <!-- Premiere Pro CC 2019 (13.0) through 2025+ (25.x) -->
+            <Host Name="PPRO" Version="[13.0,99.9]" />
+        </HostList>
+        <LocaleList>
+            <Locale Code="All" />
+        </LocaleList>
+        <RequiredRuntimeList>
+            <RequiredRuntime Name="CSXS" Version="9.0" />
+        </RequiredRuntimeList>
+    </ExecutionEnvironment>
+
+    <DispatchInfoList>
+        <Extension Id="com.patreon.credits.generator.panel">
+            <DispatchInfo>
+                <Resources>
+                    <MainPath>./index.html</MainPath>
+                    <ScriptPath>./jsx/premiere.jsx</ScriptPath>
+                    <CEFCommandLine>
+                        <Parameter>--allow-file-access-from-files</Parameter>
+                    </CEFCommandLine>
+                </Resources>
+                <Lifecycle>
+                    <AutoVisible>true</AutoVisible>
+                </Lifecycle>
+                <UI>
+                    <Type>Panel</Type>
+                    <Menu>Patreon Credits</Menu>
+                    <Geometry>
+                        <Size>
+                            <Width>420</Width>
+                            <Height>700</Height>
+                        </Size>
+                        <MinSize>
+                            <Width>360</Width>
+                            <Height>500</Height>
+                        </MinSize>
+                    </Geometry>
+                    <Icons />
+                </UI>
+            </DispatchInfo>
+        </Extension>
+    </DispatchInfoList>
+</ExtensionManifest>

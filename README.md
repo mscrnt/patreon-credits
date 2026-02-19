@@ -134,11 +134,13 @@ patreon-credits/
 ├── app.py                  # Flask server
 ├── patreon.py              # Patreon API client
 ├── ffmpeg_renderer.py      # Pillow + FFmpeg video rendering
-├── fonts/                  # Bundled font files (19 families)
+├── fonts/                  # Bundled font files (35 families)
 ├── templates/
 │   └── index.html          # Web interface
 ├── static/
 │   └── output/             # Generated videos
+├── plugins/
+│   └── adobe-premiere/     # Adobe Premiere Pro CEP panel plugin
 ├── .env                    # Configuration
 ├── .env.example            # Configuration template
 └── requirements.txt        # Python dependencies
@@ -162,7 +164,16 @@ patreon-credits/
 - `POST /generate` - Generate credits video
 - `GET /download/<filename>` - Download generated video
 - `GET /patron-count` - Get current patron count
+- `POST /refresh-patrons` - Force-refresh patron list from Patreon API
 - `GET /check-ffmpeg` - Check FFmpeg installation
+- `GET /api/docs` - Swagger UI documentation
+- `GET /api/spec` - OpenAPI 3.0 JSON specification
+
+## Adobe Premiere Pro Plugin
+
+An Adobe Premiere Pro panel plugin is included in `plugins/adobe-premiere/`. It lets you generate and insert credits videos directly from within Premiere Pro.
+
+See the [plugin README](plugins/adobe-premiere/README.md) for installation and usage instructions.
 
 ## Troubleshooting
 
