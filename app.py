@@ -352,7 +352,7 @@ def api_spec():
         'info': {
             'title': 'Patreon Credits Generator API',
             'description': 'Generate scrolling end-credits videos featuring Patreon supporters.',
-            'version': '1.3.0',
+            'version': '1.3.1',
         },
         'paths': {
             '/generate': {

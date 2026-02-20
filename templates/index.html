@@ -654,7 +654,7 @@
         const videoPlayer = document.getElementById('videoPlayer');
         const downloadBtn = document.getElementById('downloadBtn');
         const openFolderBtn = document.getElementById('openFolderBtn');
-        const isDesktop = window.pywebview !== undefined;
+        let isDesktop = window.pywebview !== undefined;
         const errorMessage = document.getElementById('errorMessage');
         const patronCount = document.getElementById('patronCount');
         const ffmpegStatus = document.getElementById('ffmpegStatus');
@@ -977,11 +977,19 @@
             e.target.value = '';
         });
 
-        // In desktop mode, hide Download and show Open Folder instead
-        if (isDesktop) {
-            downloadBtn.style.display = 'none';
-            openFolderBtn.style.display = 'inline-block';
+        // In desktop mode, hide Download and show Open Folder instead.
+        // pywebview injects window.pywebview asynchronously, so re-check
+        // after the bridge fires or a short delay.
+        function applyDesktopMode() {
+            if (window.pywebview) {
+                isDesktop = true;
+                downloadBtn.style.display = 'none';
+                openFolderBtn.style.display = 'inline-block';
+            }
         }
+        applyDesktopMode();
+        window.addEventListener('pywebviewready', applyDesktopMode);
+        setTimeout(applyDesktopMode, 500);
 
         downloadBtn.addEventListener('click', async (e) => {
             e.preventDefault();

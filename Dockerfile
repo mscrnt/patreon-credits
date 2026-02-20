@@ -7,7 +7,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg && \
+    apt-get install -y --no-install-recommends ffmpeg gosu && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -40,11 +40,14 @@ FROM base AS prod
 
 RUN groupadd -r appuser && useradd -r -g appuser -d /app appuser && \
     chown -R appuser:appuser /app
-USER appuser
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8787/health')" || exit 1
 
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["python", "launcher.py", "--headless"]
 
 # ============================================================
