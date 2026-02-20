@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a Question
+    url: https://github.com/mscrnt/patreon-credits/discussions/categories/q-a
+    about: Use Discussions for questions, help, and general conversation.
+  - name: Share Your Credits Video
+    url: https://github.com/mscrnt/patreon-credits/discussions/categories/show-and-tell
+    about: Show off what you've created with Patreon Credits Generator!
