@@ -72,13 +72,13 @@ def main():
 
         port = args.port
         from app import app
-        print(f'')
-        print(f'  Patreon Credits Generator — headless mode')
-        print(f'  ==========================================')
+        print('')
+        print('  Patreon Credits Generator — headless mode')
+        print('  ==========================================')
         print(f'  API running on: http://127.0.0.1:{port}')
         print(f'  API docs:       http://127.0.0.1:{port}/api/docs')
-        print(f'  Press Ctrl+C to stop.')
-        print(f'')
+        print('  Press Ctrl+C to stop.')
+        print('')
         app.run(host='127.0.0.1', port=port, debug=False, use_reloader=False)
     else:
         port = args.port

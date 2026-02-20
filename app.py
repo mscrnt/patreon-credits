@@ -13,7 +13,7 @@ from path_utils import (
     get_env_path, get_env_example_path, get_output_dir,
     get_templates_dir, get_static_dir, get_ffmpeg_dir,
     get_ffmpeg_download_url, check_ffmpeg as check_ffmpeg_util,
-    get_data_dir, set_data_dir, is_frozen,
+    get_data_dir, set_data_dir,
 )
 
 load_dotenv(get_env_path())
@@ -336,7 +336,7 @@ def api_spec():
         'info': {
             'title': 'Patreon Credits Generator API',
             'description': 'Generate scrolling end-credits videos featuring Patreon supporters.',
-            'version': '1.2.0',
+            'version': '1.2.1',
         },
         'paths': {
             '/generate': {
