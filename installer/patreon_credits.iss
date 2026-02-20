@@ -3,7 +3,7 @@
 ; Then compile this .iss with Inno Setup 6+
 
 #define MyAppName "Patreon Credits Generator"
-#define MyAppVersion "1.2.1"
+#define MyAppVersion "1.3.0"
 #define MyAppPublisher "mscrnt"
 #define MyAppURL "https://github.com/mscrnt/patreon-credits"
 #define MyAppExeName "PatreonCredits.exe"
