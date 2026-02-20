@@ -1,0 +1,55 @@
+/* Patreon Credits Generator — Theme Overrides */
+
+:root {
+  --pcg-accent: #ff424d;
+  --pcg-accent-hover: #e63946;
+  --pcg-gold: #FFD700;
+}
+
+/* Dark theme overrides */
+[data-bs-theme="dark"] {
+  --bs-body-bg: #1a1a1a;
+  --bs-tertiary-bg: #2a2a2a;
+}
+
+/* Navbar accent border */
+.navbar.border-danger {
+  border-color: var(--pcg-accent) !important;
+}
+
+/* Font preview */
+.font-preview {
+  background-color: var(--bs-tertiary-bg);
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Gallery card hover */
+.gallery-card {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.gallery-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Thumbnail aspect ratio */
+.gallery-card .card-img-top {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background-color: var(--bs-tertiary-bg);
+}
+
+/* Tab badge */
+.nav-tabs .badge {
+  font-size: 0.7em;
+  vertical-align: middle;
+}
+
+/* Status badges for settings */
+.badge-ok { background-color: #28a745 !important; }
+.badge-missing { background-color: #dc3545 !important; }
+.badge-checking { background-color: #6c757d !important; }

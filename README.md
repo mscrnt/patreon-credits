@@ -73,6 +73,9 @@ Grab the latest release for your platform from the [Releases page](../../release
 - Name truncation or word wrap with hyphenation
 - Optional separator lines between name rows
 - 720p, 1080p, and 4K resolution
+- Tabbed UI with Generate, Gallery, and Settings tabs
+- Video gallery with thumbnails, preview, download, and delete
+- Light and dark theme toggle (persists across sessions)
 - In-app settings page for Patreon credentials
 - Dummy data mode for testing
 - Adobe Premiere Pro plugin for direct timeline integration
@@ -289,11 +292,13 @@ patreon-credits/
 ├── Makefile                # Common dev/docker commands
 ├── fonts/                  # Bundled font files (35 families)
 ├── templates/
-│   ├── index.html          # Main UI
-│   ├── settings.html       # Settings page
+│   ├── index.html          # Main UI (tabbed: Generate, Gallery, Settings)
 │   ├── setup.html          # First-run setup wizard
 │   └── swagger.html        # API docs
-├── static/                 # Flask static files
+├── static/
+│   ├── css/                # Theme and app stylesheets
+│   ├── js/                 # App, gallery, settings, theme scripts
+│   └── img/                # Placeholder images
 ├── installer/
 │   └── patreon_credits.iss # Inno Setup script (Windows)
 ├── scripts/
@@ -328,11 +333,14 @@ patreon-credits/
 | `GET` | `/` | Main web interface |
 | `POST` | `/generate` | Generate credits video (accepts `custom_names` for manual input) |
 | `GET` | `/download/<filename>` | Download generated video |
+| `GET` | `/api/videos` | List all generated videos with metadata |
+| `GET` | `/api/thumbnail/<filename>` | Get video thumbnail (auto-generated, cached) |
+| `DELETE` | `/api/videos/<filename>` | Delete a generated video and its thumbnail |
 | `GET` | `/patron-count` | Get current patron count |
 | `POST` | `/refresh-patrons` | Force-refresh patron list from Patreon API |
 | `GET` | `/check-ffmpeg` | Check FFmpeg installation |
 | `GET` | `/health` | Health check (Docker/orchestration) |
-| `GET` | `/settings` | Settings page |
+| `GET` | `/settings` | Settings (JSON) |
 | `POST` | `/settings` | Save settings to `.env` |
 | `GET` | `/api/docs` | Swagger UI documentation |
 | `GET` | `/api/spec` | OpenAPI 3.0 JSON specification |
@@ -367,6 +375,8 @@ Click the **Install** button next to the FFmpeg status indicator, or go to **Set
 - **Pillow** — text rendering with font fallback (fontTools cmap)
 - **FFmpeg** — video compositing (H.264 MP4)
 - **Patreon API v2** — patron data
+- **Bootstrap 5.3** — responsive UI with dark/light theme support
+- **Font Awesome 6** — icons
 - Vanilla JavaScript frontend with localStorage persistence
 
 ## Support

@@ -5,6 +5,7 @@
 patrons_cache.json
 venv/
 static/output/*.mp4
+static/thumbnails/
 output/*.mp4
 dist/
 build/

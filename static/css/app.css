@@ -1,0 +1,36 @@
+/* Patreon Credits Generator — App Styles */
+
+/* Color inputs fill their container */
+.form-control-color { width: 100% !important; }
+
+/* Video player sizing */
+#videoPlayer, #modalVideoPlayer {
+  max-width: 100%;
+  max-height: 480px;
+  border-radius: 0.375rem;
+}
+
+/* Settings progress bar */
+.settings-progress {
+  display: none;
+  margin-top: 0.5rem;
+}
+.settings-progress.active {
+  display: block;
+}
+
+/* Compact form labels */
+.form-label {
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Info row in generate tab */
+.info-row {
+  font-size: 0.875rem;
+}
+
+/* Ensure card headers match theme */
+.card-header {
+  font-weight: 600;
+}

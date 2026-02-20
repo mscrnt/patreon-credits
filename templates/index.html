@@ -5,1046 +5,510 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patreon Credits Generator</title>
     <link rel="icon" type="image/png" href="/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=Bangers&family=Bebas+Neue&family=Cinzel:wght@400;700&family=Crimson+Text:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=LXGW+WenKai:wght@300;400;700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=M+PLUS+Rounded+1c:wght@400;700&family=Merriweather:wght@400;700&family=Montserrat:wght@400;700&family=Neuton:ital,wght@0,200;0,300;0,400;0,700;0,800;1,400&family=Noto+Sans:wght@400;700&family=Noto+Serif+SC:wght@400;700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@400;700&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playwrite+DE+Grund:wght@100..400&family=Poppins:wght@400;700&family=Quicksand:wght@400;700&family=Raleway:wght@400;700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Shippori+Mincho:wght@400;700&family=Source+Sans+3:wght@400;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #1a1a1a;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .header {
-            background-color: #2a2a2a;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 2px solid #ff424d;
-            position: relative;
-        }
-
-        .header-link {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-weight: 700;
-            font-size: 14px;
-            padding: 8px 16px;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .api-link {
-            left: 20px;
-            background-color: #4a9eff;
-            color: #fff;
-        }
-
-        .api-link:hover {
-            background-color: #3a8eef;
-            transform: translateY(calc(-50% - 2px));
-        }
-
-        .settings-link {
-            left: 120px;
-            background-color: #666;
-            color: #fff;
-        }
-
-        .settings-link:hover {
-            background-color: #777;
-            transform: translateY(calc(-50% - 2px));
-        }
-
-        .bmc-link {
-            right: 20px;
-            background-color: #FFDD00;
-            color: #000;
-        }
-
-        .bmc-link:hover {
-            background-color: #e6c700;
-            transform: translateY(calc(-50% - 2px));
-        }
-        
-        .header h1 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            color: #ccc;
-            font-size: 1rem;
-        }
-        
-        .container {
-            flex: 1;
-            max-width: 1000px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        
-        .form-section {
-            background-color: #2a2a2a;
-            border-radius: 10px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #ff424d;
-        }
-        
-        textarea, input[type="number"], select {
-            width: 100%;
-            padding: 12px;
-            background-color: #1a1a1a;
-            border: 1px solid #444;
-            border-radius: 5px;
-            color: #fff;
-            font-size: 16px;
-            font-family: inherit;
-            resize: vertical;
-        }
-        
-        select {
-            cursor: pointer;
-        }
-        
-        textarea:focus, input[type="number"]:focus, select:focus {
-            outline: none;
-            border-color: #ff424d;
-        }
-        
-        .options-row {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .options-row .form-group {
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-        }
-        
-        input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-            cursor: pointer;
-        }
-        
-        .button-container {
-            display: flex;
-            gap: 15px;
-            margin-top: 25px;
-        }
-        
-        button {
-            padding: 12px 30px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary {
-            background-color: #ff424d;
-            color: white;
-        }
-        
-        .btn-primary:hover:not(:disabled) {
-            background-color: #e63946;
-            transform: translateY(-2px);
-        }
-        
-        .btn-secondary {
-            background-color: #444;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #555;
-        }
-        
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        .status-section {
-            background-color: #2a2a2a;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-            display: none;
-        }
-        
-        .status-section.active {
-            display: block;
-        }
-        
-        .status-message {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.1rem;
-        }
-        
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 3px solid #444;
-            border-top-color: #ff424d;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .video-preview {
-            background-color: #2a2a2a;
-            border-radius: 10px;
-            padding: 20px;
-            display: none;
-        }
-        
-        .video-preview.active {
-            display: block;
-        }
-        
-        .video-preview h3 {
-            margin-bottom: 15px;
-            color: #ff424d;
-        }
-        
-        video {
-            width: 100%;
-            max-width: 720px;
-            border-radius: 10px;
-            margin: 0 auto;
-            display: block;
-        }
-        
-        .download-section {
-            margin-top: 20px;
-            text-align: center;
-        }
-        
-        .download-btn {
-            background-color: #28a745;
-            color: white;
-            padding: 12px 40px;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .download-btn:hover {
-            background-color: #218838;
-            transform: translateY(-2px);
-        }
-        
-        .error-message {
-            background-color: #dc3545;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        
-        .error-message.active {
-            display: block;
-        }
-        
-        .info-box {
-            background-color: #1a1a1a;
-            border: 1px solid #444;
-            border-radius: 5px;
-            padding: 15px;
-            margin-top: 20px;
-        }
-        
-        .info-box h4 {
-            color: #ff424d;
-            margin-bottom: 10px;
-        }
-        
-        .info-box p {
-            color: #ccc;
-            line-height: 1.6;
-        }
-        
-        .patron-count {
-            color: #ff424d;
-            font-weight: 600;
-        }
-        
-        .style-section {
-            background-color: #1a1a1a;
-            border: 1px solid #444;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 20px 0;
-        }
-        
-        .style-section h4 {
-            color: #ff424d;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
-        
-        .style-controls {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .style-group {
-            flex: 1;
-            min-width: 120px;
-        }
-        
-        .style-group label {
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
-        
-        input[type="color"] {
-            width: 100%;
-            height: 40px;
-            padding: 5px;
-            cursor: pointer;
-        }
-
-        .font-preview {
-            margin-top: 10px;
-            padding: 10px 15px;
-            background-color: #111;
-            border: 1px solid #333;
-            border-radius: 4px;
-            font-size: 18px;
-            color: #ccc;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/theme.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <script src="/static/js/theme.js"></script>
 </head>
 <body>
-    <div class="header">
-        <a href="/api/docs" target="_blank" rel="noopener" class="header-link api-link">API Docs</a>
-        <a href="/settings" class="header-link settings-link">Settings</a>
-        <h1>🎬 Patreon Credits Generator</h1>
-        <p>Create professional scrolling credits for your YouTube videos</p>
-        <a href="https://buymeacoffee.com/mscrnt" target="_blank" rel="noopener" class="header-link bmc-link">☕ Buy me a coffee</a>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-sm border-bottom border-danger border-2">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
+            <img src="/favicon.ico" alt="" width="44" height="44" class="me-2">Patreon Credits Generator
+        </a>
+        <div class="d-flex align-items-center gap-2">
+            <a href="/api/docs" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary">
+                <i class="fa-solid fa-code me-1"></i>API Docs
+            </a>
+            <a href="https://buymeacoffee.com/mscrnt" target="_blank" rel="noopener" class="btn btn-sm btn-warning">
+                <i class="fa-solid fa-mug-hot me-1"></i>Buy me a coffee
+            </a>
+            <button class="btn btn-sm btn-outline-secondary" id="themeToggle" title="Toggle theme">
+                <i id="themeIcon" class="fa-solid fa-sun"></i>
+            </button>
+        </div>
     </div>
-    
-    <div class="container">
-        <div class="error-message" id="errorMessage"></div>
-        
-        <div class="form-section">
+</nav>
+
+<!-- Tabs -->
+<div class="container-fluid px-3 px-md-4 mt-3">
+    <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="generate-tab" data-bs-toggle="tab"
+                    data-bs-target="#generate-tab-pane" type="button" role="tab">
+                <i class="fa-solid fa-film me-1"></i>Generate
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="gallery-tab" data-bs-toggle="tab"
+                    data-bs-target="#gallery-tab-pane" type="button" role="tab">
+                <i class="fa-solid fa-table-cells me-1"></i>Gallery
+                <span class="badge bg-secondary ms-1" id="galleryCount">0</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="settings-tab" data-bs-toggle="tab"
+                    data-bs-target="#settings-tab-pane" type="button" role="tab">
+                <i class="fa-solid fa-gear me-1"></i>Settings
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-3 pb-4" id="mainTabContent">
+
+        <!-- ====== GENERATE TAB ====== -->
+        <div class="tab-pane fade show active" id="generate-tab-pane" role="tabpanel">
+
+            <!-- Error alert -->
+            <div class="alert alert-danger d-none" id="errorMessage" role="alert"></div>
+
             <form id="creditsForm">
-                <div class="form-group">
-                    <label for="message">Custom Message</label>
-                    <textarea id="message" rows="3" placeholder="This video was made possible by our amazing Patreon supporters:">This video was made possible by our amazing Patreon supporters:</textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="customNames">Custom Names (optional)</label>
-                    <textarea id="customNames" rows="4" placeholder="Enter names manually, one per line — overrides Patreon list"></textarea>
-                    <div style="display: flex; align-items: center; gap: 12px; margin-top: 4px;">
-                        <p style="color: #888; font-size: 0.8rem; margin: 0;">Leave empty to use Patreon patron list.</p>
-                        <label style="display: inline-flex; align-items: center; gap: 4px; cursor: pointer; background: #444; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; color: #ccc; margin: 0;">
-                            Upload .txt/.csv
-                            <input type="file" id="namesFileInput" accept=".txt,.csv" style="display: none;">
-                        </label>
+                <!-- Content Card -->
+                <div class="card mb-3">
+                    <div class="card-header"><i class="fa-solid fa-comment-dots me-1"></i>Content</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label" for="message">Custom Message</label>
+                            <textarea class="form-control" id="message" rows="2">This video was made possible by our amazing Patreon supporters:</textarea>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label" for="customNames">Custom Names <span class="text-body-secondary">(optional)</span></label>
+                            <textarea class="form-control" id="customNames" rows="3" placeholder="Enter names manually, one per line — overrides Patreon list"></textarea>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <small class="text-body-secondary">Leave empty to use Patreon patron list.</small>
+                            <label class="btn btn-sm btn-outline-secondary mb-0">
+                                <i class="fa-solid fa-upload me-1"></i>Upload .txt/.csv
+                                <input type="file" id="namesFileInput" accept=".txt,.csv" class="d-none">
+                            </label>
+                        </div>
                     </div>
                 </div>
 
-                <div class="style-section">
-                    <h4>Message Styling</h4>
-                    <div class="style-controls">
-                        <div class="style-group">
-                            <label for="messageSize">Size</label>
-                            <input type="number" id="messageSize" min="10" max="100" value="36">
-                        </div>
-                        <div class="style-group">
-                            <label for="messageColor">Color</label>
-                            <input type="color" id="messageColor" value="#ffffff">
-                        </div>
-                        <div class="style-group">
-                            <label for="messageFont">Font</label>
-                            <select id="messageFont">
-                                <optgroup label="CJK + Latin (Chinese/Japanese/Korean)">
-                                    <option value="noto_sans" selected>Noto Sans CJK</option>
-                                    <option value="noto_serif_cjk">Noto Serif CJK</option>
-                                    <option value="lxgw_wenkai">LXGW WenKai</option>
-                                    <option value="zen_maru_gothic">Zen Maru Gothic</option>
-                                    <option value="mplus_rounded">M PLUS Rounded 1c</option>
-                                    <option value="shippori_mincho">Shippori Mincho</option>
-                                </optgroup>
-                                <optgroup label="Sans-serif (Latin only)">
-                                    <option value="inter">Inter</option>
-                                    <option value="roboto">Roboto</option>
-                                    <option value="open_sans">Open Sans</option>
-                                    <option value="poppins">Poppins</option>
-                                    <option value="montserrat">Montserrat</option>
-                                    <option value="raleway">Raleway</option>
-                                    <option value="quicksand">Quicksand</option>
-                                    <option value="source_sans">Source Sans 3</option>
-                                    <option value="lato">Lato</option>
-                                    <option value="nunito">Nunito</option>
-                                    <option value="rubik">Rubik</option>
-                                    <option value="dm_sans">DM Sans</option>
-                                    <option value="josefin_sans">Josefin Sans</option>
-                                    <option value="ubuntu">Ubuntu</option>
-                                    <option value="oswald">Oswald</option>
-                                    <option value="bebas_neue">Bebas Neue</option>
-                                </optgroup>
-                                <optgroup label="Serif (Latin only)">
-                                    <option value="cinzel">Cinzel</option>
-                                    <option value="playfair_display">Playfair Display</option>
-                                    <option value="merriweather">Merriweather</option>
-                                    <option value="crimson_text">Crimson Text</option>
-                                    <option value="lora">Lora</option>
-                                    <option value="libre_baskerville">Libre Baskerville</option>
-                                    <option value="arvo">Arvo</option>
-                                    <option value="neuton">Neuton</option>
-                                </optgroup>
-                                <optgroup label="Display (Latin only)">
-                                    <option value="alfa_slab_one">Alfa Slab One</option>
-                                    <option value="bangers">Bangers</option>
-                                </optgroup>
-                                <optgroup label="Handwriting/Script (Latin only)">
-                                    <option value="permanent_marker">Permanent Marker</option>
-                                    <option value="pacifico">Pacifico</option>
-                                    <option value="playwrite">Playwrite DE Grund</option>
-                                </optgroup>
-                            </select>
-                        </div>
-                        <div class="style-group">
-                            <label for="messageAlign">Align</label>
-                            <select id="messageAlign">
-                                <option value="left" selected>Left</option>
-                                <option value="center">Center</option>
-                                <option value="right">Right</option>
-                                <option value="justify">Justified</option>
-                            </select>
-                        </div>
-                        <div class="style-group">
-                            <label>&nbsp;</label>
-                            <div class="checkbox-group" style="margin-top: 0;">
-                                <input type="checkbox" id="messageBold" checked>
-                                <label for="messageBold" style="margin: 0;">Bold</label>
+                <!-- Styling Row: Message + Patron side by side -->
+                <div class="row g-3 mb-3">
+                    <!-- Message Style -->
+                    <div class="col-lg-6">
+                        <div class="card h-100">
+                            <div class="card-header"><i class="fa-solid fa-font me-1"></i>Message Style</div>
+                            <div class="card-body">
+                                <div class="row g-2">
+                                    <div class="col-4 col-md-3">
+                                        <label class="form-label" for="messageSize">Size</label>
+                                        <input type="number" class="form-control" id="messageSize" min="10" max="100" value="36">
+                                    </div>
+                                    <div class="col-4 col-md-3">
+                                        <label class="form-label" for="messageColor">Color</label>
+                                        <input type="color" class="form-control form-control-color" id="messageColor" value="#ffffff">
+                                    </div>
+                                    <div class="col-4 col-md-3">
+                                        <label class="form-label" for="messageAlign">Align</label>
+                                        <select class="form-select" id="messageAlign">
+                                            <option value="left" selected>Left</option>
+                                            <option value="center">Center</option>
+                                            <option value="right">Right</option>
+                                            <option value="justify">Justified</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-3 d-flex align-items-end">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="messageBold" checked>
+                                            <label class="form-check-label" for="messageBold">Bold</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <label class="form-label" for="messageFont">Font</label>
+                                    <select class="form-select" id="messageFont">
+                                        <optgroup label="CJK + Latin">
+                                            <option value="noto_sans" selected>Noto Sans CJK</option>
+                                            <option value="noto_serif_cjk">Noto Serif CJK</option>
+                                            <option value="lxgw_wenkai">LXGW WenKai</option>
+                                            <option value="zen_maru_gothic">Zen Maru Gothic</option>
+                                            <option value="mplus_rounded">M PLUS Rounded 1c</option>
+                                            <option value="shippori_mincho">Shippori Mincho</option>
+                                        </optgroup>
+                                        <optgroup label="Sans-serif">
+                                            <option value="inter">Inter</option>
+                                            <option value="roboto">Roboto</option>
+                                            <option value="open_sans">Open Sans</option>
+                                            <option value="poppins">Poppins</option>
+                                            <option value="montserrat">Montserrat</option>
+                                            <option value="raleway">Raleway</option>
+                                            <option value="quicksand">Quicksand</option>
+                                            <option value="source_sans">Source Sans 3</option>
+                                            <option value="lato">Lato</option>
+                                            <option value="nunito">Nunito</option>
+                                            <option value="rubik">Rubik</option>
+                                            <option value="dm_sans">DM Sans</option>
+                                            <option value="josefin_sans">Josefin Sans</option>
+                                            <option value="ubuntu">Ubuntu</option>
+                                            <option value="oswald">Oswald</option>
+                                            <option value="bebas_neue">Bebas Neue</option>
+                                        </optgroup>
+                                        <optgroup label="Serif">
+                                            <option value="cinzel">Cinzel</option>
+                                            <option value="playfair_display">Playfair Display</option>
+                                            <option value="merriweather">Merriweather</option>
+                                            <option value="crimson_text">Crimson Text</option>
+                                            <option value="lora">Lora</option>
+                                            <option value="libre_baskerville">Libre Baskerville</option>
+                                            <option value="arvo">Arvo</option>
+                                            <option value="neuton">Neuton</option>
+                                        </optgroup>
+                                        <optgroup label="Display">
+                                            <option value="alfa_slab_one">Alfa Slab One</option>
+                                            <option value="bangers">Bangers</option>
+                                        </optgroup>
+                                        <optgroup label="Handwriting">
+                                            <option value="permanent_marker">Permanent Marker</option>
+                                            <option value="pacifico">Pacifico</option>
+                                            <option value="playwrite">Playwrite DE Grund</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="font-preview rounded p-2 mt-2" id="messageFontPreview" style="font-family:'Noto Sans',sans-serif; font-weight:bold;">The quick brown fox jumps over the lazy dog</div>
                             </div>
                         </div>
                     </div>
-                    <div class="font-preview" id="messageFontPreview" style="font-family: 'Noto Sans', sans-serif; font-weight: bold;">The quick brown fox jumps over the lazy dog</div>
-                </div>
 
-                <div class="style-section">
-                    <h4>Patron Names Styling</h4>
-                    <div class="style-controls">
-                        <div class="style-group">
-                            <label for="patronSize">Size</label>
-                            <input type="number" id="patronSize" min="10" max="60" value="20">
-                        </div>
-                        <div class="style-group">
-                            <label for="patronColor">Color</label>
-                            <input type="color" id="patronColor" value="#FFD700">
-                        </div>
-                        <div class="style-group">
-                            <label for="patronFont">Font</label>
-                            <select id="patronFont">
-                                <optgroup label="CJK + Latin (Chinese/Japanese/Korean)">
-                                    <option value="noto_sans" selected>Noto Sans CJK</option>
-                                    <option value="noto_serif_cjk">Noto Serif CJK</option>
-                                    <option value="lxgw_wenkai">LXGW WenKai</option>
-                                    <option value="zen_maru_gothic">Zen Maru Gothic</option>
-                                    <option value="mplus_rounded">M PLUS Rounded 1c</option>
-                                    <option value="shippori_mincho">Shippori Mincho</option>
-                                </optgroup>
-                                <optgroup label="Sans-serif (Latin only)">
-                                    <option value="inter">Inter</option>
-                                    <option value="roboto">Roboto</option>
-                                    <option value="open_sans">Open Sans</option>
-                                    <option value="poppins">Poppins</option>
-                                    <option value="montserrat">Montserrat</option>
-                                    <option value="raleway">Raleway</option>
-                                    <option value="quicksand">Quicksand</option>
-                                    <option value="source_sans">Source Sans 3</option>
-                                    <option value="lato">Lato</option>
-                                    <option value="nunito">Nunito</option>
-                                    <option value="rubik">Rubik</option>
-                                    <option value="dm_sans">DM Sans</option>
-                                    <option value="josefin_sans">Josefin Sans</option>
-                                    <option value="ubuntu">Ubuntu</option>
-                                    <option value="oswald">Oswald</option>
-                                    <option value="bebas_neue">Bebas Neue</option>
-                                </optgroup>
-                                <optgroup label="Serif (Latin only)">
-                                    <option value="cinzel">Cinzel</option>
-                                    <option value="playfair_display">Playfair Display</option>
-                                    <option value="merriweather">Merriweather</option>
-                                    <option value="crimson_text">Crimson Text</option>
-                                    <option value="lora">Lora</option>
-                                    <option value="libre_baskerville">Libre Baskerville</option>
-                                    <option value="arvo">Arvo</option>
-                                    <option value="neuton">Neuton</option>
-                                </optgroup>
-                                <optgroup label="Display (Latin only)">
-                                    <option value="alfa_slab_one">Alfa Slab One</option>
-                                    <option value="bangers">Bangers</option>
-                                </optgroup>
-                                <optgroup label="Handwriting/Script (Latin only)">
-                                    <option value="permanent_marker">Permanent Marker</option>
-                                    <option value="pacifico">Pacifico</option>
-                                    <option value="playwrite">Playwrite DE Grund</option>
-                                </optgroup>
-                            </select>
-                        </div>
-                        <div class="style-group">
-                            <label>&nbsp;</label>
-                            <div class="checkbox-group" style="margin-top: 0;">
-                                <input type="checkbox" id="patronBold">
-                                <label for="patronBold" style="margin: 0;">Bold</label>
+                    <!-- Patron Names Style -->
+                    <div class="col-lg-6">
+                        <div class="card h-100">
+                            <div class="card-header"><i class="fa-solid fa-users me-1"></i>Patron Names Style</div>
+                            <div class="card-body">
+                                <div class="row g-2">
+                                    <div class="col-4">
+                                        <label class="form-label" for="patronSize">Size</label>
+                                        <input type="number" class="form-control" id="patronSize" min="10" max="60" value="20">
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="form-label" for="patronColor">Color</label>
+                                        <input type="color" class="form-control form-control-color" id="patronColor" value="#FFD700">
+                                    </div>
+                                    <div class="col-4 d-flex align-items-end">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="patronBold">
+                                            <label class="form-check-label" for="patronBold">Bold</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <label class="form-label" for="patronFont">Font</label>
+                                    <select class="form-select" id="patronFont">
+                                        <optgroup label="CJK + Latin">
+                                            <option value="noto_sans" selected>Noto Sans CJK</option>
+                                            <option value="noto_serif_cjk">Noto Serif CJK</option>
+                                            <option value="lxgw_wenkai">LXGW WenKai</option>
+                                            <option value="zen_maru_gothic">Zen Maru Gothic</option>
+                                            <option value="mplus_rounded">M PLUS Rounded 1c</option>
+                                            <option value="shippori_mincho">Shippori Mincho</option>
+                                        </optgroup>
+                                        <optgroup label="Sans-serif">
+                                            <option value="inter">Inter</option>
+                                            <option value="roboto">Roboto</option>
+                                            <option value="open_sans">Open Sans</option>
+                                            <option value="poppins">Poppins</option>
+                                            <option value="montserrat">Montserrat</option>
+                                            <option value="raleway">Raleway</option>
+                                            <option value="quicksand">Quicksand</option>
+                                            <option value="source_sans">Source Sans 3</option>
+                                            <option value="lato">Lato</option>
+                                            <option value="nunito">Nunito</option>
+                                            <option value="rubik">Rubik</option>
+                                            <option value="dm_sans">DM Sans</option>
+                                            <option value="josefin_sans">Josefin Sans</option>
+                                            <option value="ubuntu">Ubuntu</option>
+                                            <option value="oswald">Oswald</option>
+                                            <option value="bebas_neue">Bebas Neue</option>
+                                        </optgroup>
+                                        <optgroup label="Serif">
+                                            <option value="cinzel">Cinzel</option>
+                                            <option value="playfair_display">Playfair Display</option>
+                                            <option value="merriweather">Merriweather</option>
+                                            <option value="crimson_text">Crimson Text</option>
+                                            <option value="lora">Lora</option>
+                                            <option value="libre_baskerville">Libre Baskerville</option>
+                                            <option value="arvo">Arvo</option>
+                                            <option value="neuton">Neuton</option>
+                                        </optgroup>
+                                        <optgroup label="Display">
+                                            <option value="alfa_slab_one">Alfa Slab One</option>
+                                            <option value="bangers">Bangers</option>
+                                        </optgroup>
+                                        <optgroup label="Handwriting">
+                                            <option value="permanent_marker">Permanent Marker</option>
+                                            <option value="pacifico">Pacifico</option>
+                                            <option value="playwrite">Playwrite DE Grund</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="font-preview rounded p-2 mt-2" id="patronFontPreview" style="font-family:'Noto Sans',sans-serif; font-weight:normal; color:#FFD700;">The quick brown fox jumps over the lazy dog</div>
                             </div>
                         </div>
                     </div>
-                    <div class="font-preview" id="patronFontPreview" style="font-family: 'Noto Sans', sans-serif; font-weight: normal; color: #FFD700;">The quick brown fox jumps over the lazy dog</div>
                 </div>
 
-                <div class="options-row">
-                    <div class="form-group">
-                        <label for="duration">Video Duration (seconds)</label>
-                        <input type="number" id="duration" min="5" max="60" value="15">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="resolution">Resolution</label>
-                        <select id="resolution">
-                            <option value="1280x720" selected>720p HD (1280x720)</option>
-                            <option value="1920x1080">1080p Full HD (1920x1080)</option>
-                            <option value="3840x2160">4K UHD (3840x2160)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="columns">Columns</label>
-                        <select id="columns">
-                            <option value="1">1 Column</option>
-                            <option value="2">2 Columns</option>
-                            <option value="3">3 Columns</option>
-                            <option value="4" selected>4 Columns</option>
-                            <option value="5">5 Columns</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="nameAlign">Name Alignment</label>
-                        <select id="nameAlign">
-                            <option value="left" selected>Left</option>
-                            <option value="center">Center</option>
-                            <option value="right">Right</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group" style="max-width: 100px;">
-                        <label for="truncateLength">Max Name Length</label>
-                        <input type="number" id="truncateLength" min="0" max="50" value="15" title="0 = no truncation">
-                    </div>
-
-                    <div class="form-group" style="max-width: 120px;">
-                        <label for="bgColor">Background</label>
-                        <input type="color" id="bgColor" value="#000000">
+                <!-- Video Options Card -->
+                <div class="card mb-3">
+                    <div class="card-header"><i class="fa-solid fa-sliders me-1"></i>Video Options</div>
+                    <div class="card-body">
+                        <div class="row g-2 align-items-end">
+                            <div class="col-6 col-md-2">
+                                <label class="form-label" for="duration">Duration (s)</label>
+                                <input type="number" class="form-control" id="duration" min="5" max="60" value="15">
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <label class="form-label" for="resolution">Resolution</label>
+                                <select class="form-select" id="resolution">
+                                    <option value="1280x720" selected>720p HD</option>
+                                    <option value="1920x1080">1080p Full HD</option>
+                                    <option value="3840x2160">4K UHD</option>
+                                </select>
+                            </div>
+                            <div class="col-4 col-md-2">
+                                <label class="form-label" for="columns">Columns</label>
+                                <select class="form-select" id="columns">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4" selected>4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                            <div class="col-4 col-md-2">
+                                <label class="form-label" for="nameAlign">Name Align</label>
+                                <select class="form-select" id="nameAlign">
+                                    <option value="left" selected>Left</option>
+                                    <option value="center">Center</option>
+                                    <option value="right">Right</option>
+                                </select>
+                            </div>
+                            <div class="col-4 col-md-1">
+                                <label class="form-label" for="truncateLength">Max Len</label>
+                                <input type="number" class="form-control" id="truncateLength" min="0" max="50" value="15" title="0 = no truncation">
+                            </div>
+                            <div class="col-6 col-md-2">
+                                <label class="form-label" for="bgColor">Background</label>
+                                <input type="color" class="form-control form-control-color" id="bgColor" value="#000000">
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap gap-3 mt-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="wordWrap">
+                                <label class="form-check-label" for="wordWrap">Word wrap names</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="nameSpacing">
+                                <label class="form-check-label" for="nameSpacing">Line break between names</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="useCache">
+                                <label class="form-check-label" for="useCache">Use cached patron list</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="options-row" style="gap: 30px;">
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="wordWrap">
-                        <label for="wordWrap" style="margin: 0;">Word wrap names</label>
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="nameSpacing">
-                        <label for="nameSpacing" style="margin: 0;">Line break between names</label>
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="useCache">
-                        <label for="useCache" style="margin: 0;">Use cached patron list</label>
-                    </div>
-                </div>
-                
-                <div class="button-container">
-                    <button type="submit" class="btn-primary" id="generateBtn">
-                        Generate Credits Video
+                <!-- Actions Row -->
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                    <button type="submit" class="btn btn-danger" id="generateBtn">
+                        <i class="fa-solid fa-play me-1"></i>Generate Credits Video
                     </button>
-                    <button type="button" class="btn-secondary" id="refreshBtn">
-                        Refresh Patron List
+                    <button type="button" class="btn btn-outline-secondary" id="refreshBtn">
+                        <i class="fa-solid fa-arrows-rotate me-1"></i>Refresh Patrons
                     </button>
+                    <span class="info-row ms-auto text-body-secondary">
+                        Patrons: <strong id="patronCount">...</strong>
+                        &nbsp;&middot;&nbsp;
+                        FFmpeg: <span id="ffmpegStatus" class="badge bg-secondary">Checking</span>
+                        <button class="btn btn-sm btn-success d-none ms-1" id="installFfmpegBtn">Install</button>
+                    </span>
                 </div>
             </form>
-            
-            <div class="info-box">
-                <h4>ℹ️ Information</h4>
-                <p>Current patron count: <span class="patron-count" id="patronCount">Loading...</span></p>
-                <p>FFmpeg status: <span id="ffmpegStatus">Checking...</span>
-                    <button id="installFfmpegBtn" style="display:none; margin-left:8px; padding:2px 10px; font-size:0.85em; cursor:pointer; background:#28a745; color:#fff; border:none; border-radius:4px;" onclick="installFfmpeg()">Install</button>
-                </p>
+
+            <!-- Generating overlay -->
+            <div class="d-none" id="statusSection">
+                <div class="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center" style="z-index:1060; background:rgba(0,0,0,.7); backdrop-filter:blur(4px);">
+                    <div class="spinner-border text-danger mb-3" style="width:3rem; height:3rem;" role="status"></div>
+                    <h5 class="text-white" id="statusText">Generating credits video...</h5>
+                </div>
+            </div>
+
+            <!-- Video preview modal -->
+            <div class="modal fade" id="videoPreviewModal" tabindex="-1" aria-labelledby="videoPreviewModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="videoPreviewModalLabel"><i class="fa-solid fa-video me-1"></i>Preview</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <video id="videoPlayer" controls class="w-100" style="max-height:70vh;"></video>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-success" id="downloadBtn">
+                                <i class="fa-solid fa-download me-1"></i>Download
+                            </a>
+                            <a href="#" class="btn btn-primary d-none" id="openFolderBtn">
+                                <i class="fa-solid fa-folder-open me-1"></i>Open Video Folder
+                            </a>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <div class="status-section" id="statusSection">
-            <div class="status-message">
-                <div class="spinner"></div>
-                <span id="statusText">Generating credits video...</span>
+
+        <!-- ====== GALLERY TAB ====== -->
+        <div class="tab-pane fade" id="gallery-tab-pane" role="tabpanel">
+            <div class="d-flex align-items-center mb-3">
+                <h5 class="mb-0">Generated Videos</h5>
+                <button class="btn btn-sm btn-outline-secondary ms-auto" id="refreshGalleryBtn">
+                    <i class="fa-solid fa-arrows-rotate me-1"></i>Refresh
+                </button>
+            </div>
+
+            <!-- Empty state -->
+            <div class="text-center text-body-secondary py-5" id="galleryEmpty">
+                <i class="fa-solid fa-video" style="font-size:3rem;"></i>
+                <p class="mt-2">No videos generated yet. Head to the <strong>Generate</strong> tab to create one.</p>
+            </div>
+
+            <!-- Video grid -->
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3" id="galleryGrid"></div>
+
+            <!-- Preview modal -->
+            <div class="modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="galleryModalLabel">Video Preview</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <video id="modalVideoPlayer" controls class="w-100" style="max-height:70vh;"></video>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-success" id="modalDownloadBtn">
+                                <i class="fa-solid fa-download me-1"></i>Download
+                            </a>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <div class="video-preview" id="videoPreview">
-            <h3>📹 Preview</h3>
-            <video id="videoPlayer" controls></video>
-            <div class="download-section">
-                <a href="#" class="download-btn" id="downloadBtn">Download Video</a>
-                <a href="#" class="download-btn" id="openFolderBtn" style="display:none; background-color:#4a9eff; margin-left:10px;">Open Video Folder</a>
+
+        <!-- ====== SETTINGS TAB ====== -->
+        <div class="tab-pane fade" id="settings-tab-pane" role="tabpanel">
+            <div class="row g-3 mx-auto" style="max-width:800px;">
+
+                <!-- FFmpeg -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fa-solid fa-film me-1"></i>FFmpeg
+                            <span class="badge bg-secondary ms-2" id="settingsFfmpegBadge">Checking...</span>
+                        </div>
+                        <div class="card-body">
+                            <div id="settingsFfmpegOk" class="d-none">
+                                <p class="text-success mb-0">FFmpeg is installed and ready.</p>
+                            </div>
+                            <div id="settingsFfmpegMissing" class="d-none">
+                                <p class="text-danger mb-2">FFmpeg was not found on your system.</p>
+                                <button class="btn btn-outline-secondary" id="settingsInstallFfmpegBtn">
+                                    <i class="fa-solid fa-download me-1"></i>Download &amp; Install FFmpeg
+                                </button>
+                                <div class="settings-progress" id="settingsFfmpegProgress">
+                                    <div class="progress" style="height:6px;">
+                                        <div class="progress-bar" id="settingsFfmpegProgressFill" style="width:0%"></div>
+                                    </div>
+                                </div>
+                                <div class="alert d-none mt-2" id="settingsFfmpegMsg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Server Info -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header"><i class="fa-solid fa-server me-1"></i>Server</div>
+                        <div class="card-body">
+                            <label class="form-label" for="settingsServerUrl">API URL</label>
+                            <input type="text" class="form-control" id="settingsServerUrl" readonly
+                                   style="cursor:text; user-select:all;" onclick="this.select()">
+                            <div class="form-text">Use this URL for the Premiere plugin or API access.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Directory -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header"><i class="fa-solid fa-folder me-1"></i>Data Directory</div>
+                        <div class="card-body">
+                            <label class="form-label" for="settingsDataDir">Save location</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="settingsDataDir" placeholder="Loading...">
+                                <button class="btn btn-outline-secondary" id="settingsDataDirBtn">Update</button>
+                            </div>
+                            <div class="form-text">Where settings, cache, and generated videos are stored.</div>
+                            <div class="alert d-none mt-2" id="settingsDataDirMsg"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patreon Credentials -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header"><i class="fa-solid fa-key me-1"></i>Patreon Credentials</div>
+                        <div class="card-body">
+                            <label class="form-label" for="settingsPatreonToken">Creator Access Token</label>
+                            <div class="input-group mb-2">
+                                <input type="password" class="form-control" id="settingsPatreonToken" placeholder="Paste your token here">
+                                <button class="btn btn-outline-secondary" id="settingsDetectBtn">Detect Campaign</button>
+                            </div>
+                            <div class="form-text mb-3">
+                                <a href="https://www.patreon.com/portal/registration/register-clients" target="_blank" rel="noopener">Get your token from Patreon</a>
+                            </div>
+
+                            <label class="form-label" for="settingsCampaignId">Campaign ID</label>
+                            <input type="text" class="form-control mb-2" id="settingsCampaignId" placeholder="Auto-detected or enter manually">
+
+                            <div class="alert d-none mt-2" id="settingsPatreonMsg"></div>
+
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="settingsUseDummyData">
+                                <label class="form-check-label" for="settingsUseDummyData">Use dummy data (skip Patreon API)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save Button -->
+                <div class="col-12">
+                    <button class="btn btn-success w-100" id="settingsSaveBtn">
+                        <i class="fa-solid fa-check me-1"></i>Save Settings
+                    </button>
+                    <div class="alert d-none mt-2" id="settingsSaveMsg"></div>
+                </div>
             </div>
         </div>
+
     </div>
-    
-    <script>
-        const form = document.getElementById('creditsForm');
-        const generateBtn = document.getElementById('generateBtn');
-        const refreshBtn = document.getElementById('refreshBtn');
-        const statusSection = document.getElementById('statusSection');
-        const statusText = document.getElementById('statusText');
-        const videoPreview = document.getElementById('videoPreview');
-        const videoPlayer = document.getElementById('videoPlayer');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const openFolderBtn = document.getElementById('openFolderBtn');
-        let isDesktop = window.pywebview !== undefined;
-        const errorMessage = document.getElementById('errorMessage');
-        const patronCount = document.getElementById('patronCount');
-        const ffmpegStatus = document.getElementById('ffmpegStatus');
-        
-        // Font family mapping (backend key -> CSS font-family)
-        const fontFamilyMap = {
-            'noto_sans': "'Noto Sans', sans-serif",
-            'noto_serif_cjk': "'Noto Serif SC', serif",
-            'lxgw_wenkai': "'LXGW WenKai', cursive",
-            'zen_maru_gothic': "'Zen Maru Gothic', sans-serif",
-            'mplus_rounded': "'M PLUS Rounded 1c', sans-serif",
-            'shippori_mincho': "'Shippori Mincho', serif",
-            'inter': "'Inter', sans-serif",
-            'roboto': "'Roboto', sans-serif",
-            'open_sans': "'Open Sans', sans-serif",
-            'poppins': "'Poppins', sans-serif",
-            'montserrat': "'Montserrat', sans-serif",
-            'raleway': "'Raleway', sans-serif",
-            'quicksand': "'Quicksand', sans-serif",
-            'source_sans': "'Source Sans 3', sans-serif",
-            'lato': "'Lato', sans-serif",
-            'nunito': "'Nunito', sans-serif",
-            'rubik': "'Rubik', sans-serif",
-            'dm_sans': "'DM Sans', sans-serif",
-            'josefin_sans': "'Josefin Sans', sans-serif",
-            'ubuntu': "'Ubuntu', sans-serif",
-            'oswald': "'Oswald', sans-serif",
-            'bebas_neue': "'Bebas Neue', sans-serif",
-            'cinzel': "'Cinzel', serif",
-            'playfair_display': "'Playfair Display', serif",
-            'merriweather': "'Merriweather', serif",
-            'crimson_text': "'Crimson Text', serif",
-            'lora': "'Lora', serif",
-            'libre_baskerville': "'Libre Baskerville', serif",
-            'arvo': "'Arvo', serif",
-            'neuton': "'Neuton', serif",
-            'alfa_slab_one': "'Alfa Slab One', serif",
-            'bangers': "'Bangers', system-ui",
-            'permanent_marker': "'Permanent Marker', cursive",
-            'pacifico': "'Pacifico', cursive",
-            'playwrite': "'Playwrite DE Grund', cursive"
-        };
+</div>
 
-        // ---- localStorage persistence ----
-        const STORAGE_KEY = 'patreon_credits_settings';
-
-        // IDs of all form fields to persist
-        const persistFields = [
-            { id: 'message',       type: 'value' },
-            { id: 'customNames',   type: 'value' },
-            { id: 'messageSize',   type: 'value' },
-            { id: 'messageColor',  type: 'value' },
-            { id: 'messageFont',   type: 'value' },
-            { id: 'messageBold',   type: 'checked' },
-            { id: 'messageAlign',  type: 'value' },
-            { id: 'patronSize',    type: 'value' },
-            { id: 'patronColor',   type: 'value' },
-            { id: 'patronFont',    type: 'value' },
-            { id: 'patronBold',    type: 'checked' },
-            { id: 'duration',      type: 'value' },
-            { id: 'resolution',    type: 'value' },
-            { id: 'columns',       type: 'value' },
-            { id: 'nameAlign',     type: 'value' },
-            { id: 'truncateLength', type: 'value' },
-            { id: 'wordWrap',      type: 'checked' },
-            { id: 'nameSpacing',   type: 'checked' },
-            { id: 'bgColor',       type: 'value' },
-            { id: 'useCache',      type: 'checked' },
-        ];
-
-        function saveSettings() {
-            const settings = {};
-            persistFields.forEach(f => {
-                const el = document.getElementById(f.id);
-                settings[f.id] = f.type === 'checked' ? el.checked : el.value;
-            });
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-        }
-
-        function loadSettings() {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return;
-            try {
-                const settings = JSON.parse(raw);
-                persistFields.forEach(f => {
-                    if (settings[f.id] === undefined) return;
-                    const el = document.getElementById(f.id);
-                    if (f.type === 'checked') el.checked = settings[f.id];
-                    else el.value = settings[f.id];
-                });
-            } catch (_) { /* ignore corrupt data */ }
-        }
-
-        // Restore on page load
-        loadSettings();
-
-        // Save whenever any tracked field changes
-        persistFields.forEach(f => {
-            const el = document.getElementById(f.id);
-            el.addEventListener('change', saveSettings);
-            if (el.type === 'color' || el.tagName === 'TEXTAREA') {
-                el.addEventListener('input', saveSettings);
-            }
-        });
-
-        // ---- Live font preview updaters ----
-        function updateFontPreview(previewId, fontSelectId, boldCheckboxId, colorInputId) {
-            const preview = document.getElementById(previewId);
-            const fontVal = document.getElementById(fontSelectId).value;
-            const bold = document.getElementById(boldCheckboxId).checked;
-            preview.style.fontFamily = fontFamilyMap[fontVal] || 'sans-serif';
-            preview.style.fontWeight = bold ? 'bold' : 'normal';
-            if (colorInputId) {
-                preview.style.color = document.getElementById(colorInputId).value;
-            }
-        }
-
-        // Bind change events for message styling
-        document.getElementById('messageFont').addEventListener('change', () =>
-            updateFontPreview('messageFontPreview', 'messageFont', 'messageBold', 'messageColor'));
-        document.getElementById('messageBold').addEventListener('change', () =>
-            updateFontPreview('messageFontPreview', 'messageFont', 'messageBold', 'messageColor'));
-        document.getElementById('messageColor').addEventListener('input', () =>
-            updateFontPreview('messageFontPreview', 'messageFont', 'messageBold', 'messageColor'));
-
-        // Bind change events for patron styling
-        document.getElementById('patronFont').addEventListener('change', () =>
-            updateFontPreview('patronFontPreview', 'patronFont', 'patronBold', 'patronColor'));
-        document.getElementById('patronBold').addEventListener('change', () =>
-            updateFontPreview('patronFontPreview', 'patronFont', 'patronBold', 'patronColor'));
-        document.getElementById('patronColor').addEventListener('input', () =>
-            updateFontPreview('patronFontPreview', 'patronFont', 'patronBold', 'patronColor'));
-
-        // Sync previews with (possibly restored) values
-        updateFontPreview('messageFontPreview', 'messageFont', 'messageBold', 'messageColor');
-        updateFontPreview('patronFontPreview', 'patronFont', 'patronBold', 'patronColor');
-
-        // Check FFmpeg status on load
-        checkFFmpeg();
-        updatePatronCount();
-        
-        async function checkFFmpeg() {
-            const installBtn = document.getElementById('installFfmpegBtn');
-            try {
-                const response = await fetch('/check-ffmpeg');
-                const data = await response.json();
-                ffmpegStatus.textContent = data.installed ? '✅ Installed' : '❌ Not installed';
-                ffmpegStatus.style.color = data.installed ? '#28a745' : '#dc3545';
-                installBtn.style.display = data.installed ? 'none' : 'inline-block';
-            } catch (error) {
-                ffmpegStatus.textContent = '❌ Error checking';
-                ffmpegStatus.style.color = '#dc3545';
-                installBtn.style.display = 'none';
-            }
-        }
-
-        async function installFfmpeg() {
-            const btn = document.getElementById('installFfmpegBtn');
-            btn.disabled = true;
-            btn.textContent = 'Installing...';
-            ffmpegStatus.textContent = '⏳ Downloading FFmpeg...';
-            ffmpegStatus.style.color = '#ffc107';
-            try {
-                const resp = await fetch('/install-ffmpeg', { method: 'POST' });
-                const data = await resp.json();
-                if (data.success) {
-                    ffmpegStatus.textContent = '✅ Installed';
-                    ffmpegStatus.style.color = '#28a745';
-                    btn.style.display = 'none';
-                } else {
-                    ffmpegStatus.textContent = '❌ Install failed: ' + (data.error || 'Unknown error');
-                    ffmpegStatus.style.color = '#dc3545';
-                    btn.textContent = 'Retry';
-                    btn.disabled = false;
-                }
-            } catch (error) {
-                ffmpegStatus.textContent = '❌ Install failed';
-                ffmpegStatus.style.color = '#dc3545';
-                btn.textContent = 'Retry';
-                btn.disabled = false;
-            }
-        }
-        
-        async function updatePatronCount() {
-            try {
-                const response = await fetch('/patron-count');
-                const data = await response.json();
-                patronCount.textContent = data.count || '0';
-            } catch (error) {
-                patronCount.textContent = 'Error loading';
-            }
-        }
-        
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.classList.add('active');
-            setTimeout(() => {
-                errorMessage.classList.remove('active');
-            }, 5000);
-        }
-        
-        function showStatus(message) {
-            statusText.textContent = message;
-            statusSection.classList.add('active');
-        }
-        
-        function hideStatus() {
-            statusSection.classList.remove('active');
-        }
-        
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const message = document.getElementById('message').value.trim();
-            const customNames = document.getElementById('customNames').value.trim();
-            const duration = parseInt(document.getElementById('duration').value);
-            const resolution = document.getElementById('resolution').value;
-            const columns = parseInt(document.getElementById('columns').value);
-            const nameAlign = document.getElementById('nameAlign').value;
-            const truncateLength = parseInt(document.getElementById('truncateLength').value) || 0;
-            const wordWrap = document.getElementById('wordWrap').checked;
-            const nameSpacing = document.getElementById('nameSpacing').checked;
-            const bgColor = document.getElementById('bgColor').value;
-            const useCache = document.getElementById('useCache').checked;
-            
-            // Get styling options
-            const messageStyle = {
-                size: parseInt(document.getElementById('messageSize').value),
-                color: document.getElementById('messageColor').value,
-                font: document.getElementById('messageFont').value,
-                bold: document.getElementById('messageBold').checked,
-                align: document.getElementById('messageAlign').value
-            };
-
-            const patronStyle = {
-                size: parseInt(document.getElementById('patronSize').value),
-                color: document.getElementById('patronColor').value,
-                font: document.getElementById('patronFont').value,
-                bold: document.getElementById('patronBold').checked
-            };
-            
-            if (!message) {
-                showError('Please enter a message');
-                return;
-            }
-            
-            generateBtn.disabled = true;
-            showStatus('Fetching patron list...');
-            
-            try {
-                const response = await fetch('/generate', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message,
-                        custom_names: customNames,
-                        duration,
-                        resolution,
-                        columns,
-                        name_align: nameAlign,
-                        truncate_length: truncateLength,
-                        word_wrap: wordWrap,
-                        name_spacing: nameSpacing,
-                        bg_color: bgColor,
-                        use_cache: useCache,
-                        message_style: messageStyle,
-                        patron_style: patronStyle
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.error || 'Failed to generate video');
-                }
-                
-                showStatus('Video generated successfully!');
-                
-                // Show video preview
-                videoPlayer.src = data.video_url;
-                videoPreview.classList.add('active');
-                
-                // Store filename for download handler
-                downloadBtn.dataset.filename = data.filename;
-                
-                // Update patron count
-                patronCount.textContent = data.patron_count;
-                
-                setTimeout(hideStatus, 2000);
-                
-            } catch (error) {
-                showError(error.message);
-                hideStatus();
-            } finally {
-                generateBtn.disabled = false;
-            }
-        });
-        
-        document.getElementById('namesFileInput').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = () => {
-                let text = reader.result;
-                // CSV: if lines contain commas, split on commas and flatten
-                if (file.name.endsWith('.csv')) {
-                    const names = text.split(/[\r\n]+/)
-                        .flatMap(line => line.split(','))
-                        .map(n => n.trim().replace(/^["']|["']$/g, ''))
-                        .filter(Boolean);
-                    text = names.join('\n');
-                }
-                const ta = document.getElementById('customNames');
-                ta.value = ta.value ? ta.value.trimEnd() + '\n' + text.trim() : text.trim();
-                saveSettings();
-            };
-            reader.readAsText(file);
-            e.target.value = '';
-        });
-
-        // In desktop mode, hide Download and show Open Folder instead.
-        // pywebview injects window.pywebview asynchronously, so re-check
-        // after the bridge fires or a short delay.
-        function applyDesktopMode() {
-            if (window.pywebview) {
-                isDesktop = true;
-                downloadBtn.style.display = 'none';
-                openFolderBtn.style.display = 'inline-block';
-            }
-        }
-        applyDesktopMode();
-        window.addEventListener('pywebviewready', applyDesktopMode);
-        setTimeout(applyDesktopMode, 500);
-
-        downloadBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            const filename = downloadBtn.dataset.filename;
-            if (!filename) return;
-            try {
-                const resp = await fetch(`/download/${filename}`);
-                if (!resp.ok) throw new Error('Download failed');
-                const blob = await resp.blob();
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `patreon_credits_${filename}`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            } catch (err) {
-                showError(err.message);
-            }
-        });
-
-        openFolderBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            try {
-                const resp = await fetch('/open-output-folder', { method: 'POST' });
-                const data = await resp.json();
-                if (!data.success) showError(data.error || 'Failed to open folder');
-            } catch (err) {
-                showError(err.message);
-            }
-        });
-
-        refreshBtn.addEventListener('click', async () => {
-            refreshBtn.disabled = true;
-            showStatus('Refreshing patron list...');
-
-            try {
-                const response = await fetch('/refresh-patrons', { method: 'POST' });
-                const data = await response.json();
-
-                if (data.error) {
-                    showError('Error: ' + data.error);
-                } else {
-                    showStatus('Patron list refreshed: ' + data.count + ' patrons.');
-                    patronCount.textContent = data.count;
-                    setTimeout(hideStatus, 2000);
-                }
-            } catch (error) {
-                showError('Failed to refresh patron list');
-                hideStatus();
-            } finally {
-                refreshBtn.disabled = false;
-            }
-        });
-    </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/app.js"></script>
+<script src="/static/js/gallery.js"></script>
+<script src="/static/js/settings.js"></script>
 </body>
 </html>

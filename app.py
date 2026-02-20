@@ -1,10 +1,13 @@
 from flask import Flask, render_template, request, jsonify, send_file, redirect
+import hashlib
 import os
 import platform
 import shutil
+import subprocess
 import tempfile
 import zipfile
 import tarfile
+from datetime import datetime
 import requests as http_requests
 from patreon import PatreonAPI
 from ffmpeg_renderer import VideoRenderer
@@ -12,8 +15,9 @@ from dotenv import load_dotenv
 from path_utils import (
     get_env_path, get_env_example_path, get_output_dir,
     get_templates_dir, get_static_dir, get_ffmpeg_dir,
-    get_ffmpeg_download_url, check_ffmpeg as check_ffmpeg_util,
-    get_data_dir, set_data_dir,
+    get_ffmpeg_download_url, get_ffmpeg_path,
+    check_ffmpeg as check_ffmpeg_util,
+    get_data_dir, set_data_dir, _subprocess_kwargs,
 )
 
 load_dotenv(get_env_path())
@@ -87,6 +91,86 @@ def health():
 def favicon():
     icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'icon.png')
     return send_file(icon, mimetype='image/png')
+
+
+@app.route('/api/videos')
+def list_videos():
+    """List all generated videos with metadata."""
+    output_dir = get_output_dir()
+    videos = []
+    for f in sorted(os.listdir(output_dir), reverse=True):
+        if not f.endswith('.mp4'):
+            continue
+        filepath = os.path.join(output_dir, f)
+        stat = os.stat(filepath)
+        if stat.st_size == 0:
+            continue
+        ts_str = f.replace('credits_', '').replace('.mp4', '')
+        try:
+            ts = datetime.strptime(ts_str, '%Y%m%d_%H%M%S')
+            created = ts.isoformat()
+        except ValueError:
+            created = datetime.fromtimestamp(stat.st_mtime).isoformat()
+        videos.append({
+            'filename': f,
+            'size': stat.st_size,
+            'created': created,
+            'video_url': f'/output/{f}',
+            'thumbnail_url': f'/api/thumbnail/{f}',
+            'download_url': f'/download/{f}',
+        })
+    return jsonify({'videos': videos})
+
+
+def _thumb_path(filename):
+    """Return hex-based thumbnail path: thumbnails/<2-char prefix>/<hash>.jpg"""
+    digest = hashlib.sha256(filename.encode()).hexdigest()
+    prefix = digest[:2]
+    thumb_dir = os.path.join(get_static_dir(), 'thumbnails', prefix)
+    os.makedirs(thumb_dir, exist_ok=True)
+    return os.path.join(thumb_dir, digest + '.jpg')
+
+
+@app.route('/api/thumbnail/<filename>')
+def video_thumbnail(filename):
+    """Serve a thumbnail for a video, generating it on-the-fly if needed."""
+    if '/' in filename or '\\' in filename or '..' in filename:
+        return jsonify({'error': 'Invalid filename'}), 400
+    video_path = os.path.join(get_output_dir(), filename)
+    if not os.path.exists(video_path):
+        return jsonify({'error': 'Video not found'}), 404
+
+    thumb_path = _thumb_path(filename)
+
+    if not os.path.exists(thumb_path):
+        ffmpeg = get_ffmpeg_path()
+        cmd = [ffmpeg, '-i', video_path, '-ss', '1', '-vframes', '1',
+               '-vf', 'scale=320:-1', '-q:v', '3', '-y', thumb_path]
+        try:
+            subprocess.run(cmd, capture_output=True, timeout=10,
+                           **_subprocess_kwargs())
+        except Exception:
+            return jsonify({'error': 'Thumbnail generation failed'}), 500
+
+    if os.path.exists(thumb_path):
+        return send_file(thumb_path, mimetype='image/jpeg')
+    return jsonify({'error': 'Thumbnail not found'}), 404
+
+
+@app.route('/api/videos/<filename>', methods=['DELETE'])
+def delete_video(filename):
+    """Delete a generated video and its thumbnail."""
+    if '/' in filename or '\\' in filename or '..' in filename:
+        return jsonify({'error': 'Invalid filename'}), 400
+    video_path = os.path.join(get_output_dir(), filename)
+    if not os.path.exists(video_path):
+        return jsonify({'error': 'File not found'}), 404
+
+    os.remove(video_path)
+    thumb_path = _thumb_path(filename)
+    if os.path.exists(thumb_path):
+        os.remove(thumb_path)
+    return jsonify({'success': True})
 
 
 @app.route('/check-ffmpeg')
@@ -173,7 +257,6 @@ def download_video(filename):
 @app.route('/open-output-folder', methods=['POST'])
 def open_output_folder():
     """Open the output directory in the system file manager."""
-    import subprocess
     output_dir = get_output_dir()
     os.makedirs(output_dir, exist_ok=True)
     try:
@@ -211,10 +294,9 @@ def refresh_patrons():
 
 @app.route('/settings', methods=['GET'])
 def get_settings():
-    """Return current settings as JSON (or render settings page via Accept header)."""
-    # If the browser wants HTML, render the page
+    """Return current settings as JSON (or redirect to Settings tab)."""
     if 'text/html' in request.headers.get('Accept', ''):
-        return render_template('settings.html')
+        return redirect('/#settings-tab')
     # Otherwise return JSON for the JS fetch calls
     load_dotenv(get_env_path(), override=True)
     return jsonify({
@@ -352,7 +434,7 @@ def api_spec():
         'info': {
             'title': 'Patreon Credits Generator API',
             'description': 'Generate scrolling end-credits videos featuring Patreon supporters.',
-            'version': '1.3.1',
+            'version': '1.4.0',
         },
         'paths': {
             '/generate': {
@@ -561,6 +643,94 @@ def api_spec():
                             'content': {'video/mp4': {'schema': {'type': 'string', 'format': 'binary'}}},
                         },
                         '404': {'description': 'File not found.'},
+                    },
+                },
+            },
+            '/api/videos': {
+                'get': {
+                    'summary': 'List generated videos',
+                    'description': 'Returns all generated video files with metadata (size, date, URLs).',
+                    'responses': {
+                        '200': {
+                            'description': 'List of videos.',
+                            'content': {
+                                'application/json': {
+                                    'schema': {
+                                        'type': 'object',
+                                        'properties': {
+                                            'videos': {
+                                                'type': 'array',
+                                                'items': {
+                                                    'type': 'object',
+                                                    'properties': {
+                                                        'filename': {'type': 'string'},
+                                                        'size': {'type': 'integer', 'description': 'File size in bytes.'},
+                                                        'created': {'type': 'string', 'format': 'date-time'},
+                                                        'video_url': {'type': 'string'},
+                                                        'thumbnail_url': {'type': 'string'},
+                                                        'download_url': {'type': 'string'},
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            '/api/videos/{filename}': {
+                'delete': {
+                    'summary': 'Delete a generated video',
+                    'description': 'Deletes a video file and its cached thumbnail.',
+                    'parameters': [
+                        {
+                            'name': 'filename',
+                            'in': 'path',
+                            'required': True,
+                            'schema': {'type': 'string'},
+                            'description': 'The video filename to delete.',
+                        },
+                    ],
+                    'responses': {
+                        '200': {
+                            'description': 'Video deleted.',
+                            'content': {
+                                'application/json': {
+                                    'schema': {
+                                        'type': 'object',
+                                        'properties': {
+                                            'success': {'type': 'boolean'},
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        '404': {'description': 'File not found.'},
+                    },
+                },
+            },
+            '/api/thumbnail/{filename}': {
+                'get': {
+                    'summary': 'Get video thumbnail',
+                    'description': 'Returns a JPEG thumbnail for a generated video. Thumbnails are generated on first request and cached.',
+                    'parameters': [
+                        {
+                            'name': 'filename',
+                            'in': 'path',
+                            'required': True,
+                            'schema': {'type': 'string'},
+                            'description': 'The video filename.',
+                        },
+                    ],
+                    'responses': {
+                        '200': {
+                            'description': 'JPEG thumbnail image.',
+                            'content': {'image/jpeg': {'schema': {'type': 'string', 'format': 'binary'}}},
+                        },
+                        '404': {'description': 'Video not found.'},
+                        '500': {'description': 'Thumbnail generation failed.'},
                     },
                 },
             },

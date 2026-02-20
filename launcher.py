@@ -107,8 +107,8 @@ def main():
         webview.create_window(
             'Patreon Credits Generator',
             f'http://127.0.0.1:{port}',
-            width=1100,
-            height=850,
+            width=1024,
+            height=1092,
             min_size=(800, 600),
         )
         webview.start(icon=icon_path if os.path.exists(icon_path) else None)

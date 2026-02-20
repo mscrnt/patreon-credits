@@ -15,6 +15,10 @@
 
     var lastVideoFilename = null;
     var lastVideoUrl = null;
+    var videoListEl = document.getElementById("videoList");
+    var videoListEmpty = document.getElementById("videoListEmpty");
+    var videoCountEl = document.getElementById("videoCount");
+    var refreshVideosBtn = document.getElementById("refreshVideosBtn");
 
     // ---- Server connection ----
     function checkServer() {
@@ -110,6 +114,7 @@
             showStatus("Video generated! " + result.patron_count + " patrons.", "success");
             addTimelineBtn.style.display = "block";
             generateBtn.disabled = false;
+            loadVideoList();
         })
         .catch(function (err) {
             showStatus("Failed to connect: " + err.message, "error");
@@ -228,9 +233,99 @@
         });
     }
 
+    // ---- Video history ----
+    function formatBytes(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB";
+        return (bytes / 1048576).toFixed(1) + " MB";
+    }
+
+    function formatDate(isoStr) {
+        try {
+            var d = new Date(isoStr);
+            return d.toLocaleDateString(undefined, {
+                month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+            });
+        } catch (_) { return isoStr; }
+    }
+
+    function loadVideoList() {
+        fetch(API_BASE + "/api/videos")
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                var videos = data.videos || [];
+                if (videoCountEl) videoCountEl.textContent = videos.length ? "(" + videos.length + ")" : "";
+
+                if (videos.length === 0) {
+                    if (videoListEmpty) videoListEmpty.style.display = "block";
+                    // Clear any existing items but keep the empty message
+                    var items = videoListEl.querySelectorAll(".video-item");
+                    for (var i = 0; i < items.length; i++) items[i].remove();
+                    return;
+                }
+
+                if (videoListEmpty) videoListEmpty.style.display = "none";
+                // Clear and rebuild
+                var items = videoListEl.querySelectorAll(".video-item");
+                for (var i = 0; i < items.length; i++) items[i].remove();
+
+                videos.forEach(function (v) {
+                    var row = document.createElement("div");
+                    row.className = "video-item";
+                    row.innerHTML =
+                        '<div class="video-item-info">' +
+                            '<span class="video-item-name" title="' + v.filename + '">' + v.filename + '</span>' +
+                            '<span class="video-item-meta">' + formatDate(v.created) + ' · ' + formatBytes(v.size) + '</span>' +
+                        '</div>' +
+                        '<div class="video-item-actions">' +
+                            '<button class="btn-icon btn-import" title="Import to timeline" data-filename="' + v.filename + '">&#9654;</button>' +
+                            '<button class="btn-icon btn-delete" title="Delete" data-filename="' + v.filename + '">&#10005;</button>' +
+                        '</div>';
+                    videoListEl.appendChild(row);
+                });
+            })
+            .catch(function () {});
+    }
+
+    // Delegate clicks on video list
+    if (videoListEl) {
+        videoListEl.addEventListener("click", function (e) {
+            var btn = e.target.closest(".btn-icon");
+            if (!btn) return;
+            var filename = btn.dataset.filename;
+            if (!filename) return;
+
+            if (btn.classList.contains("btn-import")) {
+                // Import this video to timeline
+                lastVideoFilename = filename;
+                lastVideoUrl = API_BASE + "/output/" + filename;
+                addTimelineBtn.style.display = "block";
+                showStatus("Selected: " + filename + " — click Import & Add to Timeline.", "info");
+            } else if (btn.classList.contains("btn-delete")) {
+                if (!confirm("Delete " + filename + "?")) return;
+                fetch(API_BASE + "/api/videos/" + encodeURIComponent(filename), { method: "DELETE" })
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        if (data.success) {
+                            showStatus("Deleted " + filename, "success");
+                            loadVideoList();
+                        } else {
+                            showStatus("Delete failed: " + (data.error || "Unknown error"), "error");
+                        }
+                    })
+                    .catch(function () { showStatus("Delete failed.", "error"); });
+            }
+        });
+    }
+
+    if (refreshVideosBtn) {
+        refreshVideosBtn.addEventListener("click", loadVideoList);
+    }
+
     // ---- Init ----
     checkServer();
     updateProjectInfo();
+    loadVideoList();
     // Recheck periodically
     setInterval(checkServer, 15000);
     setInterval(updateProjectInfo, 10000);
