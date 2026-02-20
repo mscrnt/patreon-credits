@@ -620,7 +620,9 @@
             <div class="info-box">
                 <h4>ℹ️ Information</h4>
                 <p>Current patron count: <span class="patron-count" id="patronCount">Loading...</span></p>
-                <p>FFmpeg status: <span id="ffmpegStatus">Checking...</span></p>
+                <p>FFmpeg status: <span id="ffmpegStatus">Checking...</span>
+                    <button id="installFfmpegBtn" style="display:none; margin-left:8px; padding:2px 10px; font-size:0.85em; cursor:pointer; background:#28a745; color:#fff; border:none; border-radius:4px;" onclick="installFfmpeg()">Install</button>
+                </p>
             </div>
         </div>
         
@@ -794,14 +796,44 @@
         updatePatronCount();
         
         async function checkFFmpeg() {
+            const installBtn = document.getElementById('installFfmpegBtn');
             try {
                 const response = await fetch('/check-ffmpeg');
                 const data = await response.json();
                 ffmpegStatus.textContent = data.installed ? '✅ Installed' : '❌ Not installed';
                 ffmpegStatus.style.color = data.installed ? '#28a745' : '#dc3545';
+                installBtn.style.display = data.installed ? 'none' : 'inline-block';
             } catch (error) {
                 ffmpegStatus.textContent = '❌ Error checking';
                 ffmpegStatus.style.color = '#dc3545';
+                installBtn.style.display = 'none';
+            }
+        }
+
+        async function installFfmpeg() {
+            const btn = document.getElementById('installFfmpegBtn');
+            btn.disabled = true;
+            btn.textContent = 'Installing...';
+            ffmpegStatus.textContent = '⏳ Downloading FFmpeg...';
+            ffmpegStatus.style.color = '#ffc107';
+            try {
+                const resp = await fetch('/install-ffmpeg', { method: 'POST' });
+                const data = await resp.json();
+                if (data.success) {
+                    ffmpegStatus.textContent = '✅ Installed';
+                    ffmpegStatus.style.color = '#28a745';
+                    btn.style.display = 'none';
+                } else {
+                    ffmpegStatus.textContent = '❌ Install failed: ' + (data.error || 'Unknown error');
+                    ffmpegStatus.style.color = '#dc3545';
+                    btn.textContent = 'Retry';
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                ffmpegStatus.textContent = '❌ Install failed';
+                ffmpegStatus.style.color = '#dc3545';
+                btn.textContent = 'Retry';
+                btn.disabled = false;
             }
         }
         

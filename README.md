@@ -4,7 +4,7 @@
 
 <h1 align="center">Patreon Credits Generator</h1>
 
-A standalone desktop app to generate scrolling end-credits videos for YouTube content creators, featuring their Patreon supporters. Runs as a native window on Windows, macOS, and Linux — no Python install required. [FFmpeg](https://ffmpeg.org/download.html) must be installed and in your PATH.
+A standalone desktop app to generate scrolling end-credits videos for YouTube content creators, featuring their Patreon supporters. Runs as a native window on Windows, macOS, and Linux — no Python install required. FFmpeg is downloaded automatically on first use.
 
 <p align="center">
   <img src="docs/main_page.png" alt="Main UI" width="600"><br>
@@ -232,7 +232,7 @@ See the [plugin README](plugins/adobe-premiere/README.md) for installation and u
 ## Troubleshooting
 
 ### FFmpeg not found
-Ensure FFmpeg is installed and in your system PATH (`ffmpeg -version`). Download it from [ffmpeg.org](https://ffmpeg.org/download.html). The status indicator in the bottom-right of the UI shows whether FFmpeg is detected.
+Click the **Install** button next to the FFmpeg status indicator, or go to **Settings** and click **Download & Install FFmpeg**. The app downloads a portable FFmpeg binary to its data directory — no admin privileges or system PATH changes needed.
 
 ### No patrons showing
 - Check credentials in **Settings** or `.env`
