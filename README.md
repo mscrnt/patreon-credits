@@ -4,7 +4,17 @@
 
 <h1 align="center">Patreon Credits Generator</h1>
 
-A standalone desktop app to generate scrolling end-credits videos for YouTube content creators, featuring their Patreon supporters. Runs as a native window on Windows, macOS, and Linux — no Python install required. FFmpeg is downloaded automatically on first use.
+<p align="center">
+  A standalone desktop app to generate scrolling end-credits videos for YouTube content creators, featuring their Patreon supporters.
+</p>
+
+<p align="center">
+  <a href="../../releases"><img src="https://img.shields.io/github/v/release/mscrnt/patreon-credits?style=flat-square" alt="Release"></a>
+  <a href="https://hub.docker.com/r/mscrnt/patreon-credits"><img src="https://img.shields.io/docker/pulls/mscrnt/patreon-credits?style=flat-square" alt="Docker Pulls"></a>
+  <a href="https://hub.docker.com/r/mscrnt/patreon-credits"><img src="https://img.shields.io/docker/image-size/mscrnt/patreon-credits/latest?style=flat-square&label=image%20size" alt="Docker Image Size"></a>
+  <a href="../../pkgs/container/patreon-credits"><img src="https://img.shields.io/badge/ghcr.io-available-blue?style=flat-square&logo=github" alt="GHCR"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/mscrnt/patreon-credits?style=flat-square" alt="License"></a>
+</p>
 
 <p align="center">
   <img src="docs/main_page.png" alt="Main UI" width="600"><br>
@@ -15,6 +25,28 @@ A standalone desktop app to generate scrolling end-credits videos for YouTube co
   <img src="docs/credits.png" alt="Generated Credits" width="600"><br>
   <em>Generated scrolling credits video</em>
 </p>
+
+---
+
+## Table of Contents
+
+- [Download](#download)
+- [Features](#features)
+- [Quick Start (Desktop App)](#quick-start-desktop-app)
+- [Docker](#docker)
+- [Development Setup](#development-setup)
+- [Getting Patreon Credentials](#getting-patreon-credentials)
+- [Bundled Fonts](#bundled-fonts)
+- [Building from Source](#building-from-source)
+- [Project Structure](#project-structure)
+- [Video Specifications](#video-specifications)
+- [API Endpoints](#api-endpoints)
+- [Adobe Premiere Pro Plugin](#adobe-premiere-pro-plugin)
+- [Troubleshooting](#troubleshooting)
+- [Tech Stack](#tech-stack)
+- [Support](#support)
+
+---
 
 ## Download
 
@@ -29,21 +61,22 @@ Grab the latest release for your platform from the [Releases page](../../release
 
 ## Features
 
-- 🎬 Professional scrolling credits videos (MP4)
-- 🔄 Fetch active patrons from Patreon API
-- 📝 Custom names input — paste or upload a `.txt`/`.csv` file (no Patreon required)
-- ⏱️ Customizable duration (5-60 seconds)
-- 📝 Custom header with alignment options (left, center, right, justified)
-- 🎨 35 bundled font families (CJK + international character fallback)
-- 🖌️ Customizable text colors, sizes, and bold
-- 🎨 Customizable background color
-- 📐 1-5 column layout with configurable alignment
-- 📏 Name truncation or word wrap with hyphenation
-- ➖ Optional separator lines between name rows
-- 🖥️ 720p, 1080p, and 4K resolution
-- ⚙️ In-app settings page for Patreon credentials
-- 🧪 Dummy data mode for testing
-- 🔌 Adobe Premiere Pro plugin for direct timeline integration
+- Professional scrolling credits videos (MP4)
+- Fetch active patrons from Patreon API
+- Custom names input — paste or upload a `.txt`/`.csv` file (no Patreon required)
+- Customizable duration (5-60 seconds)
+- Custom header with alignment options (left, center, right, justified)
+- 35 bundled font families (CJK + international character fallback)
+- Customizable text colors, sizes, and bold
+- Customizable background color
+- 1-5 column layout with configurable alignment
+- Name truncation or word wrap with hyphenation
+- Optional separator lines between name rows
+- 720p, 1080p, and 4K resolution
+- In-app settings page for Patreon credentials
+- Dummy data mode for testing
+- Adobe Premiere Pro plugin for direct timeline integration
+- Docker support for server/headless deployments
 
 ## Quick Start (Desktop App)
 
@@ -69,6 +102,16 @@ PatreonCredits --headless -p 9000   # custom port (default: 8787)
 ```
 
 ## Docker
+
+The image is available from both registries:
+
+```bash
+# Docker Hub
+docker pull mscrnt/patreon-credits
+
+# GitHub Container Registry
+docker pull ghcr.io/mscrnt/patreon-credits
+```
 
 ### Quick Start
 
@@ -103,12 +146,27 @@ docker compose --profile prod up -d --build
 docker compose --profile dev up --build
 ```
 
+### Makefile Shortcuts
+
+```bash
+make dev      # Dev container with hot reload (port 5000)
+make prod     # Production container, detached (port 8787)
+make down     # Stop all containers
+make build    # Build images without starting
+make logs     # Tail production container logs
+make health   # Quick health check
+```
+
+### Environment Variables
+
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `PATREON_TOKEN` | | Patreon Creator Access Token |
 | `PATREON_CAMPAIGN_ID` | | Patreon campaign ID |
 | `USE_DUMMY_DATA` | `false` | Use dummy patron names for testing |
 | `PORT` | `8787` | Server port |
+
+### Volumes
 
 | Volume | Purpose |
 |--------|---------|
@@ -212,7 +270,9 @@ Each script runs PyInstaller and creates the platform-specific package (Inno Set
 
 ### CI/CD
 
-Pushing a `v*` tag triggers GitHub Actions to build all three platforms and create a GitHub Release with artifacts attached. See [.github/workflows/build.yml](.github/workflows/build.yml).
+Pushing a `v*` tag triggers GitHub Actions to:
+- Build desktop apps for all three platforms and create a [GitHub Release](../../releases) with artifacts
+- Build and push the Docker image to [Docker Hub](https://hub.docker.com/r/mscrnt/patreon-credits) and [GHCR](../../pkgs/container/patreon-credits)
 
 ## Project Structure
 
@@ -224,6 +284,9 @@ patreon-credits/
 ├── patreon.py              # Patreon API client
 ├── ffmpeg_renderer.py      # Pillow + FFmpeg video rendering
 ├── patreon_credits.spec    # PyInstaller build spec
+├── Dockerfile              # Multi-stage Docker build (dev + prod)
+├── docker-compose.yml      # Dev and prod profiles
+├── Makefile                # Common dev/docker commands
 ├── fonts/                  # Bundled font files (35 families)
 ├── templates/
 │   ├── index.html          # Main UI
@@ -240,9 +303,11 @@ patreon-credits/
 ├── plugins/
 │   └── adobe-premiere/     # Premiere Pro CEP panel plugin
 ├── .github/workflows/
-│   └── build.yml           # CI/CD (cross-platform builds)
+│   ├── build.yml           # CI/CD (cross-platform desktop builds)
+│   └── docker.yml          # Docker build + push (DockerHub + GHCR)
 ├── .env.example            # Configuration template
-└── requirements.txt        # Python dependencies
+├── requirements.txt        # Python dependencies
+└── requirements.docker.txt # Docker dependencies (no pywebview/pyinstaller)
 ```
 
 ## Video Specifications
@@ -258,16 +323,19 @@ patreon-credits/
 
 ## API Endpoints
 
-- `GET /` — Main web interface
-- `POST /generate` — Generate credits video (accepts `custom_names` for manual input)
-- `GET /download/<filename>` — Download generated video
-- `GET /patron-count` — Get current patron count
-- `POST /refresh-patrons` — Force-refresh patron list from Patreon API
-- `GET /check-ffmpeg` — Check FFmpeg installation
-- `GET /settings` — Settings page (Patreon credentials, dummy data toggle)
-- `POST /settings` — Save settings to `.env`
-- `GET /api/docs` — Swagger UI documentation
-- `GET /api/spec` — OpenAPI 3.0 JSON specification
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/` | Main web interface |
+| `POST` | `/generate` | Generate credits video (accepts `custom_names` for manual input) |
+| `GET` | `/download/<filename>` | Download generated video |
+| `GET` | `/patron-count` | Get current patron count |
+| `POST` | `/refresh-patrons` | Force-refresh patron list from Patreon API |
+| `GET` | `/check-ffmpeg` | Check FFmpeg installation |
+| `GET` | `/health` | Health check (Docker/orchestration) |
+| `GET` | `/settings` | Settings page |
+| `POST` | `/settings` | Save settings to `.env` |
+| `GET` | `/api/docs` | Swagger UI documentation |
+| `GET` | `/api/spec` | OpenAPI 3.0 JSON specification |
 
 ## Adobe Premiere Pro Plugin
 
@@ -295,6 +363,7 @@ Click the **Install** button next to the FFmpeg status indicator, or go to **Set
 - **Flask** — web server
 - **pywebview** — native desktop window (WebView2 on Windows, WebKit on macOS/Linux)
 - **PyInstaller** — standalone packaging
+- **Docker** — containerized server deployments
 - **Pillow** — text rendering with font fallback (fontTools cmap)
 - **FFmpeg** — video compositing (H.264 MP4)
 - **Patreon API v2** — patron data
