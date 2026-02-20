@@ -36,19 +36,18 @@ video_renderer = VideoRenderer()
 
 
 def _is_first_run():
-    """True when no .env exists or it still has placeholder values."""
-    env = get_env_path()
-    if not os.path.exists(env):
-        return True
+    """True when no credentials are configured (env vars or .env file)."""
     token = os.getenv('PATREON_TOKEN', '')
     dummy = os.getenv('USE_DUMMY_DATA', 'false').lower() == 'true'
     if dummy:
         return False
-    return not token or token == 'your_creator_access_token_here'
+    if token and token != 'your_creator_access_token_here':
+        return False
+    return not os.path.exists(get_env_path())
 
 
 def _write_env(token='', campaign_id='', use_dummy='false'):
-    """Write values to the .env file."""
+    """Write values to the .env file (falls back to os.environ if read-only)."""
     lines = [
         '# Patreon API Configuration',
         f'PATREON_TOKEN={token}',
@@ -56,8 +55,13 @@ def _write_env(token='', campaign_id='', use_dummy='false'):
         f'USE_DUMMY_DATA={use_dummy}',
         '',
     ]
-    with open(get_env_path(), 'w') as f:
-        f.write('\n'.join(lines))
+    try:
+        with open(get_env_path(), 'w') as f:
+            f.write('\n'.join(lines))
+    except OSError:
+        os.environ['PATREON_TOKEN'] = token
+        os.environ['PATREON_CAMPAIGN_ID'] = campaign_id
+        os.environ['USE_DUMMY_DATA'] = use_dummy
 
 @app.route('/')
 def index():
@@ -71,6 +75,18 @@ def index():
 def setup_page():
     """First-run setup wizard."""
     return render_template('setup.html')
+
+
+@app.route('/health')
+def health():
+    """Health check endpoint for Docker/orchestration."""
+    return jsonify({'status': 'ok'})
+
+
+@app.route('/favicon.ico')
+def favicon():
+    icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'icon.png')
+    return send_file(icon, mimetype='image/png')
 
 
 @app.route('/check-ffmpeg')
@@ -573,4 +589,6 @@ if __name__ == '__main__':
     if not check_ffmpeg_util():
         print("WARNING: FFmpeg not found. You can install it from the Settings page.")
 
-    app.run(debug=True, port=5000)
+    host = os.environ.get('FLASK_HOST', '127.0.0.1')
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=True, host=host, port=port)

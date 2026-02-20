@@ -68,6 +68,52 @@ PatreonCredits --headless
 PatreonCredits --headless -p 9000   # custom port (default: 8787)
 ```
 
+## Docker
+
+### Quick Start
+
+```bash
+docker run -d \
+  -p 8787:8787 \
+  -e USE_DUMMY_DATA=true \
+  -v patreon-output:/app/output \
+  mscrnt/patreon-credits
+```
+
+Open http://localhost:8787.
+
+### With Patreon Credentials
+
+```bash
+docker run -d \
+  -p 8787:8787 \
+  -e PATREON_TOKEN=your_token \
+  -e PATREON_CAMPAIGN_ID=your_campaign_id \
+  -v patreon-output:/app/output \
+  mscrnt/patreon-credits
+```
+
+### Docker Compose
+
+```bash
+# Production (port 8787)
+docker compose --profile prod up -d --build
+
+# Development with hot reload (port 5000)
+docker compose --profile dev up --build
+```
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PATREON_TOKEN` | | Patreon Creator Access Token |
+| `PATREON_CAMPAIGN_ID` | | Patreon campaign ID |
+| `USE_DUMMY_DATA` | `false` | Use dummy patron names for testing |
+| `PORT` | `8787` | Server port |
+
+| Volume | Purpose |
+|--------|---------|
+| `/app/output` | Generated video files |
+
 ## Development Setup
 
 For contributors or running from source:

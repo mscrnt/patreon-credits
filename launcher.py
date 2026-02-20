@@ -71,15 +71,16 @@ def main():
                 pass
 
         port = args.port
+        host = os.environ.get('FLASK_HOST', '127.0.0.1')
         from app import app
         print('')
         print('  Patreon Credits Generator — headless mode')
         print('  ==========================================')
-        print(f'  API running on: http://127.0.0.1:{port}')
-        print(f'  API docs:       http://127.0.0.1:{port}/api/docs')
+        print(f'  API running on: http://{host}:{port}')
+        print(f'  API docs:       http://{host}:{port}/api/docs')
         print('  Press Ctrl+C to stop.')
         print('')
-        app.run(host='127.0.0.1', port=port, debug=False, use_reloader=False)
+        app.run(host=host, port=port, debug=False, use_reloader=False)
     else:
         port = args.port
 

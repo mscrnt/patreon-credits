@@ -10,3 +10,4 @@ dist/
 build/
 ffmpeg_bin/
 *.spec.bak
+docker-compose.override.yml

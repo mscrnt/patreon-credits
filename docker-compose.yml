@@ -1,0 +1,40 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    ports:
+      - "${PORT:-8787}:8787"
+    environment:
+      - FLASK_HOST=0.0.0.0
+      - PORT=${PORT:-8787}
+      - PATREON_TOKEN=${PATREON_TOKEN:-}
+      - PATREON_CAMPAIGN_ID=${PATREON_CAMPAIGN_ID:-}
+      - USE_DUMMY_DATA=${USE_DUMMY_DATA:-false}
+    volumes:
+      - ./output:/app/output
+    restart: unless-stopped
+    profiles:
+      - prod
+
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    ports:
+      - "${PORT:-5000}:5000"
+    environment:
+      - FLASK_HOST=0.0.0.0
+      - FLASK_DEBUG=1
+      - PORT=${PORT:-5000}
+      - PATREON_TOKEN=${PATREON_TOKEN:-}
+      - PATREON_CAMPAIGN_ID=${PATREON_CAMPAIGN_ID:-}
+      - USE_DUMMY_DATA=${USE_DUMMY_DATA:-true}
+    volumes:
+      - .:/app
+      - /app/__pycache__
+    restart: unless-stopped
+    profiles:
+      - dev
