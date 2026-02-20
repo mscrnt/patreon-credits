@@ -11,6 +11,7 @@ Build with:
 import sys
 import os
 
+SPEC_DIR = os.path.dirname(os.path.abspath(SPEC))
 block_cipher = None
 
 a = Analysis(
@@ -21,6 +22,8 @@ a = Analysis(
         ('fonts', 'fonts'),
         ('templates', 'templates'),
         ('static', 'static'),
+        ('icon.png', '.'),
+        ('icon.ico', '.'),
         ('.env.example', '.'),
     ],
     hiddenimports=[
@@ -67,7 +70,7 @@ if sys.platform == 'darwin':
         target_arch=None,
         codesign_identity=None,
         entitlements_file=None,
-        icon=None,             # Set to 'icon.icns' if you add one
+        icon=os.path.join(SPEC_DIR, 'icon.icns') if os.path.exists(os.path.join(SPEC_DIR, 'icon.icns')) else None,
     )
 
     coll = COLLECT(
@@ -83,11 +86,11 @@ if sys.platform == 'darwin':
     app = BUNDLE(
         coll,
         name='Patreon Credits Generator.app',
-        icon=None,             # Set to 'icon.icns' if you add one
+        icon=os.path.join(SPEC_DIR, 'icon.icns') if os.path.exists(os.path.join(SPEC_DIR, 'icon.icns')) else None,
         bundle_identifier='com.mscrnt.patreoncredits',
         info_plist={
             'NSHighResolutionCapable': True,
-            'CFBundleShortVersionString': '1.1.0',
+            'CFBundleShortVersionString': '1.2.0',
         },
     )
 else:
@@ -112,5 +115,5 @@ else:
         target_arch=None,
         codesign_identity=None,
         entitlements_file=None,
-        icon=None,             # Set to 'icon.ico' if you add one
+        icon=os.path.join(SPEC_DIR, 'icon.ico') if os.path.exists(os.path.join(SPEC_DIR, 'icon.ico')) else None,
     )

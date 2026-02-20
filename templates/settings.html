@@ -172,6 +172,26 @@
             </div>
         </div>
 
+        <!-- Server Info -->
+        <div class="card">
+            <h2>Server</h2>
+            <label>API URL</label>
+            <input type="text" id="serverUrl" value="" readonly
+                   style="color: #4a9eff; cursor: text; user-select: all;"
+                   onclick="this.select()">
+            <p class="hint">Use this URL for the Premiere plugin or API access.</p>
+        </div>
+
+        <!-- Data Directory -->
+        <div class="card">
+            <h2>Data Directory</h2>
+            <label for="dataDir">Save location</label>
+            <input type="text" id="dataDir" placeholder="Loading...">
+            <p class="hint">Where settings, cache, and generated videos are stored. Changes take effect on next launch.</p>
+            <button class="btn-secondary" onclick="saveDataDir()">Update Directory</button>
+            <div class="msg" id="dataDirMsg"></div>
+        </div>
+
         <!-- Patreon Credentials -->
         <div class="card">
             <h2>Patreon Credentials</h2>
@@ -310,6 +330,39 @@
             }
         }
 
+        // ---- Data directory ----
+        async function saveDataDir() {
+            const msg = document.getElementById('dataDirMsg');
+            const path = document.getElementById('dataDir').value.trim();
+            if (!path) {
+                msg.className = 'msg error';
+                msg.textContent = 'Please enter a directory path.';
+                msg.style.display = 'block';
+                return;
+            }
+            try {
+                const resp = await fetch('/data-dir', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ path })
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    msg.className = 'msg success';
+                    msg.textContent = 'Directory updated to: ' + data.path;
+                    msg.style.display = 'block';
+                } else {
+                    msg.className = 'msg error';
+                    msg.textContent = data.error || 'Failed to set directory.';
+                    msg.style.display = 'block';
+                }
+            } catch (e) {
+                msg.className = 'msg error';
+                msg.textContent = 'Error: ' + e.message;
+                msg.style.display = 'block';
+            }
+        }
+
         // ---- Save settings ----
         async function saveSettings() {
             const msg = document.getElementById('saveMsg');
@@ -350,8 +403,14 @@
                 if (data.campaign_id) document.getElementById('campaignId').value = data.campaign_id;
                 if (data.use_dummy_data) document.getElementById('useDummyData').checked = true;
             } catch (_) {}
+            try {
+                const resp = await fetch('/data-dir');
+                const data = await resp.json();
+                document.getElementById('dataDir').value = data.path || '';
+            } catch (_) {}
         }
 
+        document.getElementById('serverUrl').value = window.location.origin;
         checkFfmpeg();
         loadExisting();
     </script>

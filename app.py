@@ -13,6 +13,7 @@ from path_utils import (
     get_env_path, get_env_example_path, get_output_dir,
     get_templates_dir, get_static_dir, get_ffmpeg_dir,
     get_ffmpeg_download_url, check_ffmpeg as check_ffmpeg_util,
+    get_data_dir, set_data_dir, is_frozen,
 )
 
 load_dotenv(get_env_path())
@@ -153,6 +154,25 @@ def download_video(filename):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/open-output-folder', methods=['POST'])
+def open_output_folder():
+    """Open the output directory in the system file manager."""
+    import subprocess
+    output_dir = get_output_dir()
+    os.makedirs(output_dir, exist_ok=True)
+    try:
+        system = platform.system()
+        if system == 'Windows':
+            os.startfile(output_dir)
+        elif system == 'Darwin':
+            subprocess.Popen(['open', output_dir])
+        else:
+            subprocess.Popen(['xdg-open', output_dir])
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
 @app.route('/patron-count')
 def get_patron_count():
     """Get the current patron count"""
@@ -215,6 +235,33 @@ def detect_campaign():
     if error:
         return jsonify({'error': error}), 400
     return jsonify({'campaign_id': campaign_id})
+
+
+@app.route('/data-dir', methods=['GET'])
+def get_data_dir_route():
+    """Return the current data directory path."""
+    return jsonify({'path': get_data_dir()})
+
+
+@app.route('/data-dir', methods=['POST'])
+def set_data_dir_route():
+    """Set a new data directory. Validates the path is writable."""
+    data = request.get_json()
+    path = data.get('path', '').strip()
+    if not path:
+        return jsonify({'error': 'No path provided', 'success': False}), 400
+    path = os.path.abspath(path)
+    try:
+        os.makedirs(path, exist_ok=True)
+        # Verify writable
+        test_file = os.path.join(path, '.write_test')
+        with open(test_file, 'w') as f:
+            f.write('ok')
+        os.remove(test_file)
+    except OSError as e:
+        return jsonify({'error': f'Cannot write to directory: {e}', 'success': False}), 400
+    set_data_dir(path)
+    return jsonify({'success': True, 'path': path})
 
 
 @app.route('/install-ffmpeg', methods=['POST'])
@@ -289,7 +336,7 @@ def api_spec():
         'info': {
             'title': 'Patreon Credits Generator API',
             'description': 'Generate scrolling end-credits videos featuring Patreon supporters.',
-            'version': '1.0.0',
+            'version': '1.2.0',
         },
         'paths': {
             '/generate': {

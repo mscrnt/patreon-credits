@@ -6,9 +6,18 @@ When running from source (dev):
 
 When frozen (PyInstaller --onefile):
     bundle dir = sys._MEIPASS  (temp extraction dir, read-only)
-    app dir    = directory containing the .exe (writable)
+    app dir    = user-chosen data directory (persisted in config.json):
+        Windows default: ~/Documents/PatreonCredits
+        macOS default:   ~/Documents/PatreonCredits
+        Linux default:   ~/Documents/PatreonCredits
+
+    A small config.json in a fixed platform location stores the user's choice:
+        Windows: %LOCALAPPDATA%/PatreonCredits/config.json
+        macOS:   ~/Library/Application Support/PatreonCredits/config.json
+        Linux:   ~/.config/PatreonCredits/config.json
 """
 
+import json
 import os
 import sys
 import platform
@@ -26,10 +35,76 @@ def get_bundle_dir():
     return os.path.dirname(os.path.abspath(__file__))
 
 
+def _get_config_dir():
+    """Fixed platform directory for config.json (small, always writable)."""
+    system = platform.system()
+    if system == 'Windows':
+        base = os.environ.get('LOCALAPPDATA', os.path.expanduser('~'))
+    elif system == 'Darwin':
+        base = os.path.join(os.path.expanduser('~'), 'Library', 'Application Support')
+    else:
+        base = os.environ.get('XDG_CONFIG_HOME', os.path.join(os.path.expanduser('~'), '.config'))
+    d = os.path.join(base, 'PatreonCredits')
+    os.makedirs(d, exist_ok=True)
+    return d
+
+
+def _get_config_file():
+    return os.path.join(_get_config_dir(), 'config.json')
+
+
+def _read_config():
+    path = _get_config_file()
+    if os.path.isfile(path):
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pass
+    return {}
+
+
+def _write_config(cfg):
+    path = _get_config_file()
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(cfg, f, indent=2)
+
+
+def _default_data_dir():
+    """Default data directory per platform.
+
+    Windows/macOS: ~/Documents/PatreonCredits
+    Linux:         ~/PatreonCredits  (~/Documents may not exist)
+    """
+    home = os.path.expanduser('~')
+    if platform.system() == 'Linux':
+        return os.path.join(home, 'PatreonCredits')
+    return os.path.join(home, 'Documents', 'PatreonCredits')
+
+
+def get_data_dir():
+    """Return the user's chosen data directory (read from config.json)."""
+    cfg = _read_config()
+    return cfg.get('data_dir', _default_data_dir())
+
+
+def set_data_dir(path):
+    """Save a new data directory to config.json."""
+    cfg = _read_config()
+    cfg['data_dir'] = os.path.abspath(path)
+    _write_config(cfg)
+
+
 def get_app_dir():
-    """Writable directory next to the executable (or project root in dev)."""
+    """Writable data directory for .env, cache, output, and ffmpeg.
+
+    When frozen, reads the user's chosen directory from config.json.
+    Defaults to ~/Documents/PatreonCredits.
+    """
     if is_frozen():
-        return os.path.dirname(sys.executable)
+        d = get_data_dir()
+        os.makedirs(d, exist_ok=True)
+        return d
     return os.path.dirname(os.path.abspath(__file__))
 
 

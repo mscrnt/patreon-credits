@@ -1,6 +1,20 @@
-# Patreon Credits Generator
+<p align="center">
+  <img src="icon.png" alt="Patreon Credits Generator" width="128">
+</p>
+
+<h1 align="center">Patreon Credits Generator</h1>
 
 A standalone desktop app to generate scrolling end-credits videos for YouTube content creators, featuring their Patreon supporters. Runs as a native window on Windows, macOS, and Linux — no Python or FFmpeg install required.
+
+<p align="center">
+  <img src="docs/main_page.png" alt="Main UI" width="600"><br>
+  <em>Configure styling, fonts, colors, and layout</em>
+</p>
+
+<p align="center">
+  <img src="docs/credits.png" alt="Generated Credits" width="600"><br>
+  <em>Generated scrolling credits video</em>
+</p>
 
 ## Download
 
@@ -38,7 +52,21 @@ Grab the latest release for your platform from the [Releases page](../../release
 3. Configure your video options and click **Generate Credits Video**
 4. Preview and download the result
 
-Settings and output videos are saved next to the executable.
+Settings, cache, and output videos are stored in a data directory you choose during setup:
+- **Windows default:** `Documents\PatreonCredits`
+- **macOS default:** `Documents/PatreonCredits`
+- **Linux default:** `~/PatreonCredits`
+
+You can change the data directory at any time in **Settings**.
+
+### Headless / API-Only Mode
+
+To run just the server (for the Premiere plugin or API access) without opening a window:
+
+```bash
+PatreonCredits --headless
+PatreonCredits --headless -p 9000   # custom port (default: 8787)
+```
 
 ## Development Setup
 
@@ -74,7 +102,11 @@ USE_DUMMY_DATA=false
 # Desktop mode (native window via pywebview)
 python launcher.py
 
-# Web mode (browser at http://localhost:5000)
+# Headless / API-only mode (no GUI window)
+python launcher.py --headless
+python launcher.py --headless -p 9000   # custom port
+
+# Dev server (browser at http://localhost:5000, debug mode)
 python app.py
 ```
 

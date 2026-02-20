@@ -2,7 +2,7 @@
     "use strict";
 
     var csInterface = new CSInterface();
-    var API_BASE = "http://localhost:5000";
+    var API_BASE = "http://localhost:8787";
 
     // ---- DOM refs ----
     var statusDot = document.getElementById("statusDot");

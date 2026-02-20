@@ -364,7 +364,7 @@
 </head>
 <body>
     <div class="header">
-        <a href="/api/docs" class="header-link api-link">API Docs</a>
+        <a href="/api/docs" target="_blank" rel="noopener" class="header-link api-link">API Docs</a>
         <a href="/settings" class="header-link settings-link">Settings</a>
         <h1>🎬 Patreon Credits Generator</h1>
         <p>Create professional scrolling credits for your YouTube videos</p>
@@ -636,6 +636,7 @@
             <video id="videoPlayer" controls></video>
             <div class="download-section">
                 <a href="#" class="download-btn" id="downloadBtn">Download Video</a>
+                <a href="#" class="download-btn" id="openFolderBtn" style="display:none; background-color:#4a9eff; margin-left:10px;">Open Video Folder</a>
             </div>
         </div>
     </div>
@@ -649,6 +650,8 @@
         const videoPreview = document.getElementById('videoPreview');
         const videoPlayer = document.getElementById('videoPlayer');
         const downloadBtn = document.getElementById('downloadBtn');
+        const openFolderBtn = document.getElementById('openFolderBtn');
+        const isDesktop = window.pywebview !== undefined;
         const errorMessage = document.getElementById('errorMessage');
         const patronCount = document.getElementById('patronCount');
         const ffmpegStatus = document.getElementById('ffmpegStatus');
@@ -941,6 +944,12 @@
             e.target.value = '';
         });
 
+        // In desktop mode, hide Download and show Open Folder instead
+        if (isDesktop) {
+            downloadBtn.style.display = 'none';
+            openFolderBtn.style.display = 'inline-block';
+        }
+
         downloadBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             const filename = downloadBtn.dataset.filename;
@@ -962,26 +971,30 @@
             }
         });
 
+        openFolderBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                const resp = await fetch('/open-output-folder', { method: 'POST' });
+                const data = await resp.json();
+                if (!data.success) showError(data.error || 'Failed to open folder');
+            } catch (err) {
+                showError(err.message);
+            }
+        });
+
         refreshBtn.addEventListener('click', async () => {
             refreshBtn.disabled = true;
             showStatus('Refreshing patron list...');
-            
+
             try {
-                const response = await fetch('/generate', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: 'Test',
-                        duration: 5,
-                        use_cache: false
-                    })
-                });
-                
-                if (response.ok) {
-                    showStatus('Patron list refreshed!');
-                    updatePatronCount();
+                const response = await fetch('/refresh-patrons', { method: 'POST' });
+                const data = await response.json();
+
+                if (data.error) {
+                    showError('Error: ' + data.error);
+                } else {
+                    showStatus('Patron list refreshed: ' + data.count + ' patrons.');
+                    patronCount.textContent = data.count;
                     setTimeout(hideStatus, 2000);
                 }
             } catch (error) {

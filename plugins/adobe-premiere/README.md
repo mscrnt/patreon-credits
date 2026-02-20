@@ -16,8 +16,9 @@ A CEP (Common Extensibility Platform) panel that integrates the Patreon Credits 
 
 - Adobe Premiere Pro CC 2019 or later
 - The Patreon Credits Generator server running locally — either:
-  - Desktop app (`PatreonCredits.exe` / `launcher.py`), or
-  - Dev server (`python app.py`)
+  - Desktop app in headless mode: `PatreonCredits --headless`
+  - Desktop app (normal mode also works — server runs in background)
+  - Dev server: `python app.py`
 - FFmpeg installed on the system (or bundled in the desktop app)
 
 ## Installation
@@ -112,6 +113,6 @@ adobe-premiere/
 
 ## API Connection
 
-The panel communicates with the Patreon Credits Generator server at `http://localhost:5000`. Make sure the server is running before using the panel. The connection status is shown in the top-left corner of the panel.
+The panel communicates with the Patreon Credits Generator server at `http://localhost:8787`. Make sure the server is running before using the panel. The connection status is shown in the top-left corner of the panel.
 
 If you need to change the server URL (e.g., different port), edit the `API_BASE` variable in `js/main.js`.

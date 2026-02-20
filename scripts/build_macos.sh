@@ -11,9 +11,10 @@ fi
 
 APP_NAME="Patreon Credits Generator"
 DMG_NAME="PatreonCredits"
-VERSION="1.1.0"
+# Extract version from spec file
+VERSION=$(grep "CFBundleShortVersionString" patreon_credits.spec | sed "s/.*'\(.*\)'.*/\1/")
 
-echo "=== Building macOS app ==="
+echo "=== Building macOS app (v${VERSION}) ==="
 python -m PyInstaller patreon_credits.spec --noconfirm
 
 APP_PATH="dist/${APP_NAME}.app"
@@ -35,9 +36,6 @@ cp -R "$APP_PATH" "$DMG_DIR/"
 
 # Add Applications symlink for drag-and-drop install
 ln -s /Applications "$DMG_DIR/Applications"
-
-# Copy .env.example alongside the app
-cp .env.example "$DMG_DIR/"
 
 # Create the DMG
 hdiutil create -volname "$APP_NAME" \

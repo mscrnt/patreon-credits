@@ -10,10 +10,11 @@ if [[ "$(uname)" != "Linux" ]]; then
 fi
 
 APP_NAME="PatreonCredits"
-VERSION="1.1.0"
+# Extract version from spec file
+VERSION=$(grep "CFBundleShortVersionString" patreon_credits.spec | sed "s/.*'\(.*\)'.*/\1/")
 APPDIR="dist/${APP_NAME}.AppDir"
 
-echo "=== Building Linux binary ==="
+echo "=== Building Linux binary (v${VERSION}) ==="
 python -m PyInstaller patreon_credits.spec --noconfirm
 
 BINARY="dist/${APP_NAME}"
@@ -30,9 +31,6 @@ mkdir -p "$APPDIR/usr/share/icons/hicolor/256x256/apps"
 # Copy binary
 cp "$BINARY" "$APPDIR/usr/bin/${APP_NAME}"
 chmod +x "$APPDIR/usr/bin/${APP_NAME}"
-
-# Copy .env.example alongside
-cp .env.example "$APPDIR/usr/bin/"
 
 # Desktop entry
 cat > "$APPDIR/${APP_NAME}.desktop" << 'DESKTOP'
