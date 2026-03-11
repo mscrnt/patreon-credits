@@ -9,7 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=Bangers&family=Bebas+Neue&family=Cinzel:wght@400;700&family=Crimson+Text:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=LXGW+WenKai:wght@300;400;700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=M+PLUS+Rounded+1c:wght@400;700&family=Merriweather:wght@400;700&family=Montserrat:wght@400;700&family=Neuton:ital,wght@0,200;0,300;0,400;0,700;0,800;1,400&family=Noto+Sans:wght@400;700&family=Noto+Serif+SC:wght@400;700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@400;700&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playwrite+DE+Grund:wght@100..400&family=Poppins:wght@400;700&family=Quicksand:wght@400;700&family=Raleway:wght@400;700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Shippori+Mincho:wght@400;700&family=Source+Sans+3:wght@400;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Amatic+SC:wght@400;700&family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=Bangers&family=Bebas+Neue&family=Bowlby+One+SC&family=Bungee&family=Carter+One&family=Caveat:wght@400;700&family=Chango&family=Cinzel:wght@400;700&family=Creepster&family=Crimson+Text:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Erica+One&family=Indie+Flower&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=LXGW+WenKai:wght@300;400;700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&family=Lobster+Two:wght@400;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Luckiest+Guy&family=M+PLUS+Rounded+1c:wght@400;700&family=Merriweather:wght@400;700&family=Montserrat:wght@400;700&family=Neuton:ital,wght@0,200;0,300;0,400;0,700;0,800;1,400&family=Noto+Sans:wght@400;700&family=Noto+Serif+SC:wght@400;700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@400;700&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playwrite+DE+Grund:wght@100..400&family=Poppins:wght@400;700&family=Quicksand:wght@400;700&family=Raleway:wght@400;700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Saira:wght@400;700&family=Shippori+Mincho:wght@400;700&family=Source+Sans+3:wght@400;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/theme.css">
     <link rel="stylesheet" href="/static/css/app.css">
     <script src="/static/js/theme.js"></script>
@@ -69,267 +69,389 @@
             <div class="alert alert-danger d-none" id="errorMessage" role="alert"></div>
 
             <form id="creditsForm">
-                <!-- Content Card -->
-                <div class="card mb-3">
-                    <div class="card-header"><i class="fa-solid fa-comment-dots me-1"></i>Content</div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label" for="message">Custom Message</label>
-                            <textarea class="form-control" id="message" rows="2">This video was made possible by our amazing Patreon supporters:</textarea>
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label" for="customNames">Custom Names <span class="text-body-secondary">(optional)</span></label>
-                            <textarea class="form-control" id="customNames" rows="3" placeholder="Enter names manually, one per line — overrides Patreon list"></textarea>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <small class="text-body-secondary">Leave empty to use Patreon patron list.</small>
-                            <label class="btn btn-sm btn-outline-secondary mb-0">
-                                <i class="fa-solid fa-upload me-1"></i>Upload .txt/.csv
-                                <input type="file" id="namesFileInput" accept=".txt,.csv" class="d-none">
-                            </label>
-                        </div>
+
+                <!-- Presets bar -->
+                <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+                    <i class="fa-solid fa-bookmark text-body-secondary"></i>
+                    <select class="form-select form-select-sm" id="presetSelect" style="width:200px;">
+                        <option value="" selected disabled>Load preset...</option>
+                    </select>
+                    <button type="button" class="btn btn-sm btn-outline-danger d-none" id="presetDeleteBtn" title="Delete selected preset">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                    <div class="vr mx-1"></div>
+                    <div class="input-group input-group-sm" style="width:200px;">
+                        <input type="text" class="form-control" id="presetName" placeholder="Save as...">
+                        <button type="button" class="btn btn-outline-success" id="presetSaveBtn" title="Save current settings as preset">
+                            <i class="fa-solid fa-save"></i>
+                        </button>
                     </div>
+                    <div class="alert d-none py-1 px-2 mb-0 small" id="presetSaveMsg"></div>
+                    <div class="vr mx-1 d-none d-md-block"></div>
+                    <span class="text-body-secondary small d-none d-md-inline">Quick:</span>
+                    <button type="button" class="btn btn-sm btn-outline-secondary export-preset" data-resolution="1280x720" data-preset-name="fast">720p</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary export-preset" data-resolution="1920x1080" data-preset-name="quality">1080p</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary export-preset" data-resolution="3840x2160" data-preset-name="4k">4K</button>
                 </div>
 
-                <!-- Styling Row: Message + Patron side by side -->
-                <div class="row g-3 mb-3">
-                    <!-- Message Style -->
-                    <div class="col-lg-6">
-                        <div class="card h-100">
-                            <div class="card-header"><i class="fa-solid fa-font me-1"></i>Message Style</div>
-                            <div class="card-body">
-                                <div class="row g-2">
-                                    <div class="col-4 col-md-3">
-                                        <label class="form-label" for="messageSize">Size</label>
-                                        <input type="number" class="form-control" id="messageSize" min="10" max="100" value="36">
+                <!-- Two-column layout -->
+                <div class="row g-3">
+
+                    <!-- ======== LEFT COLUMN ======== -->
+                    <div class="col-lg-7">
+
+                        <!-- Content -->
+                        <div class="card mb-3">
+                            <div class="card-header d-flex align-items-center">
+                                <i class="fa-solid fa-comment-dots me-2"></i>Content
+                            </div>
+                            <div>
+                                <div class="card-body">
+                                    <label class="form-label fw-semibold"><i class="fa-solid fa-heading me-1"></i>Header Message</label>
+                                    <textarea class="form-control form-control-sm mb-3" id="message" rows="2">This video was made possible by our amazing Patreon supporters:</textarea>
+
+                                    <label class="form-label fw-semibold"><i class="fa-solid fa-users me-1"></i>Name Sources</label>
+                                    <p class="text-body-secondary small mb-2">Configure API credentials in <strong>Settings &rarr; Integrations</strong>.</p>
+                                    <div class="list-group mb-3">
+                                        <div class="list-group-item d-flex align-items-center gap-2">
+                                            <input class="form-check-input mt-0 ns-check" type="checkbox" id="nsPatreonCheck" checked>
+                                            <i class="fa-brands fa-patreon text-danger"></i>
+                                            <span class="fw-semibold">Patreon</span>
+                                            <div class="d-flex align-items-center gap-2 ms-auto">
+                                                <span class="badge bg-secondary ns-count" id="patreonNameCount">0</span>
+                                                <span class="ns-action">
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="refreshBtn" title="Refresh patrons"><i class="fa-solid fa-arrows-rotate"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item d-flex align-items-center gap-2">
+                                            <input class="form-check-input mt-0 ns-check" type="checkbox" id="nsYtCheck">
+                                            <i class="fa-brands fa-youtube text-danger"></i>
+                                            <span class="fw-semibold">YouTube</span>
+                                            <div class="d-flex align-items-center gap-2 ms-auto">
+                                                <span class="badge bg-secondary ns-count" id="ytNameCount">0</span>
+                                                <span class="ns-action">
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="ytFetchBtn" title="Fetch members"><i class="fa-solid fa-arrows-rotate"></i></button>
+                                                </span>
+                                            </div>
+                                            <div class="alert d-none mt-0 mb-0 py-1 px-2 small" id="ytMsg"></div>
+                                        </div>
+                                        <div class="list-group-item d-flex align-items-center gap-2">
+                                            <input class="form-check-input mt-0 ns-check" type="checkbox" id="nsSeCheck">
+                                            <i class="fa-solid fa-broadcast-tower text-info"></i>
+                                            <span class="fw-semibold">StreamElements</span>
+                                            <div class="d-flex align-items-center gap-2 ms-auto">
+                                                <span class="badge bg-secondary ns-count" id="seNameCount">0</span>
+                                                <span class="ns-action">
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="seFetchBtn" title="Fetch tippers"><i class="fa-solid fa-arrows-rotate"></i></button>
+                                                </span>
+                                            </div>
+                                            <div class="alert d-none mt-0 mb-0 py-1 px-2 small" id="seMsg"></div>
+                                        </div>
+                                        <div class="list-group-item d-flex align-items-center gap-2">
+                                            <input class="form-check-input mt-0 ns-check" type="checkbox" id="nsKofiCheck">
+                                            <i class="fa-solid fa-heart text-danger"></i>
+                                            <span class="fw-semibold">Ko-fi</span>
+                                            <div class="d-flex align-items-center gap-2 ms-auto">
+                                                <span class="badge bg-secondary ns-count" id="kofiNameCount">0</span>
+                                                <span class="ns-action">
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary ns-settings-link" data-int-tab="#settingsIntKofi" title="Manage in Settings"><i class="fa-solid fa-gear"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item d-flex align-items-center gap-2">
+                                            <input class="form-check-input mt-0 ns-check" type="checkbox" id="nsBmcCheck">
+                                            <i class="fa-solid fa-mug-hot text-warning"></i>
+                                            <span class="fw-semibold">Buy Me a Coffee</span>
+                                            <div class="d-flex align-items-center gap-2 ms-auto">
+                                                <span class="badge bg-secondary ns-count" id="bmcNameCount">0</span>
+                                                <span class="ns-action">
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary ns-settings-link" data-int-tab="#settingsIntBmc" title="Manage in Settings"><i class="fa-solid fa-gear"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-4 col-md-3">
-                                        <label class="form-label" for="messageColor">Color</label>
-                                        <input type="color" class="form-control form-control-color" id="messageColor" value="#ffffff">
+
+                                    <label class="form-label fw-semibold"><i class="fa-solid fa-pen me-1"></i>Custom Names</label>
+                                    <textarea class="form-control form-control-sm mb-2" id="customNames" rows="3" placeholder="Enter names manually, one per line"></textarea>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label class="btn btn-sm btn-outline-secondary mb-0">
+                                            <i class="fa-solid fa-upload me-1"></i>Upload .txt/.csv
+                                            <input type="file" id="namesFileInput" accept=".txt,.csv" class="d-none">
+                                        </label>
+                                        <small class="text-body-secondary">Appended to fetched names from selected sources.</small>
                                     </div>
-                                    <div class="col-4 col-md-3">
-                                        <label class="form-label" for="messageAlign">Align</label>
-                                        <select class="form-select" id="messageAlign">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Typography & Layout -->
+                        <div class="card mb-3">
+                            <div class="card-header d-flex align-items-center">
+                                <i class="fa-solid fa-paintbrush me-2"></i>Typography &amp; Layout
+                            </div>
+                            <div>
+                                <div class="card-body">
+                                    <!-- Message style row -->
+                                    <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
+                                        <span class="fw-semibold small text-nowrap" style="min-width:65px;">Message:</span>
+                                        <input type="number" class="form-control form-control-sm" id="messageSize" min="10" max="100" value="36" style="width:60px;" title="Font size">
+                                        <input type="color" class="form-control form-control-color form-control-sm compact-color" id="messageColor" value="#ffffff" title="Text color">
+                                        <div class="form-check form-check-inline mb-0">
+                                            <input class="form-check-input" type="checkbox" id="messageBold" checked>
+                                            <label class="form-check-label small" for="messageBold">Bold</label>
+                                        </div>
+                                        <select class="form-select form-select-sm" id="messageAlign" style="width:90px;">
                                             <option value="left" selected>Left</option>
                                             <option value="center">Center</option>
                                             <option value="right">Right</option>
-                                            <option value="justify">Justified</option>
+                                            <option value="justify">Justify</option>
                                         </select>
+                                        <span class="badge bg-secondary" id="messageFontLabel">Noto Sans CJK</span>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary font-pick-btn" data-target-font="message" data-bs-toggle="modal" data-bs-target="#fontPickerModal" title="Change font">
+                                            <i class="fa-solid fa-font"></i>
+                                        </button>
                                     </div>
-                                    <div class="col-12 col-md-3 d-flex align-items-end">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="messageBold" checked>
-                                            <label class="form-check-label" for="messageBold">Bold</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-2">
-                                    <label class="form-label" for="messageFont">Font</label>
-                                    <select class="form-select" id="messageFont">
-                                        <optgroup label="CJK + Latin">
-                                            <option value="noto_sans" selected>Noto Sans CJK</option>
-                                            <option value="noto_serif_cjk">Noto Serif CJK</option>
-                                            <option value="lxgw_wenkai">LXGW WenKai</option>
-                                            <option value="zen_maru_gothic">Zen Maru Gothic</option>
-                                            <option value="mplus_rounded">M PLUS Rounded 1c</option>
-                                            <option value="shippori_mincho">Shippori Mincho</option>
-                                        </optgroup>
-                                        <optgroup label="Sans-serif">
-                                            <option value="inter">Inter</option>
-                                            <option value="roboto">Roboto</option>
-                                            <option value="open_sans">Open Sans</option>
-                                            <option value="poppins">Poppins</option>
-                                            <option value="montserrat">Montserrat</option>
-                                            <option value="raleway">Raleway</option>
-                                            <option value="quicksand">Quicksand</option>
-                                            <option value="source_sans">Source Sans 3</option>
-                                            <option value="lato">Lato</option>
-                                            <option value="nunito">Nunito</option>
-                                            <option value="rubik">Rubik</option>
-                                            <option value="dm_sans">DM Sans</option>
-                                            <option value="josefin_sans">Josefin Sans</option>
-                                            <option value="ubuntu">Ubuntu</option>
-                                            <option value="oswald">Oswald</option>
-                                            <option value="bebas_neue">Bebas Neue</option>
-                                        </optgroup>
-                                        <optgroup label="Serif">
-                                            <option value="cinzel">Cinzel</option>
-                                            <option value="playfair_display">Playfair Display</option>
-                                            <option value="merriweather">Merriweather</option>
-                                            <option value="crimson_text">Crimson Text</option>
-                                            <option value="lora">Lora</option>
-                                            <option value="libre_baskerville">Libre Baskerville</option>
-                                            <option value="arvo">Arvo</option>
-                                            <option value="neuton">Neuton</option>
-                                        </optgroup>
-                                        <optgroup label="Display">
-                                            <option value="alfa_slab_one">Alfa Slab One</option>
-                                            <option value="bangers">Bangers</option>
-                                        </optgroup>
-                                        <optgroup label="Handwriting">
-                                            <option value="permanent_marker">Permanent Marker</option>
-                                            <option value="pacifico">Pacifico</option>
-                                            <option value="playwrite">Playwrite DE Grund</option>
-                                        </optgroup>
-                                    </select>
-                                </div>
-                                <div class="font-preview rounded p-2 mt-2" id="messageFontPreview" style="font-family:'Noto Sans',sans-serif; font-weight:bold;">The quick brown fox jumps over the lazy dog</div>
-                            </div>
-                        </div>
-                    </div>
+                                    <!-- Hidden font select for form persistence -->
+                                    <select class="d-none" id="messageFont"><optgroup label="CJK + Latin"><option value="noto_sans" selected>Noto Sans CJK</option><option value="noto_serif_cjk">Noto Serif CJK</option><option value="lxgw_wenkai">LXGW WenKai</option><option value="zen_maru_gothic">Zen Maru Gothic</option><option value="mplus_rounded">M PLUS Rounded 1c</option><option value="shippori_mincho">Shippori Mincho</option><option value="bpmf_huninn">Bpmf Huninn</option></optgroup><optgroup label="Sans-serif"><option value="inter">Inter</option><option value="roboto">Roboto</option><option value="open_sans">Open Sans</option><option value="poppins">Poppins</option><option value="montserrat">Montserrat</option><option value="raleway">Raleway</option><option value="quicksand">Quicksand</option><option value="source_sans">Source Sans 3</option><option value="lato">Lato</option><option value="nunito">Nunito</option><option value="rubik">Rubik</option><option value="dm_sans">DM Sans</option><option value="josefin_sans">Josefin Sans</option><option value="ubuntu">Ubuntu</option><option value="oswald">Oswald</option><option value="bebas_neue">Bebas Neue</option><option value="saira">Saira</option></optgroup><optgroup label="Serif"><option value="cinzel">Cinzel</option><option value="playfair_display">Playfair Display</option><option value="merriweather">Merriweather</option><option value="crimson_text">Crimson Text</option><option value="lora">Lora</option><option value="libre_baskerville">Libre Baskerville</option><option value="arvo">Arvo</option><option value="neuton">Neuton</option></optgroup><optgroup label="Display"><option value="alfa_slab_one">Alfa Slab One</option><option value="bangers">Bangers</option><option value="bowlby_one_sc">Bowlby One SC</option><option value="bungee">Bungee</option><option value="carter_one">Carter One</option><option value="chango">Chango</option><option value="creepster">Creepster</option><option value="erica_one">Erica One</option><option value="lobster_two">Lobster Two</option><option value="luckiest_guy">Luckiest Guy</option></optgroup><optgroup label="Handwriting"><option value="amatic_sc">Amatic SC</option><option value="caveat">Caveat</option><option value="indie_flower">Indie Flower</option><option value="permanent_marker">Permanent Marker</option><option value="pacifico">Pacifico</option><option value="playwrite">Playwrite DE Grund</option></optgroup></select>
+                                    <div class="font-preview rounded p-2 mb-3 small" id="messageFontPreview" style="font-family:'Noto Sans',sans-serif; font-weight:bold;">The quick brown fox jumps over the lazy dog</div>
 
-                    <!-- Patron Names Style -->
-                    <div class="col-lg-6">
-                        <div class="card h-100">
-                            <div class="card-header"><i class="fa-solid fa-users me-1"></i>Patron Names Style</div>
-                            <div class="card-body">
-                                <div class="row g-2">
-                                    <div class="col-4">
-                                        <label class="form-label" for="patronSize">Size</label>
-                                        <input type="number" class="form-control" id="patronSize" min="10" max="60" value="20">
-                                    </div>
-                                    <div class="col-4">
-                                        <label class="form-label" for="patronColor">Color</label>
-                                        <input type="color" class="form-control form-control-color" id="patronColor" value="#FFD700">
-                                    </div>
-                                    <div class="col-4 d-flex align-items-end">
-                                        <div class="form-check">
+                                    <!-- Patron style + layout row -->
+                                    <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
+                                        <span class="fw-semibold small text-nowrap" style="min-width:65px;">Names:</span>
+                                        <input type="number" class="form-control form-control-sm" id="patronSize" min="10" max="60" value="20" style="width:60px;" title="Font size">
+                                        <input type="color" class="form-control form-control-color form-control-sm compact-color" id="patronColor" value="#FFD700" title="Text color">
+                                        <div class="form-check form-check-inline mb-0">
                                             <input class="form-check-input" type="checkbox" id="patronBold">
-                                            <label class="form-check-label" for="patronBold">Bold</label>
+                                            <label class="form-check-label small" for="patronBold">Bold</label>
+                                        </div>
+                                        <span class="badge bg-secondary" id="patronFontLabel">Noto Sans CJK</span>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary font-pick-btn" data-target-font="patron" data-bs-toggle="modal" data-bs-target="#fontPickerModal" title="Change font">
+                                            <i class="fa-solid fa-font"></i>
+                                        </button>
+                                        <select class="form-select form-select-sm" id="columns" style="width:120px;" title="Columns">
+                                            <option value="1">1 Column</option>
+                                            <option value="2">2 Columns</option>
+                                            <option value="3">3 Columns</option>
+                                            <option value="4" selected>4 Columns</option>
+                                            <option value="5">5 Columns</option>
+                                        </select>
+                                        <select class="form-select form-select-sm" id="nameAlign" style="width:100px;" title="Name alignment">
+                                            <option value="left" selected>Left</option>
+                                            <option value="center">Center</option>
+                                            <option value="right">Right</option>
+                                        </select>
+                                        <div class="input-group input-group-sm" style="width:170px;">
+                                            <span class="input-group-text" title="Max characters per name">Max Characters</span>
+                                            <input type="number" class="form-control" id="truncateLength" min="0" max="50" value="15" title="0 = no truncation">
+                                        </div>
+                                        <div class="form-check form-check-inline mb-0">
+                                            <input class="form-check-input" type="checkbox" id="wordWrap">
+                                            <label class="form-check-label small" for="wordWrap">Wrap</label>
+                                        </div>
+                                        <div class="form-check form-check-inline mb-0">
+                                            <input class="form-check-input" type="checkbox" id="nameSpacing">
+                                            <label class="form-check-label small" for="nameSpacing">Spacing</label>
+                                        </div>
+                                    </div>
+                                    <select class="d-none" id="patronFont"><optgroup label="CJK + Latin"><option value="noto_sans" selected>Noto Sans CJK</option><option value="noto_serif_cjk">Noto Serif CJK</option><option value="lxgw_wenkai">LXGW WenKai</option><option value="zen_maru_gothic">Zen Maru Gothic</option><option value="mplus_rounded">M PLUS Rounded 1c</option><option value="shippori_mincho">Shippori Mincho</option><option value="bpmf_huninn">Bpmf Huninn</option></optgroup><optgroup label="Sans-serif"><option value="inter">Inter</option><option value="roboto">Roboto</option><option value="open_sans">Open Sans</option><option value="poppins">Poppins</option><option value="montserrat">Montserrat</option><option value="raleway">Raleway</option><option value="quicksand">Quicksand</option><option value="source_sans">Source Sans 3</option><option value="lato">Lato</option><option value="nunito">Nunito</option><option value="rubik">Rubik</option><option value="dm_sans">DM Sans</option><option value="josefin_sans">Josefin Sans</option><option value="ubuntu">Ubuntu</option><option value="oswald">Oswald</option><option value="bebas_neue">Bebas Neue</option><option value="saira">Saira</option></optgroup><optgroup label="Serif"><option value="cinzel">Cinzel</option><option value="playfair_display">Playfair Display</option><option value="merriweather">Merriweather</option><option value="crimson_text">Crimson Text</option><option value="lora">Lora</option><option value="libre_baskerville">Libre Baskerville</option><option value="arvo">Arvo</option><option value="neuton">Neuton</option></optgroup><optgroup label="Display"><option value="alfa_slab_one">Alfa Slab One</option><option value="bangers">Bangers</option><option value="bowlby_one_sc">Bowlby One SC</option><option value="bungee">Bungee</option><option value="carter_one">Carter One</option><option value="chango">Chango</option><option value="creepster">Creepster</option><option value="erica_one">Erica One</option><option value="lobster_two">Lobster Two</option><option value="luckiest_guy">Luckiest Guy</option></optgroup><optgroup label="Handwriting"><option value="amatic_sc">Amatic SC</option><option value="caveat">Caveat</option><option value="indie_flower">Indie Flower</option><option value="permanent_marker">Permanent Marker</option><option value="pacifico">Pacifico</option><option value="playwrite">Playwrite DE Grund</option></optgroup></select>
+                                    <div class="font-preview rounded p-2 mb-3 small" id="patronFontPreview" style="font-family:'Noto Sans',sans-serif; font-weight:normal; color:#FFD700;">The quick brown fox jumps over the lazy dog</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- /col-lg-7 -->
+
+                    <!-- ======== RIGHT COLUMN ======== -->
+                    <div class="col-lg-5">
+
+                        <!-- Video & Transitions -->
+                        <div class="card mb-3">
+                            <div class="card-header d-flex align-items-center">
+                                <i class="fa-solid fa-video me-2"></i>Video &amp; Transitions
+                            </div>
+                            <div>
+                                <div class="card-body">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-6">
+                                            <label class="form-label" for="duration">Duration (s)</label>
+                                            <input type="number" class="form-control form-control-sm" id="duration" min="5" max="60" value="15">
+                                        </div>
+                                        <div class="col-3">
+                                            <label class="form-label" for="resolution">Resolution</label>
+                                            <select class="form-select form-select-sm" id="resolution">
+                                                <option value="1280x720" selected>720p HD</option>
+                                                <option value="1920x1080">1080p Full HD</option>
+                                                <option value="3840x2160">4K UHD</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-3">
+                                            <label class="form-label" for="fps">Frame Rate</label>
+                                            <select class="form-select form-select-sm" id="fps">
+                                                <option value="30" selected>30 fps</option>
+                                                <option value="60">60 fps</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <label class="form-label">Scroll Speed <span class="text-body-secondary" id="speedVal">1x</span></label>
+                                    <input type="range" class="form-range" id="speedMultiplier" min="0.25" max="3" step="0.25" value="1">
+                                    <div class="row g-2 mt-1">
+                                        <div class="col-6">
+                                            <label class="form-label">Fade In <span class="text-body-secondary" id="fadeInVal">0s</span></label>
+                                            <input type="range" class="form-range" id="fadeIn" min="0" max="5" step="0.5" value="0">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label">Fade Out <span class="text-body-secondary" id="fadeOutVal">0s</span></label>
+                                            <input type="range" class="form-range" id="fadeOut" min="0" max="5" step="0.5" value="0">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mt-2">
-                                    <label class="form-label" for="patronFont">Font</label>
-                                    <select class="form-select" id="patronFont">
-                                        <optgroup label="CJK + Latin">
-                                            <option value="noto_sans" selected>Noto Sans CJK</option>
-                                            <option value="noto_serif_cjk">Noto Serif CJK</option>
-                                            <option value="lxgw_wenkai">LXGW WenKai</option>
-                                            <option value="zen_maru_gothic">Zen Maru Gothic</option>
-                                            <option value="mplus_rounded">M PLUS Rounded 1c</option>
-                                            <option value="shippori_mincho">Shippori Mincho</option>
-                                        </optgroup>
-                                        <optgroup label="Sans-serif">
-                                            <option value="inter">Inter</option>
-                                            <option value="roboto">Roboto</option>
-                                            <option value="open_sans">Open Sans</option>
-                                            <option value="poppins">Poppins</option>
-                                            <option value="montserrat">Montserrat</option>
-                                            <option value="raleway">Raleway</option>
-                                            <option value="quicksand">Quicksand</option>
-                                            <option value="source_sans">Source Sans 3</option>
-                                            <option value="lato">Lato</option>
-                                            <option value="nunito">Nunito</option>
-                                            <option value="rubik">Rubik</option>
-                                            <option value="dm_sans">DM Sans</option>
-                                            <option value="josefin_sans">Josefin Sans</option>
-                                            <option value="ubuntu">Ubuntu</option>
-                                            <option value="oswald">Oswald</option>
-                                            <option value="bebas_neue">Bebas Neue</option>
-                                        </optgroup>
-                                        <optgroup label="Serif">
-                                            <option value="cinzel">Cinzel</option>
-                                            <option value="playfair_display">Playfair Display</option>
-                                            <option value="merriweather">Merriweather</option>
-                                            <option value="crimson_text">Crimson Text</option>
-                                            <option value="lora">Lora</option>
-                                            <option value="libre_baskerville">Libre Baskerville</option>
-                                            <option value="arvo">Arvo</option>
-                                            <option value="neuton">Neuton</option>
-                                        </optgroup>
-                                        <optgroup label="Display">
-                                            <option value="alfa_slab_one">Alfa Slab One</option>
-                                            <option value="bangers">Bangers</option>
-                                        </optgroup>
-                                        <optgroup label="Handwriting">
-                                            <option value="permanent_marker">Permanent Marker</option>
-                                            <option value="pacifico">Pacifico</option>
-                                            <option value="playwrite">Playwrite DE Grund</option>
-                                        </optgroup>
-                                    </select>
+                            </div>
+                        </div>
+
+                        <!-- Background -->
+                        <div class="card mb-3">
+                            <div class="card-header d-flex align-items-center">
+                                <i class="fa-solid fa-fill-drip me-2"></i>Background
+                            </div>
+                            <div>
+                                <div class="card-body">
+                                    <div class="btn-group btn-group-sm w-100 mb-2" role="group">
+                                        <input type="radio" class="btn-check" name="bgType" id="bgTypeSolid" value="solid" checked>
+                                        <label class="btn btn-outline-secondary" for="bgTypeSolid">Solid</label>
+                                        <input type="radio" class="btn-check" name="bgType" id="bgTypeImage" value="image">
+                                        <label class="btn btn-outline-secondary" for="bgTypeImage">Image</label>
+                                        <input type="radio" class="btn-check" name="bgType" id="bgTypeGradient" value="gradient">
+                                        <label class="btn btn-outline-secondary" for="bgTypeGradient">Gradient</label>
+                                    </div>
+                                    <div id="bgSolidOptions">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <label class="form-label mb-0 small">Color</label>
+                                            <input type="color" class="form-control form-control-color compact-color" id="bgColor" value="#000000">
+                                        </div>
+                                    </div>
+                                    <div id="bgImageOptions" class="d-none">
+                                        <label class="btn btn-sm btn-outline-secondary">
+                                            <i class="fa-solid fa-image me-1"></i>Choose
+                                            <input type="file" id="bgImageInput" accept="image/*" class="d-none">
+                                        </label>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" data-asset-target="bgImage" data-asset-type="images" data-bs-toggle="modal" data-bs-target="#assetPickerModal" title="Choose from library"><i class="fa-solid fa-folder-open"></i></button>
+                                        <span class="ms-2 text-body-secondary small" id="bgImageName">No file</span>
+                                        <input type="hidden" id="bgImageFilename">
+                                    </div>
+                                    <div id="bgGradientOptions" class="d-none">
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            <input type="color" class="form-control form-control-color compact-color" id="bgGradientColor1" value="#000033" title="From">
+                                            <i class="fa-solid fa-arrow-right text-body-secondary small"></i>
+                                            <input type="color" class="form-control form-control-color compact-color" id="bgGradientColor2" value="#000000" title="To">
+                                            <select class="form-select form-select-sm" id="bgGradientDirection" style="width:120px;">
+                                                <option value="vertical" selected>Top-Bottom</option>
+                                                <option value="horizontal">Left-Right</option>
+                                                <option value="diagonal">Diagonal</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="font-preview rounded p-2 mt-2" id="patronFontPreview" style="font-family:'Noto Sans',sans-serif; font-weight:normal; color:#FFD700;">The quick brown fox jumps over the lazy dog</div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Video Options Card -->
-                <div class="card mb-3">
-                    <div class="card-header"><i class="fa-solid fa-sliders me-1"></i>Video Options</div>
-                    <div class="card-body">
-                        <div class="row g-2 align-items-end">
-                            <div class="col-6 col-md-2">
-                                <label class="form-label" for="duration">Duration (s)</label>
-                                <input type="number" class="form-control" id="duration" min="5" max="60" value="15">
+                        <!-- Overlays -->
+                        <div class="card mb-3">
+                            <div class="card-header d-flex align-items-center">
+                                <i class="fa-solid fa-layer-group me-2"></i>Overlays
                             </div>
-                            <div class="col-6 col-md-3">
-                                <label class="form-label" for="resolution">Resolution</label>
-                                <select class="form-select" id="resolution">
-                                    <option value="1280x720" selected>720p HD</option>
-                                    <option value="1920x1080">1080p Full HD</option>
-                                    <option value="3840x2160">4K UHD</option>
-                                </select>
-                            </div>
-                            <div class="col-4 col-md-2">
-                                <label class="form-label" for="columns">Columns</label>
-                                <select class="form-select" id="columns">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4" selected>4</option>
-                                    <option value="5">5</option>
-                                </select>
-                            </div>
-                            <div class="col-4 col-md-2">
-                                <label class="form-label" for="nameAlign">Name Align</label>
-                                <select class="form-select" id="nameAlign">
-                                    <option value="left" selected>Left</option>
-                                    <option value="center">Center</option>
-                                    <option value="right">Right</option>
-                                </select>
-                            </div>
-                            <div class="col-4 col-md-1">
-                                <label class="form-label" for="truncateLength">Max Len</label>
-                                <input type="number" class="form-control" id="truncateLength" min="0" max="50" value="15" title="0 = no truncation">
-                            </div>
-                            <div class="col-6 col-md-2">
-                                <label class="form-label" for="bgColor">Background</label>
-                                <input type="color" class="form-control form-control-color" id="bgColor" value="#000000">
-                            </div>
-                        </div>
-                        <div class="d-flex flex-wrap gap-3 mt-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="wordWrap">
-                                <label class="form-check-label" for="wordWrap">Word wrap names</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="nameSpacing">
-                                <label class="form-check-label" for="nameSpacing">Line break between names</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="useCache">
-                                <label class="form-check-label" for="useCache">Use cached patron list</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            <div>
+                                <div class="card-body">
+                                    <!-- Audio -->
+                                    <div class="mb-3 pb-3 border-bottom">
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <i class="fa-solid fa-music text-body-secondary"></i>
+                                            <span class="fw-semibold small">Background Music</span>
+                                            <label class="btn btn-sm btn-outline-secondary ms-auto mb-0 py-0">
+                                                <i class="fa-solid fa-upload me-1"></i>Choose
+                                                <input type="file" id="audioFileInput" accept="audio/*" class="d-none">
+                                            </label>
+                                            <button type="button" class="btn btn-sm btn-outline-primary py-0" data-asset-target="audio" data-asset-type="audio" data-bs-toggle="modal" data-bs-target="#assetPickerModal" title="Choose from library"><i class="fa-solid fa-folder-open"></i></button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger d-none py-0" id="audioClearBtn"><i class="fa-solid fa-xmark"></i></button>
+                                        </div>
+                                        <span class="text-body-secondary small" id="audioFileName">No file selected</span>
+                                        <input type="hidden" id="audioFilename">
+                                        <div class="mt-1">
+                                            <label class="form-label mb-0 small">Volume <span class="text-body-secondary" id="audioVolumeVal">100%</span></label>
+                                            <input type="range" class="form-range" id="audioVolume" min="0" max="100" value="100">
+                                        </div>
+                                    </div>
 
-                <!-- Actions Row -->
-                <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                    <button type="submit" class="btn btn-danger" id="generateBtn">
-                        <i class="fa-solid fa-play me-1"></i>Generate Credits Video
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary" id="refreshBtn">
-                        <i class="fa-solid fa-arrows-rotate me-1"></i>Refresh Patrons
-                    </button>
-                    <span class="info-row ms-auto text-body-secondary">
-                        Patrons: <strong id="patronCount">...</strong>
-                        &nbsp;&middot;&nbsp;
-                        FFmpeg: <span id="ffmpegStatus" class="badge bg-secondary">Checking</span>
-                        <button class="btn btn-sm btn-success d-none ms-1" id="installFfmpegBtn">Install</button>
-                    </span>
+                                    <!-- Logo -->
+                                    <div class="mb-3 pb-3 border-bottom">
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <i class="fa-solid fa-image text-body-secondary"></i>
+                                            <span class="fw-semibold small">Logo</span>
+                                            <label class="btn btn-sm btn-outline-secondary ms-auto mb-0 py-0">
+                                                <i class="fa-solid fa-upload me-1"></i>Choose
+                                                <input type="file" id="logoFileInput" accept="image/*" class="d-none">
+                                            </label>
+                                            <button type="button" class="btn btn-sm btn-outline-primary py-0" data-asset-target="logo" data-asset-type="images" data-bs-toggle="modal" data-bs-target="#assetPickerModal" title="Choose from library"><i class="fa-solid fa-folder-open"></i></button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger d-none py-0" id="logoClearBtn"><i class="fa-solid fa-xmark"></i></button>
+                                        </div>
+                                        <span class="text-body-secondary small" id="logoFileName">No file selected</span>
+                                        <input type="hidden" id="logoFilename">
+                                        <div class="d-flex gap-2 mt-1">
+                                            <select class="form-select form-select-sm" id="logoPosition" style="width:120px;">
+                                                <option value="top-left">Top Left</option>
+                                                <option value="top-right" selected>Top Right</option>
+                                                <option value="bottom-left">Bottom Left</option>
+                                                <option value="bottom-right">Bottom Right</option>
+                                                <option value="center">Center</option>
+                                            </select>
+                                            <div class="input-group input-group-sm" style="width:90px;">
+                                                <input type="number" class="form-control" id="logoSize" min="20" max="400" value="80">
+                                                <span class="input-group-text">px</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- QR Code -->
+                                    <div>
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <i class="fa-solid fa-qrcode text-body-secondary"></i>
+                                            <span class="fw-semibold small">QR Code</span>
+                                            <img id="qrPreview" class="d-none border rounded ms-auto" style="width:40px; height:40px;" alt="QR preview">
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm mb-1" id="qrUrl" placeholder="https://patreon.com/yourchannel">
+                                        <div class="d-flex gap-2" id="qrPreviewWrap">
+                                            <select class="form-select form-select-sm" id="qrPosition" style="width:120px;">
+                                                <option value="top-left">Top Left</option>
+                                                <option value="top-right">Top Right</option>
+                                                <option value="bottom-left">Bottom Left</option>
+                                                <option value="bottom-right" selected>Bottom Right</option>
+                                                <option value="center">Center</option>
+                                            </select>
+                                            <div class="input-group input-group-sm" style="width:90px;">
+                                                <input type="number" class="form-control" id="qrSize" min="40" max="400" value="120">
+                                                <span class="input-group-text">px</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- /col-lg-5 -->
+
+                </div><!-- /row -->
+
+                <!-- Sticky Generate Bar -->
+                <div class="generate-bar sticky-bottom bg-body border-top shadow-sm py-2 px-3 mt-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="submit" class="btn btn-danger" id="generateBtn">
+                            <i class="fa-solid fa-play me-1"></i>Generate Credits Video
+                        </button>
+                        <span class="info-row ms-auto text-body-secondary">
+                            FFmpeg: <span id="ffmpegStatus" class="badge bg-secondary">Checking</span>
+                            <button class="btn btn-sm btn-success d-none ms-1" id="installFfmpegBtn">Install</button>
+                        </span>
+                    </div>
                 </div>
             </form>
 
@@ -408,93 +530,424 @@
 
         <!-- ====== SETTINGS TAB ====== -->
         <div class="tab-pane fade" id="settings-tab-pane" role="tabpanel">
-            <div class="row g-3 mx-auto" style="max-width:800px;">
+            <div class="mx-auto" style="max-width:900px;">
 
-                <!-- FFmpeg -->
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fa-solid fa-film me-1"></i>FFmpeg
-                            <span class="badge bg-secondary ms-2" id="settingsFfmpegBadge">Checking...</span>
-                        </div>
-                        <div class="card-body">
-                            <div id="settingsFfmpegOk" class="d-none">
-                                <p class="text-success mb-0">FFmpeg is installed and ready.</p>
-                            </div>
-                            <div id="settingsFfmpegMissing" class="d-none">
-                                <p class="text-danger mb-2">FFmpeg was not found on your system.</p>
-                                <button class="btn btn-outline-secondary" id="settingsInstallFfmpegBtn">
-                                    <i class="fa-solid fa-download me-1"></i>Download &amp; Install FFmpeg
-                                </button>
-                                <div class="settings-progress" id="settingsFfmpegProgress">
-                                    <div class="progress" style="height:6px;">
-                                        <div class="progress-bar" id="settingsFfmpegProgressFill" style="width:0%"></div>
+                <!-- Settings sub-tabs -->
+                <ul class="nav nav-pills mb-3 mt-1" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#settings-general-pane" type="button" role="tab">
+                            <i class="fa-solid fa-gear me-1"></i>General
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#settings-integrations-pane" type="button" role="tab">
+                            <i class="fa-solid fa-plug me-1"></i>Integrations
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+
+                    <!-- ── General sub-tab ── -->
+                    <div class="tab-pane fade show active" id="settings-general-pane" role="tabpanel">
+                        <div class="row g-3">
+
+                            <!-- FFmpeg -->
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <i class="fa-solid fa-film me-1"></i>FFmpeg
+                                        <span class="badge bg-secondary ms-2" id="settingsFfmpegBadge">Checking...</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="settingsFfmpegOk" class="d-none">
+                                            <p class="text-success mb-0">FFmpeg is installed and ready.</p>
+                                        </div>
+                                        <div id="settingsFfmpegMissing" class="d-none">
+                                            <p class="text-danger mb-2">FFmpeg was not found on your system.</p>
+                                            <button class="btn btn-outline-secondary" id="settingsInstallFfmpegBtn">
+                                                <i class="fa-solid fa-download me-1"></i>Download &amp; Install FFmpeg
+                                            </button>
+                                            <div class="settings-progress" id="settingsFfmpegProgress">
+                                                <div class="progress" style="height:6px;">
+                                                    <div class="progress-bar" id="settingsFfmpegProgressFill" style="width:0%"></div>
+                                                </div>
+                                            </div>
+                                            <div class="alert d-none mt-2" id="settingsFfmpegMsg"></div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="alert d-none mt-2" id="settingsFfmpegMsg"></div>
+                            </div>
+
+                            <!-- Server Info -->
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header"><i class="fa-solid fa-server me-1"></i>Server</div>
+                                    <div class="card-body">
+                                        <label class="form-label" for="settingsServerUrl">API URL</label>
+                                        <input type="text" class="form-control" id="settingsServerUrl" readonly
+                                               style="cursor:text; user-select:all;" onclick="this.select()">
+                                        <div class="form-text">Use this URL for the Premiere plugin or API access.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Data Directory -->
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header"><i class="fa-solid fa-folder me-1"></i>Data Directory</div>
+                                    <div class="card-body">
+                                        <label class="form-label" for="settingsDataDir">Save location</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="settingsDataDir" placeholder="Loading...">
+                                            <button class="btn btn-outline-secondary" id="settingsDataDirBtn">Update</button>
+                                        </div>
+                                        <div class="form-text">Where settings, cache, and generated videos are stored.</div>
+                                        <div class="alert d-none mt-2" id="settingsDataDirMsg"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Logging -->
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header"><i class="fa-solid fa-file-lines me-1"></i>Logging</div>
+                                    <div class="card-body">
+                                        <div class="row g-2 align-items-end">
+                                            <div class="col-auto">
+                                                <label class="form-label small mb-1" for="logLevel">Log Level</label>
+                                                <select id="logLevel" class="form-select form-select-sm" style="width:130px">
+                                                    <option value="DEBUG">Debug</option>
+                                                    <option value="INFO" selected>Info</option>
+                                                    <option value="WARNING">Warning</option>
+                                                    <option value="ERROR">Error</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-auto">
+                                                <label class="form-label small mb-1" for="logMaxSize">Max File Size (MB)</label>
+                                                <input type="number" id="logMaxSize" class="form-control form-control-sm"
+                                                       value="5" min="1" max="100" style="width:80px">
+                                            </div>
+                                            <div class="col-auto">
+                                                <label class="form-label small mb-1" for="logBackupCount">Backup Files</label>
+                                                <input type="number" id="logBackupCount" class="form-control form-control-sm"
+                                                       value="3" min="0" max="10" style="width:80px">
+                                            </div>
+                                            <div class="col-auto">
+                                                <a href="/api/logs" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                                    <i class="fa-solid fa-file-lines me-1"></i>View Log
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="form-text mt-1">Log rotation settings take effect on next app restart.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Dummy Data -->
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header"><i class="fa-solid fa-flask me-1"></i>Developer</div>
+                                    <div class="card-body">
+                                        <div class="form-check mb-0">
+                                            <input class="form-check-input" type="checkbox" id="settingsUseDummyData">
+                                            <label class="form-check-label" for="settingsUseDummyData">Use dummy data (skip all API calls)</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Server Info -->
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header"><i class="fa-solid fa-server me-1"></i>Server</div>
-                        <div class="card-body">
-                            <label class="form-label" for="settingsServerUrl">API URL</label>
-                            <input type="text" class="form-control" id="settingsServerUrl" readonly
-                                   style="cursor:text; user-select:all;" onclick="this.select()">
-                            <div class="form-text">Use this URL for the Premiere plugin or API access.</div>
+                    <!-- ── Integrations sub-tab ── -->
+                    <div class="tab-pane fade" id="settings-integrations-pane" role="tabpanel">
+                        <p class="text-body-secondary small mb-3">Configure API tokens for each name-source integration. These are also available in the Generate &rarr; Content tab.</p>
+
+                        <ul class="nav nav-pills nav-fill mb-3" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#settingsIntPatreon" type="button" role="tab">
+                                    <i class="fa-brands fa-patreon me-1"></i>Patreon
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#settingsIntBmc" type="button" role="tab">
+                                    <i class="fa-solid fa-mug-hot me-1 text-warning"></i>Buy Me a Coffee
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#settingsIntSe" type="button" role="tab">
+                                    <i class="fa-solid fa-broadcast-tower me-1 text-info"></i>StreamElements
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#settingsIntKofi" type="button" role="tab">
+                                    <i class="fa-solid fa-heart me-1 text-danger"></i>Ko-fi
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#settingsIntYt" type="button" role="tab">
+                                    <i class="fa-brands fa-youtube me-1 text-danger"></i>YouTube
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <!-- Patreon -->
+                            <div class="tab-pane fade show active" id="settingsIntPatreon" role="tabpanel">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <label class="form-label fw-semibold" for="settingsPatreonToken">Creator Access Token</label>
+                                        <div class="input-group mb-2">
+                                            <input type="password" class="form-control" id="settingsPatreonToken" placeholder="Paste your token here">
+                                            <button class="btn btn-outline-secondary" id="settingsDetectBtn">Detect Campaign</button>
+                                        </div>
+                                        <div class="form-text mb-3">
+                                            <a href="https://www.patreon.com/portal/registration/register-clients" target="_blank" rel="noopener">Get your token from Patreon</a>
+                                        </div>
+
+                                        <label class="form-label fw-semibold" for="settingsCampaignId">Campaign ID</label>
+                                        <input type="text" class="form-control" id="settingsCampaignId" placeholder="Auto-detected or enter manually">
+
+                                        <div class="alert d-none mt-2" id="settingsPatreonMsg"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Buy Me a Coffee -->
+                            <div class="tab-pane fade" id="settingsIntBmc" role="tabpanel">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <label class="form-label fw-semibold" for="settingsBmcToken">API Token</label>
+                                        <input type="password" class="form-control mb-1" id="settingsBmcToken" placeholder="Paste your BMC developer token">
+                                        <div class="form-text mb-3">Get your token from <a href="https://developers.buymeacoffee.com/" target="_blank" rel="noopener">developers.buymeacoffee.com</a></div>
+
+                                        <label class="form-label fw-semibold" for="settingsBmcWebhookUrl">Webhook URL</label>
+                                        <p class="text-body-secondary small mb-2">Set this URL in your <a href="https://studio.buymeacoffee.com/webhooks" target="_blank" rel="noopener">BMC webhook settings</a> to receive supporter events.</p>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" id="settingsBmcWebhookUrl" readonly>
+                                            <button type="button" class="btn btn-outline-secondary" id="settingsBmcCopyBtn" title="Copy URL">
+                                                <i class="fa-solid fa-copy"></i>
+                                            </button>
+                                        </div>
+
+                                        <hr>
+
+                                        <!-- Stored Names Management -->
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <div>
+                                                <span class="fw-semibold">Stored Names</span>
+                                                <span class="badge bg-secondary ms-1" id="settingsBmcCount">0</span>
+                                                <span class="text-body-secondary small ms-1">via webhook</span>
+                                            </div>
+                                            <div class="d-flex gap-1">
+                                                <div class="input-group input-group-sm" style="width:auto;">
+                                                    <select class="form-select form-select-sm" id="settingsBmcClearDays" style="width:130px;">
+                                                        <option value="">All</option>
+                                                        <option value="1">Older than 1 day</option>
+                                                        <option value="7">Older than 7 days</option>
+                                                        <option value="14">Older than 14 days</option>
+                                                        <option value="30">Older than 30 days</option>
+                                                        <option value="90">Older than 90 days</option>
+                                                    </select>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger" id="settingsBmcClearBtn">
+                                                        <i class="fa-solid fa-trash-can me-1"></i>Clear
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="alert d-none mt-1 mb-3 py-1 px-2 small" id="settingsBmcMsg"></div>
+
+                                        <!-- Auto-Clear Schedule -->
+                                        <label class="form-label fw-semibold" for="settingsBmcSchedule">Auto-Clear Schedule</label>
+                                        <select class="form-select mb-1" id="settingsBmcSchedule">
+                                            <option value="never">Never</option>
+                                            <option value="daily">Daily</option>
+                                            <option value="weekly">Weekly</option>
+                                            <option value="monthly">Monthly (30 days)</option>
+                                            <option value="custom">Custom...</option>
+                                        </select>
+                                        <div class="d-none mb-2" id="settingsBmcCustomDaysWrap">
+                                            <div class="input-group input-group-sm mt-1">
+                                                <input type="number" class="form-control" id="settingsBmcCustomDays" min="1" max="365" placeholder="Days">
+                                                <span class="input-group-text">days</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-text" id="settingsBmcScheduleInfo"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- StreamElements -->
+                            <div class="tab-pane fade" id="settingsIntSe" role="tabpanel">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row g-2 mb-2">
+                                            <div class="col-md-8">
+                                                <label class="form-label fw-semibold" for="settingsSeJwt">JWT Token</label>
+                                                <input type="password" class="form-control" id="settingsSeJwt" placeholder="JWT Token">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-semibold" for="settingsSeChannelId">Channel ID</label>
+                                                <input type="text" class="form-control" id="settingsSeChannelId" placeholder="Channel ID">
+                                            </div>
+                                        </div>
+                                        <div class="form-text mb-3">
+                                            To get your JWT token: log in to <a href="https://streamelements.com/dashboard/account/channels" target="_blank" rel="noopener">StreamElements</a> &rarr; click your account icon (top-right) &rarr; click your channel name &rarr; enable <strong>Show Secrets</strong> &rarr; copy your <strong>JWT</strong> token. Your Channel ID is shown on the same row.
+                                            <a href="https://dev.streamelements.com/docs/api-docs/ae133ffaf8c1a-personal-access-using-jwt-secert-token-to-access-the-api" target="_blank" rel="noopener">More info</a>
+                                        </div>
+
+                                        <hr>
+
+                                        <!-- Stored Names Management -->
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <div>
+                                                <span class="fw-semibold">Stored Names</span>
+                                                <span class="badge bg-secondary ms-1" id="settingsSeCount">0</span>
+                                            </div>
+                                            <div class="d-flex gap-1">
+                                                <div class="input-group input-group-sm" style="width:auto;">
+                                                    <select class="form-select form-select-sm" id="settingsSeClearDays" style="width:130px;">
+                                                        <option value="">All</option>
+                                                        <option value="1">Older than 1 day</option>
+                                                        <option value="7">Older than 7 days</option>
+                                                        <option value="14">Older than 14 days</option>
+                                                        <option value="30">Older than 30 days</option>
+                                                        <option value="90">Older than 90 days</option>
+                                                    </select>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger" id="settingsSeClearBtn">
+                                                        <i class="fa-solid fa-trash-can me-1"></i>Clear
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="alert d-none mt-1 mb-3 py-1 px-2 small" id="settingsSeMsg"></div>
+
+                                        <!-- Auto-Clear Schedule -->
+                                        <label class="form-label fw-semibold" for="settingsSeSchedule">Auto-Clear Schedule</label>
+                                        <select class="form-select mb-1" id="settingsSeSchedule">
+                                            <option value="never">Never</option>
+                                            <option value="daily">Daily</option>
+                                            <option value="weekly">Weekly</option>
+                                            <option value="monthly">Monthly (30 days)</option>
+                                            <option value="custom">Custom...</option>
+                                        </select>
+                                        <div class="d-none mb-2" id="settingsSeCustomDaysWrap">
+                                            <div class="input-group input-group-sm mt-1">
+                                                <input type="number" class="form-control" id="settingsSeCustomDays" min="1" max="365" placeholder="Days">
+                                                <span class="input-group-text">days</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-text" id="settingsSeScheduleInfo"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ko-fi -->
+                            <div class="tab-pane fade" id="settingsIntKofi" role="tabpanel">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <label class="form-label fw-semibold" for="settingsKofiWebhookUrl">Webhook URL</label>
+                                        <p class="text-body-secondary small mb-2">Set this URL in your Ko-fi account settings to receive donation events.</p>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" id="settingsKofiWebhookUrl" readonly>
+                                            <button type="button" class="btn btn-outline-secondary" id="settingsKofiCopyBtn" title="Copy URL">
+                                                <i class="fa-solid fa-copy"></i>
+                                            </button>
+                                        </div>
+                                        <label class="form-label fw-semibold" for="settingsKofiVerifyToken">Verification Token</label>
+                                        <input type="password" class="form-control mb-3" id="settingsKofiVerifyToken" placeholder="From Ko-fi advanced settings">
+
+                                        <hr>
+
+                                        <!-- Stored Names Management -->
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <div>
+                                                <span class="fw-semibold">Stored Names</span>
+                                                <span class="badge bg-secondary ms-1" id="settingsKofiCount">0</span>
+                                            </div>
+                                            <div class="d-flex gap-1">
+                                                <div class="input-group input-group-sm" style="width:auto;">
+                                                    <select class="form-select form-select-sm" id="settingsKofiClearDays" style="width:130px;">
+                                                        <option value="">All</option>
+                                                        <option value="1">Older than 1 day</option>
+                                                        <option value="7">Older than 7 days</option>
+                                                        <option value="14">Older than 14 days</option>
+                                                        <option value="30">Older than 30 days</option>
+                                                        <option value="90">Older than 90 days</option>
+                                                    </select>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger" id="settingsKofiClearBtn">
+                                                        <i class="fa-solid fa-trash-can me-1"></i>Clear
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="alert d-none mt-1 mb-3 py-1 px-2 small" id="settingsKofiMsg"></div>
+
+                                        <!-- Auto-Clear Schedule -->
+                                        <label class="form-label fw-semibold" for="settingsKofiSchedule">Auto-Clear Schedule</label>
+                                        <select class="form-select mb-1" id="settingsKofiSchedule">
+                                            <option value="never">Never</option>
+                                            <option value="daily">Daily</option>
+                                            <option value="weekly">Weekly</option>
+                                            <option value="monthly">Monthly (30 days)</option>
+                                            <option value="custom">Custom...</option>
+                                        </select>
+                                        <div class="d-none mb-2" id="settingsKofiCustomDaysWrap">
+                                            <div class="input-group input-group-sm mt-1">
+                                                <input type="number" class="form-control" id="settingsKofiCustomDays" min="1" max="365" placeholder="Days">
+                                                <span class="input-group-text">days</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-text" id="settingsKofiScheduleInfo"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- YouTube -->
+                            <div class="tab-pane fade" id="settingsIntYt" role="tabpanel">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="fw-semibold mb-2">Setup Guide</p>
+                                        <ol class="small text-body-secondary mb-3">
+                                            <li>Create a project in <a href="https://console.cloud.google.com/projectcreate" target="_blank" rel="noopener">Google Cloud Console</a></li>
+                                            <li>Enable the <a href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank" rel="noopener">YouTube Data API v3</a></li>
+                                            <li>Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">Credentials</a> &rarr; Create OAuth 2.0 Client ID (Web application)</li>
+                                            <li>Add this as an <strong>Authorized redirect URI</strong>:</li>
+                                        </ol>
+                                        <div class="input-group input-group-sm mb-3">
+                                            <input type="text" class="form-control" id="settingsYtRedirectUri" readonly>
+                                            <button type="button" class="btn btn-outline-secondary" id="settingsYtCopyRedirect" title="Copy URI">
+                                                <i class="fa-solid fa-copy"></i>
+                                            </button>
+                                        </div>
+
+                                        <label class="form-label fw-semibold" for="settingsYtClientId">Client ID</label>
+                                        <input type="text" class="form-control mb-2" id="settingsYtClientId" placeholder="xxxx.apps.googleusercontent.com">
+                                        <label class="form-label fw-semibold" for="settingsYtClientSecret">Client Secret</label>
+                                        <input type="password" class="form-control mb-3" id="settingsYtClientSecret" placeholder="Your client secret">
+
+                                        <hr>
+
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div>
+                                                <span class="fw-semibold">Status</span>
+                                                <span class="badge bg-secondary ms-1" id="settingsYtStatusBadge">Not Authorized</span>
+                                            </div>
+                                            <button type="button" class="btn btn-sm btn-outline-danger d-none" id="settingsYtRevokeBtn">
+                                                <i class="fa-solid fa-link-slash me-1"></i>Revoke
+                                            </button>
+                                        </div>
+                                        <div class="alert d-none mt-2 mb-0 py-1 px-2 small" id="settingsYtMsg"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Data Directory -->
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header"><i class="fa-solid fa-folder me-1"></i>Data Directory</div>
-                        <div class="card-body">
-                            <label class="form-label" for="settingsDataDir">Save location</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="settingsDataDir" placeholder="Loading...">
-                                <button class="btn btn-outline-secondary" id="settingsDataDirBtn">Update</button>
-                            </div>
-                            <div class="form-text">Where settings, cache, and generated videos are stored.</div>
-                            <div class="alert d-none mt-2" id="settingsDataDirMsg"></div>
-                        </div>
-                    </div>
-                </div>
+                </div><!-- /tab-content -->
 
-                <!-- Patreon Credentials -->
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header"><i class="fa-solid fa-key me-1"></i>Patreon Credentials</div>
-                        <div class="card-body">
-                            <label class="form-label" for="settingsPatreonToken">Creator Access Token</label>
-                            <div class="input-group mb-2">
-                                <input type="password" class="form-control" id="settingsPatreonToken" placeholder="Paste your token here">
-                                <button class="btn btn-outline-secondary" id="settingsDetectBtn">Detect Campaign</button>
-                            </div>
-                            <div class="form-text mb-3">
-                                <a href="https://www.patreon.com/portal/registration/register-clients" target="_blank" rel="noopener">Get your token from Patreon</a>
-                            </div>
-
-                            <label class="form-label" for="settingsCampaignId">Campaign ID</label>
-                            <input type="text" class="form-control mb-2" id="settingsCampaignId" placeholder="Auto-detected or enter manually">
-
-                            <div class="alert d-none mt-2" id="settingsPatreonMsg"></div>
-
-                            <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" id="settingsUseDummyData">
-                                <label class="form-check-label" for="settingsUseDummyData">Use dummy data (skip Patreon API)</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Save Button -->
-                <div class="col-12">
+                <!-- Save Button (always visible) -->
+                <div class="mt-3">
                     <button class="btn btn-success w-100" id="settingsSaveBtn">
                         <i class="fa-solid fa-check me-1"></i>Save Settings
                     </button>
@@ -506,8 +959,55 @@
     </div>
 </div>
 
+<!-- Font Picker Modal -->
+<div class="modal fade" id="fontPickerModal" tabindex="-1" aria-labelledby="fontPickerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fontPickerModalLabel"><i class="fa-solid fa-font me-2"></i>Choose <span id="fontPickerTarget">Message</span> Font</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control form-control-sm mb-3" id="fontSearch" placeholder="Search fonts...">
+                <div class="row row-cols-2 row-cols-md-3 g-2" id="fontGrid"></div>
+            </div>
+            <div class="modal-footer">
+                <div class="font-preview rounded p-2 flex-grow-1 me-2" id="fontModalPreview" style="font-size:18px; min-height:40px;">The quick brown fox jumps over the lazy dog</div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="fontPickerApply">Apply</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="assetPickerModal" tabindex="-1" aria-labelledby="assetPickerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assetPickerModalLabel"><i class="fa-solid fa-folder-open me-2"></i>Choose <span id="assetPickerTarget">Asset</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row row-cols-2 row-cols-md-3 g-2" id="assetGrid"></div>
+                <div id="assetEmpty" class="text-center text-body-secondary py-5 d-none">
+                    <i class="fa-solid fa-folder-open fa-3x mb-3 opacity-25"></i>
+                    <p class="mb-0">No assets uploaded yet</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="assetPickerApply">Use Selected</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/static/js/app.js"></script>
+<script src="/static/js/effects.js"></script>
+<script src="/static/js/asset-picker.js"></script>
+<script src="/static/js/presets.js"></script>
+<script src="/static/js/integrations.js"></script>
 <script src="/static/js/gallery.js"></script>
 <script src="/static/js/settings.js"></script>
 </body>

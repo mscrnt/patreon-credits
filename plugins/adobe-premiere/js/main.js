@@ -30,7 +30,7 @@
             })
             .catch(function () {
                 statusDot.className = "status-dot disconnected";
-                statusText.textContent = "Server offline - start python app.py";
+                statusText.textContent = "Server offline - start the server";
             });
     }
 

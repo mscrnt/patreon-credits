@@ -18,7 +18,7 @@ A CEP (Common Extensibility Platform) panel that integrates the Patreon Credits 
 - The Patreon Credits Generator server running locally — either:
   - Desktop app in headless mode: `PatreonCredits --headless`
   - Desktop app (normal mode also works — server runs in background)
-  - Dev server: `python app.py`
+  - Dev server: `python -m pcg.app`
 - FFmpeg installed on the system (or bundled in the desktop app)
 
 ## Installation
@@ -65,7 +65,7 @@ ZXPSignCmd -sign plugins/adobe-premiere PatreonCredits.zxp certificate.p12 passw
 
 ## Usage
 
-1. Start the Patreon Credits Generator server (run the desktop app or `python app.py`)
+1. Start the Patreon Credits Generator server (run the desktop app or `python -m pcg.app`)
 
 2. Open Premiere Pro and go to **Window > Extensions > Patreon Credits**
 

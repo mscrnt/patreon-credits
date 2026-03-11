@@ -1,7 +1,7 @@
 /.claude
 /.env
 /.venv
-/__pycache__
+__pycache__/
 patrons_cache.json
 venv/
 static/output/*.mp4
@@ -12,3 +12,4 @@ build/
 ffmpeg_bin/
 *.spec.bak
 docker-compose.override.yml
+uploads/*

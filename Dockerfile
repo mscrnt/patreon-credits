@@ -23,8 +23,9 @@ COPY templates/ templates/
 COPY static/ static/
 COPY plugins/ plugins/
 COPY .env.example .env.example
-COPY icon.png icon.ico ./
-COPY app.py launcher.py path_utils.py patreon.py ffmpeg_renderer.py ./
+COPY assets/ assets/
+COPY pcg/ pcg/
+COPY run.py ./
 
 RUN mkdir -p output
 
@@ -48,7 +49,7 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8787/health')" || exit 1
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["python", "launcher.py", "--headless"]
+CMD ["python", "run.py", "--headless"]
 
 # ============================================================
 # Stage 3: dev — development with hot reload
@@ -60,4 +61,4 @@ ENV FLASK_DEBUG=1 \
 
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+CMD ["python", "-m", "pcg.app"]

@@ -3,7 +3,7 @@
 ; Then compile this .iss with Inno Setup 6+
 
 #define MyAppName "Patreon Credits Generator"
-#define MyAppVersion "1.4.0"
+#define MyAppVersion "1.5.0"
 #define MyAppPublisher "mscrnt"
 #define MyAppURL "https://github.com/mscrnt/patreon-credits"
 #define MyAppExeName "PatreonCredits.exe"
@@ -21,7 +21,7 @@ OutputDir=..\dist\installer
 OutputBaseFilename=PatreonCredits_Setup_{#MyAppVersion}
 Compression=lzma2
 SolidCompression=yes
-SetupIconFile=..\icon.ico
+SetupIconFile=..\assets\icon.ico
 ; Require Windows 10+
 MinVersion=10.0
 PrivilegesRequired=admin

@@ -124,7 +124,16 @@
     var grid = document.getElementById('galleryGrid');
     if (!grid) return;
 
-    // Load when Gallery tab is shown
+    // Fetch count on page load so the badge isn't stuck at 0
+    var countBadge = document.getElementById('galleryCount');
+    if (countBadge) {
+      fetch('/api/videos')
+        .then(function (r) { return r.json(); })
+        .then(function (data) { countBadge.textContent = (data.videos || []).length; })
+        .catch(function () {});
+    }
+
+    // Load full gallery when tab is shown
     var galleryTab = document.querySelector('[data-bs-target="#gallery-tab-pane"]');
     if (galleryTab) {
       galleryTab.addEventListener('shown.bs.tab', loadGallery);

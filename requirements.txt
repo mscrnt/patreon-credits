@@ -3,5 +3,6 @@ requests
 python-dotenv
 Pillow
 fonttools
+qrcode[pil]
 pywebview
 pyinstaller

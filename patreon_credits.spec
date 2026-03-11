@@ -15,15 +15,15 @@ SPEC_DIR = os.path.dirname(os.path.abspath(SPEC))
 block_cipher = None
 
 a = Analysis(
-    ['launcher.py'],
+    ['run.py'],
     pathex=[],
     binaries=[],
     datas=[
         ('fonts', 'fonts'),
         ('templates', 'templates'),
         ('static', 'static'),
-        ('icon.png', '.'),
-        ('icon.ico', '.'),
+        ('assets/icon.png', 'assets'),
+        ('assets/icon.ico', 'assets'),
         ('.env.example', '.'),
     ],
     hiddenimports=[
@@ -35,10 +35,15 @@ a = Analysis(
         'fontTools',
         'fontTools.ttLib',
         'webview',
-        'app',
-        'patreon',
-        'ffmpeg_renderer',
-        'path_utils',
+        'pcg',
+        'pcg.app',
+        'pcg.launcher',
+        'pcg.patreon',
+        'pcg.ffmpeg_renderer',
+        'pcg.path_utils',
+        'pcg.integrations',
+        'pcg.presets',
+        'pcg.logging_config',
     ],
     hookspath=[],
     hooksconfig={},
@@ -70,7 +75,7 @@ if sys.platform == 'darwin':
         target_arch=None,
         codesign_identity=None,
         entitlements_file=None,
-        icon=os.path.join(SPEC_DIR, 'icon.icns') if os.path.exists(os.path.join(SPEC_DIR, 'icon.icns')) else None,
+        icon=os.path.join(SPEC_DIR, 'assets', 'icon.icns') if os.path.exists(os.path.join(SPEC_DIR, 'assets', 'icon.icns')) else None,
     )
 
     coll = COLLECT(
@@ -86,11 +91,11 @@ if sys.platform == 'darwin':
     app = BUNDLE(
         coll,
         name='Patreon Credits Generator.app',
-        icon=os.path.join(SPEC_DIR, 'icon.icns') if os.path.exists(os.path.join(SPEC_DIR, 'icon.icns')) else None,
+        icon=os.path.join(SPEC_DIR, 'assets', 'icon.icns') if os.path.exists(os.path.join(SPEC_DIR, 'assets', 'icon.icns')) else None,
         bundle_identifier='com.mscrnt.patreoncredits',
         info_plist={
             'NSHighResolutionCapable': True,
-            'CFBundleShortVersionString': '1.4.0',
+            'CFBundleShortVersionString': '2.0.0',
         },
     )
 else:
@@ -115,5 +120,5 @@ else:
         target_arch=None,
         codesign_identity=None,
         entitlements_file=None,
-        icon=os.path.join(SPEC_DIR, 'icon.ico') if os.path.exists(os.path.join(SPEC_DIR, 'icon.ico')) else None,
+        icon=os.path.join(SPEC_DIR, 'assets', 'icon.ico') if os.path.exists(os.path.join(SPEC_DIR, 'assets', 'icon.ico')) else None,
     )

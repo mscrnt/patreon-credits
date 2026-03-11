@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="icon.png" alt="Patreon Credits Generator" width="128">
+  <img src="assets/icon.png" alt="Patreon Credits Generator" width="128">
 </p>
 
 <h1 align="center">Patreon Credits Generator</h1>

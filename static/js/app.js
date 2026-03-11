@@ -10,7 +10,9 @@
     zen_maru_gothic: "'Zen Maru Gothic', sans-serif",
     mplus_rounded: "'M PLUS Rounded 1c', sans-serif",
     shippori_mincho: "'Shippori Mincho', serif",
+    bpmf_huninn: "'Bpmf Huninn', sans-serif",
     inter: "'Inter', sans-serif",
+    saira: "'Saira', sans-serif",
     roboto: "'Roboto', sans-serif",
     open_sans: "'Open Sans', sans-serif",
     poppins: "'Poppins', sans-serif",
@@ -36,6 +38,17 @@
     neuton: "'Neuton', serif",
     alfa_slab_one: "'Alfa Slab One', serif",
     bangers: "'Bangers', system-ui",
+    bowlby_one_sc: "'Bowlby One SC', system-ui",
+    bungee: "'Bungee', system-ui",
+    carter_one: "'Carter One', system-ui",
+    chango: "'Chango', system-ui",
+    creepster: "'Creepster', system-ui",
+    erica_one: "'Erica One', system-ui",
+    lobster_two: "'Lobster Two', cursive",
+    luckiest_guy: "'Luckiest Guy', system-ui",
+    amatic_sc: "'Amatic SC', cursive",
+    caveat: "'Caveat', cursive",
+    indie_flower: "'Indie Flower', cursive",
     permanent_marker: "'Permanent Marker', cursive",
     pacifico: "'Pacifico', cursive",
     playwrite: "'Playwrite DE Grund', cursive",
@@ -62,40 +75,113 @@
     { id: 'patronBold', type: 'checked' },
     { id: 'duration', type: 'value' },
     { id: 'resolution', type: 'value' },
+    { id: 'fps', type: 'value' },
     { id: 'columns', type: 'value' },
     { id: 'nameAlign', type: 'value' },
     { id: 'truncateLength', type: 'value' },
     { id: 'wordWrap', type: 'checked' },
     { id: 'nameSpacing', type: 'checked' },
     { id: 'bgColor', type: 'value' },
-    { id: 'useCache', type: 'checked' },
+    // Effects fields (Phase 2)
+    { id: 'fadeIn', type: 'value' },
+    { id: 'fadeOut', type: 'value' },
+    { id: 'speedMultiplier', type: 'value' },
+    { id: 'bgType', type: 'value' },
+    { id: 'bgGradientColor1', type: 'value' },
+    { id: 'bgGradientColor2', type: 'value' },
+    { id: 'bgGradientDirection', type: 'value' },
+    { id: 'logoPosition', type: 'value' },
+    { id: 'logoSize', type: 'value' },
+    { id: 'qrUrl', type: 'value' },
+    { id: 'qrPosition', type: 'value' },
+    { id: 'qrSize', type: 'value' },
+    { id: 'audioVolume', type: 'value' },
+    // Integration credentials (Settings tab)
+    { id: 'settingsBmcToken', type: 'value' },
+    { id: 'settingsSeJwt', type: 'value' },
+    { id: 'settingsSeChannelId', type: 'value' },
+    { id: 'settingsKofiVerifyToken', type: 'value' },
+    { id: 'settingsYtClientId', type: 'value' },
+    { id: 'settingsYtClientSecret', type: 'value' },
+    // Name source checkboxes
+    { id: 'nsPatreonCheck', type: 'checked' },
+    { id: 'nsBmcCheck', type: 'checked' },
+    { id: 'nsSeCheck', type: 'checked' },
+    { id: 'nsKofiCheck', type: 'checked' },
+    { id: 'nsYtCheck', type: 'checked' },
+    // Asset library (persisted upload filenames)
+    { id: 'bgImageFilename', type: 'value' },
+    { id: 'audioFilename', type: 'value' },
+    { id: 'logoFilename', type: 'value' },
+    // Logging settings
+    { id: 'logLevel', type: 'value' },
+    { id: 'logMaxSize', type: 'value' },
+    { id: 'logBackupCount', type: 'value' },
   ];
 
-  function saveSettings() {
+  function _collectSettings() {
     var settings = {};
     persistFields.forEach(function (f) {
       var el = document.getElementById(f.id);
       if (el) settings[f.id] = f.type === 'checked' ? el.checked : el.value;
     });
+    return settings;
+  }
+
+  function _applySettings(settings) {
+    if (!settings) return;
+    persistFields.forEach(function (f) {
+      if (settings[f.id] === undefined) return;
+      var el = document.getElementById(f.id);
+      if (!el) return;
+      if (f.type === 'checked') el.checked = settings[f.id];
+      else el.value = settings[f.id];
+    });
+  }
+
+  var _saveTimer = null;
+  function saveSettings() {
+    var settings = _collectSettings();
+    // Always save to localStorage as fast cache
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    // Debounce server saves to avoid flooding
+    clearTimeout(_saveTimer);
+    _saveTimer = setTimeout(function () {
+      fetch('/api/generate-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(settings),
+      }).catch(function () { /* server save failed, localStorage has it */ });
+    }, 500);
   }
 
   function loadSettings() {
+    // First apply localStorage for instant restore
     var raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
-    try {
-      var settings = JSON.parse(raw);
-      persistFields.forEach(function (f) {
-        if (settings[f.id] === undefined) return;
-        var el = document.getElementById(f.id);
-        if (!el) return;
-        if (f.type === 'checked') el.checked = settings[f.id];
-        else el.value = settings[f.id];
-      });
-    } catch (_) {
-      /* ignore corrupt data */
+    if (raw) {
+      try { _applySettings(JSON.parse(raw)); } catch (_) {}
     }
+    // Then try server for authoritative values
+    fetch('/api/generate-settings', { headers: { Accept: 'application/json' } })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data && Object.keys(data).length > 0) {
+          _applySettings(data);
+          // Sync localStorage with server values
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+          // Re-sync font previews with server values
+          updateFontPreview('messageFontPreview', 'messageFont', 'messageBold', 'messageColor');
+          updateFontPreview('patronFontPreview', 'patronFont', 'patronBold', 'patronColor');
+        }
+      })
+      .catch(function () { /* server unavailable, localStorage is fine */ });
   }
+
+  // Expose for other modules (presets need to load/save)
+  window.PCG.saveSettings = saveSettings;
+  window.PCG.loadSettings = loadSettings;
+  window.PCG.applySettings = _applySettings;
+  window.PCG.collectSettings = _collectSettings;
 
   // ---- Live font preview updaters ----
   function updateFontPreview(previewId, fontSelectId, boldCheckboxId, colorInputId) {
@@ -165,7 +251,7 @@
   }
 
   function updatePatronCount() {
-    var el = document.getElementById('patronCount');
+    var el = document.getElementById('patreonNameCount');
     if (!el) return;
     fetch('/patron-count')
       .then(function (r) { return r.json(); })
@@ -240,6 +326,11 @@
     updateFontPreview('messageFontPreview', 'messageFont', 'messageBold', 'messageColor');
     updateFontPreview('patronFontPreview', 'patronFont', 'patronBold', 'patronColor');
 
+    // Restore uploaded asset selections from persisted filenames
+    if (window.PCG && window.PCG.restoreAssetSelections) {
+      window.PCG.restoreAssetSelections();
+    }
+
     // FFmpeg & patron count
     checkFFmpeg();
     updatePatronCount();
@@ -262,8 +353,6 @@
       var wordWrap = document.getElementById('wordWrap').checked;
       var nameSpacing = document.getElementById('nameSpacing').checked;
       var bgColor = document.getElementById('bgColor').value;
-      var useCache = document.getElementById('useCache').checked;
-
       var messageStyle = {
         size: parseInt(document.getElementById('messageSize').value),
         color: document.getElementById('messageColor').value,
@@ -283,24 +372,30 @@
       generateBtn.disabled = true;
       showStatus('Generating credits video...');
 
+      // Collect effects data if available
+      var effects = (window.PCG && window.PCG.collectEffects) ? window.PCG.collectEffects() : {};
+
+      var payload = {
+        message: message,
+        custom_names: customNames,
+        duration: duration,
+        resolution: resolution,
+        columns: columns,
+        name_align: nameAlign,
+        truncate_length: truncateLength,
+        word_wrap: wordWrap,
+        name_spacing: nameSpacing,
+        bg_color: bgColor,
+        message_style: messageStyle,
+        patron_style: patronStyle,
+      };
+      // Merge effects into payload
+      for (var k in effects) { payload[k] = effects[k]; }
+
       fetch('/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: message,
-          custom_names: customNames,
-          duration: duration,
-          resolution: resolution,
-          columns: columns,
-          name_align: nameAlign,
-          truncate_length: truncateLength,
-          word_wrap: wordWrap,
-          name_spacing: nameSpacing,
-          bg_color: bgColor,
-          use_cache: useCache,
-          message_style: messageStyle,
-          patron_style: patronStyle,
-        }),
+        body: JSON.stringify(payload),
       })
         .then(function (resp) {
           return resp.json().then(function (data) {
@@ -312,7 +407,8 @@
           hideStatus();
           videoPlayer.src = data.video_url;
           downloadBtn.dataset.filename = data.filename;
-          document.getElementById('patronCount').textContent = data.patron_count;
+          var pcBadge = document.getElementById('patreonNameCount');
+          if (pcBadge) pcBadge.textContent = data.patron_count;
           if (previewModal) previewModal.show();
           // Notify gallery
           document.dispatchEvent(new CustomEvent('videoGenerated'));
@@ -421,7 +517,8 @@
               showError('Error: ' + data.error);
             } else {
               showStatus('Patron list refreshed: ' + data.count + ' patrons.');
-              document.getElementById('patronCount').textContent = data.count;
+              var pcBadge = document.getElementById('patreonNameCount');
+              if (pcBadge) pcBadge.textContent = data.count;
               setTimeout(hideStatus, 2000);
             }
           })
@@ -434,5 +531,123 @@
           });
       });
     }
+
+    // ---- Collapsible card headers — toggle .collapsed class for chevron rotation ----
+    document.querySelectorAll('.card-header[data-bs-toggle="collapse"]').forEach(function (header) {
+      var target = document.querySelector(header.dataset.bsTarget);
+      if (!target) return;
+      target.addEventListener('show.bs.collapse', function () {
+        header.classList.remove('collapsed');
+        header.setAttribute('aria-expanded', 'true');
+      });
+      target.addEventListener('hide.bs.collapse', function () {
+        header.classList.add('collapsed');
+        header.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // ---- Font Picker Modal ----
+    (function () {
+      var fontPickerModal = document.getElementById('fontPickerModal');
+      if (!fontPickerModal) return;
+
+      var grid = document.getElementById('fontGrid');
+      var search = document.getElementById('fontSearch');
+      var preview = document.getElementById('fontModalPreview');
+      var applyBtn = document.getElementById('fontPickerApply');
+      var targetLabel = document.getElementById('fontPickerTarget');
+      var currentTarget = 'message'; // 'message' or 'patron'
+      var selectedFont = '';
+
+      // Build font list from the hidden select options
+      var fontList = [];
+      var messageSelect = document.getElementById('messageFont');
+      if (messageSelect) {
+        Array.prototype.slice.call(messageSelect.options).forEach(function (opt) {
+          fontList.push({ value: opt.value, label: opt.textContent, family: fontFamilyMap[opt.value] || 'sans-serif' });
+        });
+      }
+
+      function renderGrid(filter) {
+        grid.innerHTML = '';
+        var lowerFilter = (filter || '').toLowerCase();
+        fontList.forEach(function (f) {
+          if (lowerFilter && f.label.toLowerCase().indexOf(lowerFilter) === -1) return;
+          var col = document.createElement('div');
+          col.className = 'col';
+          var card = document.createElement('div');
+          card.className = 'font-card p-2 text-center' + (f.value === selectedFont ? ' selected' : '');
+          card.dataset.font = f.value;
+          card.innerHTML = '<div class="font-sample" style="font-family:' + f.family + ';">AaBbCcDd 123</div>' +
+            '<small class="font-name text-body-secondary">' + f.label + '</small>';
+          card.addEventListener('click', function () {
+            grid.querySelectorAll('.font-card').forEach(function (c) { c.classList.remove('selected'); });
+            card.classList.add('selected');
+            selectedFont = f.value;
+            preview.style.fontFamily = f.family;
+          });
+          col.appendChild(card);
+          grid.appendChild(col);
+        });
+      }
+
+      // On modal show — read which font target triggered it
+      fontPickerModal.addEventListener('show.bs.modal', function (event) {
+        var trigger = event.relatedTarget;
+        if (trigger && trigger.dataset.targetFont) {
+          currentTarget = trigger.dataset.targetFont;
+        }
+        targetLabel.textContent = currentTarget === 'message' ? 'Message' : 'Names';
+        var selectEl = document.getElementById(currentTarget + 'Font');
+        selectedFont = selectEl ? selectEl.value : 'noto_sans';
+        search.value = '';
+        renderGrid('');
+        preview.style.fontFamily = fontFamilyMap[selectedFont] || 'sans-serif';
+      });
+
+      // Search filter
+      if (search) {
+        search.addEventListener('input', function () {
+          renderGrid(search.value);
+        });
+      }
+
+      // Apply selection
+      if (applyBtn) {
+        applyBtn.addEventListener('click', function () {
+          if (!selectedFont) return;
+          var selectEl = document.getElementById(currentTarget + 'Font');
+          var badgeEl = document.getElementById(currentTarget + 'FontLabel');
+          if (selectEl) {
+            selectEl.value = selectedFont;
+            selectEl.dispatchEvent(new Event('change'));
+          }
+          if (badgeEl) {
+            // Find display label
+            var match = fontList.find(function (f) { return f.value === selectedFont; });
+            badgeEl.textContent = match ? match.label : selectedFont;
+          }
+          // Update font preview
+          var previewId = currentTarget + 'FontPreview';
+          var boldId = currentTarget + 'Bold';
+          var colorId = currentTarget === 'message' ? 'messageColor' : 'patronColor';
+          updateFontPreview(previewId, currentTarget + 'Font', boldId, colorId);
+          saveSettings();
+          bootstrap.Modal.getInstance(fontPickerModal).hide();
+        });
+      }
+    })();
+
+    // ---- Sync font badge labels on load ----
+    function syncFontBadge(target) {
+      var selectEl = document.getElementById(target + 'Font');
+      var badgeEl = document.getElementById(target + 'FontLabel');
+      if (selectEl && badgeEl) {
+        var opt = selectEl.options[selectEl.selectedIndex];
+        if (opt) badgeEl.textContent = opt.textContent;
+      }
+    }
+    syncFontBadge('message');
+    syncFontBadge('patron');
   });
 })();
