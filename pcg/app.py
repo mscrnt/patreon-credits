@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, send_file, redirect
 from werkzeug.utils import secure_filename
+from dotenv import load_dotenv
 import hashlib
 import io
 import json
@@ -14,10 +15,8 @@ import tarfile
 from datetime import datetime
 import requests as http_requests
 
-logger = logging.getLogger(__name__)
 from .patreon import PatreonAPI
 from .ffmpeg_renderer import VideoRenderer
-from dotenv import load_dotenv
 from .path_utils import (
     get_env_path, get_env_example_path, get_output_dir,
     get_templates_dir, get_static_dir, get_ffmpeg_dir,
@@ -30,6 +29,8 @@ from .path_utils import (
     get_se_cache_path,
     get_youtube_token_path,
 )
+
+logger = logging.getLogger(__name__)
 
 load_dotenv(get_env_path())
 
