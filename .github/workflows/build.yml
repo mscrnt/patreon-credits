@@ -56,16 +56,16 @@ jobs:
         run: |
           ICONSET="icon.iconset"
           mkdir -p "$ICONSET"
-          # Generate all required sizes from icon.png
+          # Generate all required sizes from assets/icon.png
           for SIZE in 16 32 64 128 256 512; do
-            sips -z $SIZE $SIZE icon.png --out "$ICONSET/icon_${SIZE}x${SIZE}.png" >/dev/null
+            sips -z $SIZE $SIZE assets/icon.png --out "$ICONSET/icon_${SIZE}x${SIZE}.png" >/dev/null
           done
           # Retina variants (@2x)
           for SIZE in 16 32 128 256; do
             DOUBLE=$((SIZE * 2))
-            sips -z $DOUBLE $DOUBLE icon.png --out "$ICONSET/icon_${SIZE}x${SIZE}@2x.png" >/dev/null
+            sips -z $DOUBLE $DOUBLE assets/icon.png --out "$ICONSET/icon_${SIZE}x${SIZE}@2x.png" >/dev/null
           done
-          iconutil -c icns "$ICONSET" -o icon.icns
+          iconutil -c icns "$ICONSET" -o assets/icon.icns
           rm -rf "$ICONSET"
 
       - name: Build app
@@ -129,8 +129,8 @@ jobs:
           chmod +x "$APPDIR/usr/bin/PatreonCredits"
 
           # Use the committed icon
-          cp icon.png "$APPDIR/PatreonCredits.png"
-          cp icon.png "$APPDIR/usr/share/icons/hicolor/256x256/apps/PatreonCredits.png"
+          cp assets/icon.png "$APPDIR/PatreonCredits.png"
+          cp assets/icon.png "$APPDIR/usr/share/icons/hicolor/256x256/apps/PatreonCredits.png"
 
           cat > "$APPDIR/PatreonCredits.desktop" << 'EOF'
           [Desktop Entry]

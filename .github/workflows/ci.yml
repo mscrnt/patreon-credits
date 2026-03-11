@@ -32,6 +32,6 @@ jobs:
 
       - name: Check imports
         run: |
-          python -c "from ffmpeg_renderer import VideoRenderer"
-          python -c "from patreon import PatreonAPI"
-          python -c "from app import app"
+          python -c "from pcg.ffmpeg_renderer import VideoRenderer"
+          python -c "from pcg.patreon import PatreonAPI"
+          python -c "from pcg.app import app"
